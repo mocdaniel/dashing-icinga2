@@ -10,3 +10,14 @@
     bundle
 
     dashing start
+
+## Widgets
+
+    dashing generate widget table
+    dashing generate widget showmon
+
+## Jobs
+
+    dashing generate job icinga2
+
+
