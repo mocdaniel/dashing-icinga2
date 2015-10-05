@@ -1,5 +1,7 @@
 require 'rest_client'
 
+# TODO make this a global configuration
+# TODO add basic auth support
 $node_name = "mbmif.int.netways.de"
 $api_url_base = "https://localhost:5665/v1"
 
@@ -64,17 +66,17 @@ SCHEDULER.every '1s' do
   avg_latency = status["avg_latency"].round(2)
   avg_execution_time = status["avg_execution_time"].round(2)
 
-  services_ok = status["num_services_ok"]
-  services_warning = status["num_services_warning"]
-  services_critical = status["num_services_critical"]
-  services_unknown = status["num_services_unknown"]
-  services_ack = status["num_services_acknowledged"]
-  services_downtime = status["num_services_in_downtime"]
+  services_ok = status["num_services_ok"].to_int
+  services_warning = status["num_services_warning"].to_int
+  services_critical = status["num_services_critical"].to_int
+  services_unknown = status["num_services_unknown"].to_int
+  services_ack = status["num_services_acknowledged"].to_int
+  services_downtime = status["num_services_in_downtime"].to_int
 
-  hosts_up = status["num_hosts_up"]
-  hosts_down = status["num_hosts_down"]
-  hosts_ack = status["num_hosts_acknowledged"]
-  hosts_downtime = status["num_hosts_in_downtime"]
+  hosts_up = status["num_hosts_up"].to_int
+  hosts_down = status["num_hosts_down"].to_int
+  hosts_ack = status["num_hosts_acknowledged"].to_int
+  hosts_downtime = status["num_hosts_in_downtime"].to_int
 
   total_critical = services_critical + hosts_down
   total_warning = services_warning
