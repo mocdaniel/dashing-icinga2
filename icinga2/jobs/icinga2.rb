@@ -28,6 +28,13 @@ def get_stats()
   return rest_client.get(headers)
 end
 
+def get_app()
+  api_url = $api_url_base + "/status/IcingaApplication"
+  rest_client = prepare_rest_client(api_url)
+  headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
+
+  return rest_client.get(headers)
+end
 
 
 SCHEDULER.every '1s' do
@@ -37,28 +44,37 @@ SCHEDULER.every '1s' do
   total_ack = 0
   total = 0
 
+  app = get_app()
+  result = JSON.parse(app.body)
+  icingaapplication = result["results"][0] # there's only one row
+  app_info = icingaapplication["status"]
+
+  puts "App Info: " + app_info.to_s
+
+  version = app_info["icingaapplication"]["app"]["version"]
+
   res = get_stats()
-
-  puts res
-  #puts "Status: " + (JSON.pretty_generate JSON.parse(res))
-
   result = JSON.parse(res.body)
-  puts result
-
-  cib = result["results"][0]
-
-  puts cib
+  cib = result["results"][0] # there's only one row
   status = cib["status"]
 
   puts "Status: " + status.to_s
+
+  uptime = status["uptime"].round(2)
+  avg_latency = status["avg_latency"].round(2)
+  avg_execution_time = status["avg_execution_time"].round(2)
 
   services_ok = status["num_services_ok"]
   services_warning = status["num_services_warning"]
   services_critical = status["num_services_critical"]
   services_unknown = status["num_services_unknown"]
+  services_ack = status["num_services_acknowledged"]
+  services_downtime = status["num_services_in_downtime"]
 
   hosts_up = status["num_hosts_up"]
   hosts_down = status["num_hosts_down"]
+  hosts_ack = status["num_hosts_acknowledged"]
+  hosts_downtime = status["num_hosts_in_downtime"]
 
   total_critical = services_critical + hosts_down
   total_warning = services_warning
@@ -74,8 +90,55 @@ SCHEDULER.every '1s' do
     value = total.to_s
   end
 
+  # events
   send_event('icinga-overview', {
    value: value,
    color: color })
+
+  send_event('icinga-version', {
+   value: version.to_s,
+   color: 'blue' })
+
+  send_event('icinga-uptime', {
+   value: uptime.to_s + "s",
+   color: 'blue' })
+
+  send_event('icinga-latency', {
+   value: avg_latency.to_s + "s",
+   color: 'blue' })
+
+  send_event('icinga-execution-time', {
+   value: avg_execution_time.to_s + "s",
+   color: 'blue' })
+
+  # down, critical, warning
+  send_event('icinga-host-down', {
+   value: hosts_down.to_s,
+   color: 'red' })
+
+  send_event('icinga-service-critical', {
+   value: services_critical.to_s,
+   color: 'red' })
+
+  send_event('icinga-service-warning', {
+   value: services_warning.to_s,
+   color: 'yellow' })
+
+  # ack, downtime
+  send_event('icinga-service-ack', {
+   value: services_ack.to_s,
+   color: 'blue' })
+
+  send_event('icinga-host-ack', {
+   value: hosts_ack.to_s,
+   color: 'blue' })
+
+  send_event('icinga-service-downtime', {
+   value: services_downtime.to_s,
+   color: 'orange' })
+
+  send_event('icinga-host-downtime', {
+   value: hosts_downtime.to_s,
+   color: 'orange' })
 end
 
