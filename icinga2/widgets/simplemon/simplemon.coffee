@@ -1,9 +1,21 @@
 class Dashing.Simplemon extends Dashing.Widget
+  @accessor 'current', Dashing.AnimatedValue
 
   ready: ->
-    # This is fired when the widget is done being rendered
+    setInterval(@checkUpdate, 100)
 
   onData: (data) ->
-    # Handle incoming data
-    # You can access the html node of this widget with `@node`
-    # Example: $(@node).fadeOut().fadeIn() will make the node flash each time data comes in.
+    if data.color
+      # clear existing "color-*" classes
+      $(@get('node')).attr 'class', (i,c) ->
+        c.replace /\bcolor-\S+/g, ''
+      # add new class
+      $(@get('node')).addClass "color-#{data.color}"
+
+  checkUpdate: =>
+    if updatedAt = @get('updatedAt')
+      timestamp = new Date(updatedAt * 1000)
+      now = new Date()
+      diff = now.getTime() - timestamp.getTime()
+      if diff > 30000
+        @onData({color:'grey'})

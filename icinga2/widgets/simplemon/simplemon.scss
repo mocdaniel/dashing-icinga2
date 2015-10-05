@@ -1,3 +1,101 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #47bbb3;
+$value-color:       #fff;
+
+$background-color-green:  #105010;
+$background-color-green-1:  #105010;
+$background-color-green-2:  #105010;
+$value-color-green:       #fff;
+
+$background-color-red:  #ff0000;
+$background-color-red-1:  #ff0000;
+$background-color-red-2:  #bb0000;
+$value-color-red:       #fff;
+
+$background-color-yellow:  #ff6c00;
+$background-color-yellow-1:  #ff6c00;
+$background-color-yellow-2:  #ff3d00;
+$value-color-yellow:       #fff;
+
+$background-color-grey:  #999999;
+$value-color-grey:       #fff;
+
+$title-color:       rgba(255, 255, 255, 0.7);
+$title-color-uns:       rgba(0, 0, 0, 0.7);
+$moreinfo-color:    rgba(255, 255, 255, 0.7);
+
+@-webkit-keyframes status-yellow-background {
+    0%   { background-color: $background-color-yellow-1; }
+    50%  { background-color: $background-color-yellow-2; }
+    100% { background-color: $background-color-yellow-1; }
+}
+@-webkit-keyframes status-red-background {
+    0%   { background-color: $background-color-red-1; }
+    50%  { background-color: $background-color-red-2; }
+    100% { background-color: $background-color-red-1; }
+}
+@-webkit-keyframes status-green-background {
+    0%   { background-color: $background-color-green-1; }
+    50%  { background-color: $background-color-green-2; }
+    100% { background-color: $background-color-green-1; }
+}
+@mixin animation($animation-name, $duration, $function, $animation-iteration-count:""){
+    -webkit-animation:  $animation-name $duration $function #{$animation-iteration-count};
+    -moz-animation:     $animation-name $duration $function #{$animation-iteration-count};
+    -ms-animation:      $animation-name $duration $function #{$animation-iteration-count};
+}
+
+
+// ----------------------------------------------------------------------------
+// Widget-number styles
+// ----------------------------------------------------------------------------
 .widget-simplemon {
 
+  background-color: $background-color;
+
+  .title {
+    color: $title-color;
+  }
+
+  .value {
+    color: $value-color;
+  }
+
+  .updated-at {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+}
+.widget-simplemon.color-green {
+    background-color: $background-color-green;
+    .value { color: $value-color-green; }
+}
+.widget-simplemon.color-green-blink {
+    background-color: $background-color-green;
+    @include animation(status-green-background, 2s, ease, infinite);
+    .value { color: $value-color-green; }
+}
+.widget-simplemon.color-red {
+    background-color: $background-color-red;
+    .value { color: $value-color-red; }
+}
+.widget-simplemon.color-red-blink {
+    background-color: $background-color-red;
+    @include animation(status-red-background, 2s, ease, infinite);
+    .value { color: $value-color-red; }
+}
+.widget-simplemon.color-yellow {
+    background-color: $background-color-yellow;
+    .value { color: $value-color-yellow; }
+}
+.widget-simplemon.color-yellow-blink {
+    @include animation(status-yellow-background, 2s, ease, infinite);
+    background-color: $background-color-yellow;
+    .value { color: $value-color-yellow; }
+}
+.widget-simplemon.color-grey {
+    background-color: $background-color-grey;
+    .value { color: $value-color-grey; }
 }
