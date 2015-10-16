@@ -1,2 +1,3 @@
-icinga2/.bundle
-icinga2/binpaths
+.bundle
+binpaths
+history.yml

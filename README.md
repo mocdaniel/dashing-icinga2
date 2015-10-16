@@ -54,10 +54,6 @@ Edit `jobs/icinga2.erb` and adjust the settings for the Icinga 2 API credentials
 
 # Run
 
-Navigate into the dashing project:
-
-   cd icinga2
-
 Install all required ruby gems:
 
    bundle install
