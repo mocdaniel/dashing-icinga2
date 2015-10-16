@@ -58,18 +58,18 @@ Edit `jobs/icinga2.erb` and adjust the settings for the Icinga 2 API credentials
 
 Install all required ruby gems:
 
-   bundle install
+    bundle install
 
 On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
 therefore you'll need to fix the eventmachine gem:
 
-   brew install openssl
-   bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-   bundle install --path binpaths
+    brew install openssl
+    bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
+    bundle install --path binpaths
 
 Now start dashing:
 
-   ./run.sh
+    ./run.sh
 
 (or `dashing start`).
 
