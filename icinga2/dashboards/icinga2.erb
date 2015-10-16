@@ -1,0 +1,47 @@
+<% content_for :title do %>Icinga 2 Dashboard<% end %>
+<div class="gridster">
+  ICINGA 2
+  <ul>
+    <!-- Stats -->
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="icinga-uptime" data-view="Simplemon" data-title="Uptime"></div>
+    </li>
+
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-latency" data-view="Simplemon" data-title="Latency"></div>
+    </li>
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-execution-time" data-view="Simplemon" data-title="Execution Time"></div>
+    </li>
+
+    <!-- Down, Critical, Warning -->
+    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-overview" data-view="Simplemon" data-title="Overview"></div>
+    </li>
+    <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-down" data-view="Simplemon" data-title="Hosts Down"></div>
+    </li>
+    <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-service-critical" data-view="Simplemon" data-title="Services Critical"></div>
+    </li>
+    <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-service-warning" data-view="Simplemon" data-title="Services Warning"></div>
+    </li>
+
+    <!-- Acknowledged -->
+    <li data-row="3" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-ack" data-view="Simplemon" data-title="Hosts Acknowledged"></div>
+    </li>
+    <li data-row="3" data-col="2" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-service-ack" data-view="Simplemon" data-title="Services Acknowledged"></div>
+    </li>
+    <!-- Downtime -->
+    <li data-row="3" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-downtime" data-view="Simplemon" data-title="Hosts in Downtime"></div>
+    </li>
+    <li data-row="3" data-col="4" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-service-downtime" data-view="Simplemon" data-title="Services in Downtime"></div>
+    </li>
+  </ul>
+
+</div>

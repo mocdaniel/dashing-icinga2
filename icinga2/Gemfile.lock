@@ -103,7 +103,9 @@ PLATFORMS
 
 DEPENDENCIES
   dashing
+  eventmachine
   rest-client
+  thin
   twitter (>= 5.9.0)
 
 BUNDLED WITH
