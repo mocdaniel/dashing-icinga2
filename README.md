@@ -9,6 +9,8 @@ to show basic alerts on your dashboard.
 **This is intended for demo purposes and not for production usage.**
 You may use the provided examples in your own implementation.
 
+![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
+
 # License
 
 * Dashing is licensed under the [MIT license](https://github.com/Shopify/dashing/blob/master/MIT-LICENSE).
