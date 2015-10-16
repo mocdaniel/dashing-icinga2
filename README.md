@@ -35,7 +35,7 @@ Therefore add a new ApiUser object to your Icinga 2 configuration:
 
     vim /etc/icinga2/conf.d/api-users.conf
 
-    object ApiUser "aws" {
+    object ApiUser "dashing" {
       password = "icinga"
       client_cn = "icinga2a"
       permissions = [ "*" ]
