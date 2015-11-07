@@ -86,7 +86,7 @@ Navigate to [http://localhost:3030](http://localhost:3030)
 * Add ticket system demo (e.g. dev.icinga.org)
 * Add Grafana dashboard
 * Slightly overhaul the dashboards
-* Fix config.ru settings
+* Fix config.ru settings - [#227](https://github.com/Shopify/dashing/issues/227)
 * Hints for Docker integration (docker-icinga2)
 
 # Developer Hints
