@@ -24,11 +24,12 @@ $node_name = Socket.gethostbyname(Socket.gethostname).first
 if defined? settings.icinga2_api_nodename
   node_name = settings.icinga2_api_nodename
 end
-$api_url_base = "https://localhost:5665/v1"
+#$api_url_base = "https://192.168.99.100:4665"
+$api_url_base = "https://localhost:5665"
 if defined? settings.icinga2_api_url
   api_url_base = settings.icinga2_api_url
 end
-$api_username = "dashing"
+$api_username = "root"
 if defined? settings.icinga2_api_username
   api_username = settings.icinga2_api_username
 end
@@ -61,7 +62,7 @@ def prepare_rest_client(api_url)
 end
 
 def get_stats()
-  api_url = $api_url_base + "/status/CIB"
+  api_url = $api_url_base + "/v1/status/CIB"
   rest_client = prepare_rest_client(api_url)
   headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
 
@@ -69,7 +70,7 @@ def get_stats()
 end
 
 def get_app()
-  api_url = $api_url_base + "/status/IcingaApplication"
+  api_url = $api_url_base + "/v1/status/IcingaApplication"
   rest_client = prepare_rest_client(api_url)
   headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
 

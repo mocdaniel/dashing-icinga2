@@ -80,6 +80,11 @@ Navigate to [http://localhost:3030](http://localhost:3030)
 
 [roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
 
+# TODO
+
+* Fix config.ru settings
+* Hints for Docker integration (docker-icinga2)
+
 # Developer Hints
 
 ## Dashing Installation
