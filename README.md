@@ -24,7 +24,7 @@ You may use the provided examples in your own implementation.
 
 Gems:
 
-    gem install bundle
+    gem install bundler
     gem install dashing
 
 ## Icinga 2
