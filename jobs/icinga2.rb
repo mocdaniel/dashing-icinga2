@@ -18,6 +18,7 @@
 # * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
 # ******************************************************************************/
 
+# TODO: replace it with rest-client, this one is deprecated
 require 'rest_client'
 
 $node_name = Socket.gethostbyname(Socket.gethostname).first
