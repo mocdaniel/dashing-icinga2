@@ -82,6 +82,9 @@ Navigate to [http://localhost:3030](http://localhost:3030)
 
 # TODO
 
+* Add ticket system demo (e.g. dev.icinga.org)
+* Add Grafana dashboard
+* Slightly overhaul the dashboards
 * Fix config.ru settings
 * Hints for Docker integration (docker-icinga2)
 
