@@ -46,19 +46,20 @@ Therefore add a new ApiUser object to your Icinga 2 configuration:
     vim /etc/icinga2/conf.d/api-users.conf
 
     object ApiUser "dashing" {
-      password = "icinga"
-      client_cn = "icinga2a"
-      permissions = [ "*" ]
+      password = "icinga2ondashingr0xx"
+      permissions = [ "status/query", "objects/query" ]
     }
+
+Set the [ApiUser permissions](http://docs.icinga.org/icinga2/latest/doc/module/icinga2/chapter/icinga2-api#icinga2-api-permissions)
+according to your needs. By default we will only fetch
+data from the `/v1/status` and `/v1/objects` endpoints, but do not require write
+permissions.
 
 In case you want to use client certificates, set the `client_cn` from your connecting
 host and put the client certificate files (private and public key, ca.crt) in the `pki`
 directory.
-
-> **Note**
->
-> The job script will attempt to use client certificates once found in the `pki/` directory
-> instead of basic auth.
+The icinga2 job script will attempt to use client certificates once found in the `pki/` directory
+instead of basic auth.
 
 ## Dashing Configuration
 
@@ -102,11 +103,6 @@ Now start dashing:
 Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:3030](http://localhost:3030)
-
-## Additional Runtime Options
-
-* Daemonize with `-d`. This will write the pid file underneath `tmp/pids/thin.pid`. Path can be specified using `--pid`.
-* Listen on a different port using `-p <port>`.
 
 # Thanks
 
