@@ -75,11 +75,6 @@ export LC_ALL=en_US.UTF-8
 
 cd $DASHING_PWD
 
-if [ ! -f "$DASHING_PID_FILE" ]; then
-    echo "Dashing is not running. PID cannot be found in $DASHING_PID_FILE"
-    exit 0;
-fi
-
 kill -9 $(<"$DASHING_PID_FILE") > /dev/null 2>&1
 rm -f $DASHING_PID_FILE
 $DASHING_BIN start -d -p $DASHING_PORT --pid $DASHING_PID_FILE
