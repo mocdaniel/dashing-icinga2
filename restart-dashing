@@ -1,0 +1,101 @@
+#!/bin/bash
+
+#/******************************************************************************
+# * Icinga 2 Dashing Restart Script                                            *
+# * Copyright (C) 2016 Icinga Development Team (https://www.icinga.org)        *
+# *                                                                            *
+# * This program is free software; you can redistribute it and/or              *
+# * modify it under the terms of the GNU General Public License                *
+# * as published by the Free Software Foundation; either version 2             *
+# * of the License, or (at your option) any later version.                     *
+# *                                                                            *
+# * This program is distributed in the hope that it will be useful,            *
+# * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+# * GNU General Public License for more details.                               *
+# *                                                                            *
+# * You should have received a copy of the GNU General Public License          *
+# * along with this program; if not, write to the Free Software Foundation     *
+# * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+# ******************************************************************************/
+
+DASHING_PWD=`pwd`
+DASHING_PORT=3030
+DASHING_PID_FILE="tmp/pids/thin.pid"
+DASHING_BIN=dashing
+
+usage(){
+cat << EOF
+usage: $0 options
+ This script restarts the Dashing daemon.
+ OPTIONS:
+    -h        Show this message
+    -p        Port where Dashing will listen (defaults to 3030)
+    -P        PID file path (defaults to tmp/pids/thin.pid)
+    -D        Change to this directory before starting the daemon (defaults to current directory)
+    -b        Path to the dashing binary (defaults to just 'dashing' from system path)
+EOF
+}
+
+while getopts ":p:P:D:b:h" opt; do
+  case $opt in
+    h)
+      usage
+      exit 1
+      ;;
+    p)
+      DASHING_PORT=$OPTARG
+      ;;
+    P)
+      DASHING_PID_FILE=$OPTARG
+      ;;
+    D)
+      DASHING_PWD=$OPTARG
+      ;;
+    b)
+      DASHING_BIN=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      usage
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+# ensure that dashing runs with utf8
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+cd $DASHING_PWD
+
+if [ ! -f "$DASHING_PID_FILE" ]; then
+    echo "Dashing is not running. PID cannot be found in $DASHING_PID_FILE"
+    exit 0;
+fi
+
+kill -9 $(<"$DASHING_PID_FILE") > /dev/null 2>&1
+rm -f $DASHING_PID_FILE
+$DASHING_BIN start -d -p $DASHING_PORT --pid $DASHING_PID_FILE
+ERR=$?
+
+if [ $ERR != 0 ]; then
+    echo "Restart failed. Bailing out."
+    exit $ERR
+fi
+
+# dashing might take a while to start
+while [ ! -f "$DASHING_PID_FILE" ]; do
+    sleep 1
+done
+
+PID=$(<"$DASHING_PID_FILE")
+
+echo "Restarted Dashing with PID $PID listening on port $DASHING_PORT."
+exit $ERR

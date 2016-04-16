@@ -75,9 +75,9 @@ prevent errors such as `ruby bundler: command not found: thin`.
 
 Now start dashing:
 
-    ./run.sh
+    ./restart-dashing
 
-(or `dashing start`).
+Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:3030](http://localhost:3030)
 
@@ -97,9 +97,9 @@ This is not available on unix-based systems, you can safely ignore this warning:
 
 Now start dashing:
 
-    ./run.sh
+    ./restart-dashing
 
-(or `dashing start`).
+Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:3030](http://localhost:3030)
 
