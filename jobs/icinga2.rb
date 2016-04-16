@@ -1,7 +1,7 @@
 
 #/******************************************************************************
 # * Icinga 2 Dashing Job                                                       *
-# * Copyright (C) 2015 Icinga Development Team (https://www.icinga.org)        *
+# * Copyright (C) 2015-2016 Icinga Development Team (https://www.icinga.org)   *
 # *                                                                            *
 # * This program is free software; you can redistribute it and/or              *
 # * modify it under the terms of the GNU General Public License                *
@@ -18,14 +18,13 @@
 # * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
 # ******************************************************************************/
 
-# TODO: replace it with rest-client, this one is deprecated
-require 'rest_client'
+require 'rest-client'
 
 $node_name = Socket.gethostbyname(Socket.gethostname).first
 if defined? settings.icinga2_api_nodename
   node_name = settings.icinga2_api_nodename
 end
-#$api_url_base = "https://192.168.99.100:4665"
+#$api_url_base = "https://192.168.33.5:5665"
 $api_url_base = "https://localhost:5665"
 if defined? settings.icinga2_api_url
   api_url_base = settings.icinga2_api_url

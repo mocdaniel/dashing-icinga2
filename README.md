@@ -114,7 +114,6 @@ Navigate to [http://localhost:3030](http://localhost:3030)
 
 # TODO
 
-* Replace rest\_client with rest-client gem
 * Add ticket system demo (e.g. dev.icinga.org)
 * Add Grafana dashboard
 * Slightly overhaul the dashboards
