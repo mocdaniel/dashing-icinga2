@@ -102,6 +102,7 @@ SCHEDULER.every '1s' do
   puts "Status: " + status.to_s
 
   uptime = status["uptime"].round(2)
+  uptime = Time.at(uptime).utc.strftime("%H:%M:%S")
   avg_latency = status["avg_latency"].round(2)
   avg_execution_time = status["avg_execution_time"].round(2)
 
@@ -141,7 +142,7 @@ SCHEDULER.every '1s' do
    color: 'blue' })
 
   send_event('icinga-uptime', {
-   value: uptime.to_s + "s",
+   value: uptime.to_s,
    color: 'blue' })
 
   send_event('icinga-latency', {
