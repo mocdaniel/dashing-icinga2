@@ -11,6 +11,13 @@ You may use the provided examples in your own implementation.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
+# Support
+
+Please open issues at [dev.icinga.org](https://dev.icinga.org/projects/icinga-tools). In case
+you've created a PR/patch, open a new issue linking to it as well please :)
+
+If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.org/community/get-help/).
+
 # License
 
 * Dashing is licensed under the [MIT license](https://github.com/Shopify/dashing/blob/master/MIT-LICENSE).
@@ -26,6 +33,9 @@ Gems:
 
     gem install bundler
     gem install dashing
+
+In case the installation takes quite long and you do not need any documentation,
+add the `--no-rdoc --no-ri` flags.
 
 ## Icinga 2
 
@@ -56,15 +66,11 @@ Edit `jobs/icinga2.erb` and adjust the settings for the Icinga 2 API credentials
 
 # Run
 
-Install all required ruby gems:
+## Linux
 
-    bundle install
+Install all required ruby gems into the local `binpaths` directory. This will
+prevent errors such as `ruby bundler: command not found: thin`.
 
-On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
-therefore you'll need to fix the eventmachine gem:
-
-    brew install openssl
-    bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
     bundle install --path binpaths
 
 Now start dashing:
@@ -75,6 +81,32 @@ Now start dashing:
 
 Navigate to [http://localhost:3030](http://localhost:3030)
 
+## Unix and OSX
+
+On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
+therefore you'll need to fix the eventmachine gem:
+
+    brew install openssl
+    bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
+    bundle install --path binpaths
+
+Note: Dashing is running as thin server which by default uses epoll from within the eventmachine library.
+This is not available on unix-based systems, you can safely ignore this warning:
+
+   warning: epoll is not supported on this platform
+
+Now start dashing:
+
+    ./run.sh
+
+(or `dashing start`).
+
+Navigate to [http://localhost:3030](http://localhost:3030)
+
+## Additional Runtime Options
+
+* Daemonize with `-d`. This will write the pid file underneath `tmp/pids/thin.pid`. Path can be specified using `--pid`.
+* Listen on a different port using `-p <port>`.
 
 # Thanks
 
