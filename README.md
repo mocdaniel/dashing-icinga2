@@ -11,12 +11,15 @@ You may use the provided examples in your own implementation.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
+# Changes from master
+Rewrite the `icinga2.rb` Job to use an own written Library (located in libs Directory) to seperate Logic an Job.
+My Job uses an Configuration file (`config/icinga2.json`) for an better configuration way an - maybe - for more than one Icinga2 Instance.
+
+
+
+All my changes currently are **NOT TESTED**
+
 # Support
-
-Please open issues at [dev.icinga.org](https://dev.icinga.org/projects/icinga-tools). In case
-you've created a PR/patch, open a new issue linking to it as well please :)
-
-If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.org/community/get-help/).
 
 # License
 
@@ -30,6 +33,12 @@ If you have any questions, please hop onto the [Icinga community channels](https
 * Icinga 2 API (v2.4+)
 
 Gems:
+
+    require 'json'
+    require 'rest-client'
+    require 'openssl'
+    require 'logger'
+    require 'time'
 
     gem install bundler
     gem install dashing
