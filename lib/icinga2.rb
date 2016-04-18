@@ -44,7 +44,7 @@ class Icinga2
     file = File.open( '/tmp/dashing-icinga2.log', File::WRONLY | File::APPEND | File::CREAT )
     @log = Logger.new( file, 'weekly', 1024000 )
 #    @log = Logger.new( STDOUT )
-    @log.level = Logger::DEBUG
+    @log.level = Logger::INFO
     @log.datetime_format = "%Y-%m-%d %H:%M:%S"
     @log.formatter = proc do |severity, datetime, progname, msg|
       "[#{datetime.strftime(@log.datetime_format)}] #{severity.ljust(5)} : #{msg}\n"
@@ -190,11 +190,14 @@ class Icinga2
         state_changed = host['attrs']['last_state_change']
 
         if( state == 0 )
+          state_msg   = 'Okay'
           state_class = 'icinga2-status-ok'
         elsif( state == 1 )
+          state_msg   = 'WARNING'
           state_class = 'icinga2-status-warning'
           problem = 1
         elsif( state == 2 )
+          state_msg   = 'CRITICAL'
           state_class = 'icinga2-status-critical'
           problem = 1
         else
@@ -202,7 +205,7 @@ class Icinga2
         end
 
         latest.push(
-          { cols: [ { value: name,   class: 'icinga2-hostname' }, { value: state,  class: state_class }, ] }
+          { cols: [ { value: name,   class: 'icinga2-hostname' }, { value: state_msg,  class: state_class }, ] }
         )
 
         latest.push(
@@ -215,8 +218,7 @@ class Icinga2
 
     end
 
-    @log.debug( JSON.pretty_generate( latest ) )
-
+#    @log.debug( JSON.pretty_generate( latest ) )
 #     latest_moreinfo = latest_counter.to_s + " problems"
 #     if latest_counter > 15
 #       latest_moreinfo += " | " + (latest_counter - 15).to_s + " not listed"
@@ -233,7 +235,7 @@ class Icinga2
 
   def hostsChecks()
 
-    api_url     = sprintf( '%s/v1/objects/hosts?attrs=name&attrs=display_name&attrs=last_check_result&attrs=last_state_change', @api_url_base )
+    api_url     = sprintf( '%s/v1/objects/hosts?filter=host.state!=0&attrs=name&attrs=display_name&attrs=last_check_result&attrs=last_state_change', @api_url_base )
     rest_client = RestClient::Resource.new( URI.encode( api_url ), @options )
     data        = JSON.parse( rest_client.get( @headers ).body )
     result      = data['results']

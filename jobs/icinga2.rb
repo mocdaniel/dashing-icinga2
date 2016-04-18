@@ -4,7 +4,7 @@ require './lib/icinga2'
 
 icinga = Icinga2.new( 'config/icinga2.json' )
 
-SCHEDULER.every '30s' do
+SCHEDULER.every '3m' do
 
   icinga.run
 
