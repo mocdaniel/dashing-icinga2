@@ -109,9 +109,6 @@ h3 {
   color: $text-color;
 }
 
-#banner {
-  margin-bottom: 25px;
-}
 // ----------------------------------------------------------------------------
 // Base widget styles
 // ----------------------------------------------------------------------------
@@ -247,7 +244,8 @@ h3 {
 }
 
 #container {
-  padding-top: 5px;
+  //padding-top: 5px;
+  //if background-color is not white there's a nasty white line with padding-top
 }
 
 
