@@ -1,17 +1,16 @@
 <% content_for :title do %>Icinga 2 Dashboard<% end %>
 <div class="gridster">
-  ICINGA 2
   <ul>
     <!-- Stats -->
     <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
-      <div data-id="icinga-uptime" data-view="Simplemon" data-title="Uptime"></div>
+      <div data-id="icinga-uptime" data-view="Simplemon" data-title="Uptime" style="background-color: #0095bf;"></div>
     </li>
 
     <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-latency" data-view="Simplemon" data-title="Latency"></div>
+      <div data-id="icinga-version" data-view="Simplemon" data-title="Version" style="background-color: #0095bf;"></div>
     </li>
     <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-execution-time" data-view="Simplemon" data-title="Execution Time"></div>
+      <div data-id="icinga-latency" data-view="Simplemon" data-title="Latency"></div>
     </li>
 
     <!-- Down, Critical, Warning -->

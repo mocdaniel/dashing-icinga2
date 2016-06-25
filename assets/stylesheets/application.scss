@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color: #222;
+$background-color: #fff;
 $text-color: #fff;
 
 $background-warning-color-1: #e82711;
@@ -99,7 +99,7 @@ h1 {
 }
 h2 {
   text-transform: uppercase;
-  font-size: 76px;
+  font-size: 68px;
   font-weight: 700;
   color: $text-color;
 }
@@ -109,6 +109,9 @@ h3 {
   color: $text-color;
 }
 
+#banner {
+  margin-bottom: 25px;
+}
 // ----------------------------------------------------------------------------
 // Base widget styles
 // ----------------------------------------------------------------------------
