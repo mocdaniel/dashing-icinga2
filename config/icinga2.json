@@ -1,0 +1,12 @@
+{
+  "icinga2": {
+    "server": {
+      "name": "%ICINGA2_HOST%",
+      "port": "%ICINGA2_PORT%"
+    },
+    "api": {
+      "user": "%ICINGA2_DASHING_APIUSER%",
+      "password": "%ICINGA2_DASHING_APIPASS%"
+    }
+  }
+}

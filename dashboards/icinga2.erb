@@ -2,7 +2,30 @@
 <div class="gridster">
   ICINGA 2
   <ul>
-    <!-- Stats -->
+    <!-- head -->
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="2">
+      <div data-view="Clock"></div>
+      <i class="icon-time icon-background"></i>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="6" data-sizey="1">
+      <div data-id="chuck" data-view="Text" data-title="Team Facts"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-view="Image" data-image="/icinga_logo4-300x109.png" style="background: lightgrey;"></div>
+    </li>
+    <!-- head -->
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-uptime" data-view="Icinga2" data-title="Uptime"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="2">
+      <div data-id="icinga-hosts-latest" data-view="Table" data-title="Icinga host problems" class="icinga-latest-problems"></div>
+    </li>
+
+
+
+<!--
     <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
       <div data-id="icinga-uptime" data-view="Simplemon" data-title="Uptime"></div>
     </li>
@@ -42,6 +65,8 @@
     <li data-row="3" data-col="4" data-sizex="1" data-sizey="1">
       <div data-id="icinga-service-downtime" data-view="Simplemon" data-title="Services in Downtime"></div>
     </li>
+-->
+
   </ul>
 
 </div>

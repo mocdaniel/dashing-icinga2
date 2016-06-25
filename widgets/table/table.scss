@@ -1,3 +1,64 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #12b0c5;
+$value-color:       #fff;
+
+$title-color:       rgba(255, 255, 255, 0.7);
+$label-color:       rgba(255, 255, 255, 0.7);
+$moreinfo-color:    rgba(255, 255, 255, 0.7);
+
+// ----------------------------------------------------------------------------
+// Widget-list styles
+// ----------------------------------------------------------------------------
 .widget-table {
+
+  background-color: $background-color;
+  vertical-align: top;
+
+  .title {
+    color: $title-color;
+  }
+
+  td {
+    margin: 0 15px;
+    text-align: left;
+    color: $label-color;
+  }
+
+  .value {
+    margin-left: 12px;
+    font-weight: 600;
+    color: $value-color;
+  }
+
+  .updated-at {
+    color: rgba(0, 0, 0, 0.3);
+  }
+
+  .more-info {
+    color: $moreinfo-color;
+  }
+
+
+  td.icinga2-status-ok {
+    color: green;
+    font-weight: bold;
+  }
+
+  td.icinga2-status-warning {
+    color: yellow;
+    font-weight: bold;
+  }
+
+  td.icinga2-status-critical {
+    color: red;
+    font-weight: bold;
+  }
+
+  td.icinga-duration {
+    text-align: right;
+    font-size: 0.85em;
+  }
 
 }

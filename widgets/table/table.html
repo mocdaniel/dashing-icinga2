@@ -1,1 +1,20 @@
-<div data-bind="value"></div>
+<!--<div data-bind="value"></div> -->
+<h1 class="title" data-bind="title"></h1>
+<table>
+  <thead>
+    <tr>
+      <th data-foreach-header="headers" data-bind="header.value"></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+  <tr data-foreach-row="rows" data-bind-class="row.class">
+    <td data-foreach-col="row.cols" data-bind-title="col.title" data-bind-class="col.class" data-bind-colspan="col.colspan">
+      <span data-bind="col.value | raw"></span>
+      <span data-bind-class="col.arrow"></span>
+    </td>
+  </tr>
+</table>
+
+<p class="more-info" data-bind="moreinfo"></p>
+<p class="updated-at" data-bind="updatedAtMessage"></p>
