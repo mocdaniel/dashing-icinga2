@@ -47,7 +47,7 @@ Therefore add a new ApiUser object to your Icinga 2 configuration:
 
     object ApiUser "dashing" {
       password = "icinga2ondashingr0xx"
-      permissions = [ "status/query", "objects/query" ]
+      permissions = [ "status/query", "objects/query/*" ]
     }
 
 Set the [ApiUser permissions](http://docs.icinga.org/icinga2/latest/doc/module/icinga2/chapter/icinga2-api#icinga2-api-permissions)
