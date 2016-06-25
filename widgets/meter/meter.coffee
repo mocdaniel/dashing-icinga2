@@ -7,8 +7,12 @@ class Dashing.Meter extends Dashing.Widget
     @observe 'value', (value) ->
       $(@node).find(".meter").val(value).trigger('change')
 
+    @observe 'max', (max) ->
+      $(@node).find(".meter").trigger('configure', {'max': max})
+
   ready: ->
     meter = $(@node).find(".meter")
+    $(@node).fadeOut().css('background-color',@get('bgColor')).fadeIn()
     meter.attr("data-bgcolor", meter.css("background-color"))
     meter.attr("data-fgcolor", meter.css("color"))
     meter.knob()
