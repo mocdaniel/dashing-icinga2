@@ -27,7 +27,7 @@ If you have any questions, please hop onto the [Icinga community channels](https
 
 * Ruby, Gems and Bundler
 * Dashing Gem
-* Icinga 2 API (v2.4+)
+* Icinga 2 API (v2.5+)
 
 Gems:
 
