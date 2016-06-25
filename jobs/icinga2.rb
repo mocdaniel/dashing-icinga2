@@ -42,7 +42,7 @@ end
 def prepare_rest_client(api_url)
   # check whether pki files are there, otherwise use basic auth
   if File.file?("pki/" + $node_name + ".crt")
-    puts "PKI found, using client certificates for connection to Icinga 2 API"
+    #puts "PKI found, using client certificates for connection to Icinga 2 API"
     cert_file = File.read("pki/" + $node_name + ".crt")
     key_file = File.read("pki/" + $node_name + ".key")
     ca_file = File.read("pki/ca.crt")
@@ -52,7 +52,7 @@ def prepare_rest_client(api_url)
 
     options = {:ssl_client_cert => cert, :ssl_client_key => key, :ssl_ca_file => ca_file, :verify_ssl => OpenSSL::SSL::VERIFY_NONE}
   else
-    puts "PKI not found, using basic auth for connection to Icinga 2 API"
+    #puts "PKI not found, using basic auth for connection to Icinga 2 API"
 
     options = { :user => $api_username, :password => $api_password, :verify_ssl => OpenSSL::SSL::VERIFY_NONE }
   end
@@ -77,14 +77,41 @@ def get_app()
   return rest_client.get(headers)
 end
 
+#TODO: move to lib, add filter/join params
+def get_hosts()
+  api_url = $api_url_base + "/v1/objects/hosts"
+  rest_client = prepare_rest_client(api_url)
+  headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
+
+  return rest_client.get(headers)
+end
+
+def get_services()
+  api_url = $api_url_base + "/v1/objects/services"
+  rest_client = prepare_rest_client(api_url)
+  headers = {"Content-Type" => "application/json", "Accept" => "application/json"}
+
+  return rest_client.get(headers)
+end
+
+def count_problems(object)
+  problems = 0
+
+  object.each do |item|
+    item.each do |key, dict|
+      #TODO 2.5: use ack and downtimes as handled states
+      if (key == "attrs" && dict["state"] != 0 && (dict["downtime_depth"] == 0 or dict["acknowledgement"] == 0))
+      #if (key == "attrs" && dict["state"] != 0)
+        problems = problems + 1
+        #puts "Key: " + key.to_s + " State: " + dict["state"].to_s
+      end
+    end
+  end
+
+  return problems
+end
 
 SCHEDULER.every '1s' do
-
-  total_critical = 0
-  total_warning = 0
-  total_ack = 0
-  total = 0
-
   app = get_app()
   result = JSON.parse(app.body)
   icingaapplication = result["results"][0] # there's only one row
@@ -123,11 +150,24 @@ SCHEDULER.every '1s' do
   avg_latency = status["avg_latency"].round(2)
 
   ### Hosts/Services
+  host_objects_fetch = get_hosts()
+  result = JSON.parse(host_objects_fetch.body)
+
+  total_hosts = result["results"].size
+  all_hosts = result["results"]
+  total_problem_hosts = count_problems(all_hosts)
 
   hosts_up = status["num_hosts_up"].to_int
   hosts_down = status["num_hosts_down"].to_int
   hosts_ack = status["num_hosts_acknowledged"].to_int
   hosts_downtime = status["num_hosts_in_downtime"].to_int
+
+  service_objects_fetch = get_services()
+  result = JSON.parse(service_objects_fetch.body)
+
+  total_services = result["results"].size
+  all_services = result["results"]
+  total_problem_services = count_problems(all_services)
 
   services_ok = status["num_services_ok"].to_int
   services_warning = status["num_services_warning"].to_int
@@ -136,25 +176,20 @@ SCHEDULER.every '1s' do
   services_ack = status["num_services_acknowledged"].to_int
   services_downtime = status["num_services_in_downtime"].to_int
 
-  total_critical = services_critical + hosts_down
-  total_warning = services_warning
+  # meter widget
+  #host_meter = ((total_problem_hosts.to_f / total_hosts.to_f) * 100).round(2)
+  # we'll update the patched meter widget with absolute values (set max dynamically)
+  host_meter = total_problem_hosts.to_f
+  host_meter_max = total_hosts
 
-  if total_critical > 0 then
-    color = 'red'
-    value = total_critical.to_s
-  elsif total_warning > 0 then
-    color = 'yellow'
-    value = total_warning.to_s
-  else
-    color = 'green'
-    value = total.to_s
-  end
+  #service_meter = ((total_problem_services.to_f / total_services.to_f) * 100).round(2)
+  # we'll update the patched meter widget with absolute values (set max dynamically)
+  service_meter = total_problem_services.to_f
+  service_meter_max = total_services
+
+  puts "Meter widget: Hosts " + host_meter.to_s + "/" + host_meter_max.to_s + " Services " + service_meter.to_s + "/" + service_meter_max.to_s
 
   ### Events
-  send_event('icinga-overview', {
-   value: value,
-   color: color })
-
   send_event('icinga-version', {
    value: version_str,
    moreinfo: 'Revision: ' + version_revision
@@ -169,7 +204,19 @@ SCHEDULER.every '1s' do
    value: avg_latency.to_s + "s",
    color: 'blue' })
 
-  # down, critical, warning
+  send_event('icinga-host-meter', {
+   value: host_meter,
+   max:   host_meter_max,
+   moreinfo: "Total hosts: " + host_meter_max.to_s,
+   color: 'blue' })
+
+  send_event('icinga-service-meter', {
+   value: service_meter,
+   max:   service_meter_max,
+   moreinfo: "Total services: " + service_meter_max.to_s,
+   color: 'blue' })
+
+  # down, critical, warning, unknown
   send_event('icinga-host-down', {
    value: hosts_down.to_s,
    color: 'red' })
@@ -181,6 +228,10 @@ SCHEDULER.every '1s' do
   send_event('icinga-service-warning', {
    value: services_warning.to_s,
    color: 'yellow' })
+
+  send_event('icinga-service-unknown', {
+   value: services_unknown.to_s,
+   color: 'purple' })
 
   # ack, downtime
   send_event('icinga-service-ack', {
