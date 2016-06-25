@@ -6,12 +6,15 @@ that lets you build beautiful dashboards.
 This dashing implementation uses the Icinga 2 API
 to show basic alerts on your dashboard.
 
-**This is intended for demo purposes and not for production usage.**
-You may use the provided examples in your own implementation.
-
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
+# Demo
+
+A demo is available inside the [Icinga Vagrant Boxes](https://github.com/icinga/icinga-vagrant).
+
 # Support
+
+**This is intended for demo purposes.** You may use the provided examples in your own implementation.
 
 Please open issues at [dev.icinga.org](https://dev.icinga.org/projects/icinga-tools). In case
 you've created a PR/patch, open a new issue linking to it as well please :)
@@ -112,7 +115,6 @@ Navigate to [http://localhost:3030](http://localhost:3030)
 
 * Add ticket system demo (e.g. dev.icinga.org)
 * Add Grafana dashboard
-* Slightly overhaul the dashboards
 * Fix config.ru settings - [#227](https://github.com/Shopify/dashing/issues/227)
 * Hints for Docker integration (docker-icinga2)
 
