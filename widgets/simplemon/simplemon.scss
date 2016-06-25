@@ -4,20 +4,25 @@
 $background-color:  #47bbb3;
 $value-color:       #fff;
 
-$background-color-green:  #105010;
-$background-color-green-1:  #105010;
-$background-color-green-2:  #105010;
+$background-color-green:  #44bb77;
+$background-color-green-1:  #44bb77;
+$background-color-green-2:  #44bb77;
 $value-color-green:       #fff;
 
-$background-color-red:  #ff0000;
-$background-color-red-1:  #ff0000;
-$background-color-red-2:  #bb0000;
+$background-color-red:  #ff5566;
+$background-color-red-1:  #ff5566;
+$background-color-red-2:  #ff5566;
 $value-color-red:       #fff;
 
-$background-color-yellow:  #ff6c00;
-$background-color-yellow-1:  #ff6c00;
-$background-color-yellow-2:  #ff3d00;
+$background-color-yellow:  #ffaa44;
+$background-color-yellow-1:  #ffaa44;
+$background-color-yellow-2:  #ffaa44;
 $value-color-yellow:       #fff;
+
+$background-color-purple:  #aa44ff;
+$background-color-purple-1:  #aa44ff;
+$background-color-purple-2:  #aa44ff;
+$value-color-purple:       #fff;
 
 $background-color-grey:  #999999;
 $value-color-grey:       #fff;
@@ -40,6 +45,11 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
     0%   { background-color: $background-color-green-1; }
     50%  { background-color: $background-color-green-2; }
     100% { background-color: $background-color-green-1; }
+}
+@-webkit-keyframes status-purple-background {
+    0%   { background-color: $background-color-purple-1; }
+    50%  { background-color: $background-color-purple-2; }
+    100% { background-color: $background-color-purple-1; }
 }
 @mixin animation($animation-name, $duration, $function, $animation-iteration-count:""){
     -webkit-animation:  $animation-name $duration $function #{$animation-iteration-count};
@@ -64,7 +74,7 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   }
 
   .updated-at {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.3);
   }
 
 }
@@ -94,6 +104,15 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
     @include animation(status-yellow-background, 2s, ease, infinite);
     background-color: $background-color-yellow;
     .value { color: $value-color-yellow; }
+}
+.widget-simplemon.color-purple {
+    background-color: $background-color-purple;
+    .value { color: $value-color-purple; }
+}
+.widget-simplemon.color-purple-blink {
+    @include animation(status-purple-background, 2s, ease, infinite);
+    background-color: $background-color-purple;
+    .value { color: $value-color-purple; }
 }
 .widget-simplemon.color-grey {
     background-color: $background-color-grey;
