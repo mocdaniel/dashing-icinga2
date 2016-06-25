@@ -98,12 +98,19 @@ def count_problems(object)
   problems = 0
 
   object.each do |item|
-    item.each do |key, dict|
-      #TODO 2.5: use ack and downtimes as handled states
-      if (key == "attrs" && dict["state"] != 0 && (dict["downtime_depth"] == 0 or dict["acknowledgement"] == 0))
-      #if (key == "attrs" && dict["state"] != 0)
+    item.each do |k, d|
+      if (k != "attrs")
+        next
+      end
+
+      #TODO remove once 2.5 has been released
+      if not d.has_key?("downtime_depth")
+        d["downtime_depth"] = 0
+      end
+
+      if (d["state"] != 0 && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
         problems = problems + 1
-        #puts "Key: " + key.to_s + " State: " + dict["state"].to_s
+        #puts "Key: " + key.to_s + " State: " + d["state"].to_s
       end
     end
   end
