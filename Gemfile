@@ -5,3 +5,4 @@ gem 'thin'
 gem 'eventmachine'
 
 gem 'rest-client'
+gem 'json'

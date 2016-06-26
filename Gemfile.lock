@@ -1,9 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.3.8)
     backports (3.6.6)
-    buftok (0.2.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -22,28 +20,14 @@ GEM
       thor (~> 0.18.1)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
-    equalizer (0.0.10)
     eventmachine (1.0.8)
     execjs (2.0.2)
-    faraday (0.9.1)
-      multipart-post (>= 1.2, < 3)
     hike (1.2.3)
-    http (0.9.8)
-      addressable (~> 2.3)
-      http-cookie (~> 1.0)
-      http-form_data (~> 1.0.1)
-      http_parser.rb (~> 0.6.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    http-form_data (1.0.1)
-    http_parser.rb (0.6.0)
     json (1.8.3)
-    memoizable (0.4.2)
-      thread_safe (~> 0.3, >= 0.3.1)
     mime-types (2.6.2)
     multi_json (1.11.2)
-    multipart-post (2.0.0)
-    naught (1.1.0)
     netrc (0.10.3)
     rack (1.5.5)
     rack-protection (1.5.3)
@@ -57,7 +41,6 @@ GEM
     rufus-scheduler (2.0.24)
       tzinfo (>= 0.3.22)
     sass (3.2.19)
-    simple_oauth (0.3.1)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -81,17 +64,6 @@ GEM
     thor (0.18.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
-    twitter (5.15.0)
-      addressable (~> 2.3)
-      buftok (~> 0.2.0)
-      equalizer (= 0.0.10)
-      faraday (~> 0.9.0)
-      http (>= 0.4, < 0.10)
-      http_parser.rb (~> 0.6.0)
-      json (~> 1.8)
-      memoizable (~> 0.4.0)
-      naught (~> 1.0)
-      simple_oauth (~> 0.3.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -104,9 +76,9 @@ PLATFORMS
 DEPENDENCIES
   dashing
   eventmachine
+  json
   rest-client
   thin
-  twitter (>= 5.9.0)
 
 BUNDLED WITH
    1.10.6

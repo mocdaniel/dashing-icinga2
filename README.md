@@ -38,7 +38,7 @@ Gems:
     gem install dashing
 
 In case the installation takes quite long and you do not need any documentation,
-add the `--no-rdoc --no-ri` flags.
+add the `--no-document` flags.
 
 ## Icinga 2
 
@@ -72,10 +72,9 @@ Edit `jobs/icinga2.erb` and adjust the settings for the Icinga 2 API credentials
 
 ## Linux
 
-Install all required ruby gems into the local `binpaths` directory. This will
-prevent errors such as `ruby bundler: command not found: thin`.
+Install all required ruby gems into the system path.
 
-    bundle install --path binpaths
+    bundle install --system
 
 Now start dashing:
 
@@ -83,7 +82,7 @@ Now start dashing:
 
 Additional options are available through `./restart-dashing -h`.
 
-Navigate to [http://localhost:3030](http://localhost:3030)
+Navigate to [http://localhost:8005](http://localhost:8005)
 
 ## Unix and OSX
 
@@ -105,7 +104,7 @@ Now start dashing:
 
 Additional options are available through `./restart-dashing -h`.
 
-Navigate to [http://localhost:3030](http://localhost:3030)
+Navigate to [http://localhost:8005](http://localhost:8005)
 
 # Thanks
 

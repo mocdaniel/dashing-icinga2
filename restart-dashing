@@ -19,8 +19,13 @@
 # * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
 # ******************************************************************************/
 
-DASHING_PWD=`pwd`
-DASHING_PORT=3030
+if [ -d '/usr/share/dashing-icinga2' ]; then
+  DASHING_PWD='/usr/share/dashing-icinga2'
+else
+  DASHING_PWD=`pwd`
+fi
+
+DASHING_PORT=8005
 DASHING_PID_FILE="tmp/pids/thin.pid"
 DASHING_BIN=dashing
 
@@ -75,8 +80,11 @@ export LC_ALL=en_US.UTF-8
 
 cd $DASHING_PWD
 
-kill -9 $(<"$DASHING_PID_FILE") > /dev/null 2>&1
-rm -f $DASHING_PID_FILE
+if [ -f "$DASHING_PID_FILE" ]; then
+  kill -9 $(<"$DASHING_PID_FILE") > /dev/null 2>&1
+  rm -f $DASHING_PID_FILE
+fi
+
 $DASHING_BIN start -d -p $DASHING_PORT --pid $DASHING_PID_FILE
 ERR=$?
 
