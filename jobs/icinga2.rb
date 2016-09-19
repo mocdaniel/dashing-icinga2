@@ -118,7 +118,7 @@ def count_problems(object)
   return problems
 end
 
-SCHEDULER.every '1s' do
+SCHEDULER.every '5s' do
   app = get_app()
   result = JSON.parse(app.body)
   icingaapplication = result["results"][0] # there's only one row
