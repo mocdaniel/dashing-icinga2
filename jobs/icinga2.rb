@@ -103,11 +103,6 @@ def count_problems(object)
         next
       end
 
-      #TODO remove once 2.5 has been released
-      if not d.has_key?("downtime_depth")
-        d["downtime_depth"] = 0
-      end
-
       if (d["state"] != 0 && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
         problems = problems + 1
         #puts "Key: " + key.to_s + " State: " + d["state"].to_s
