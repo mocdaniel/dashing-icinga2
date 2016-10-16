@@ -3,3 +3,4 @@ binpaths
 history.yml
 log
 tmp
+*.lock
