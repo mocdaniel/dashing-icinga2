@@ -2,7 +2,7 @@ class Dashing.Simplemon extends Dashing.Widget
   @accessor 'current', Dashing.AnimatedValue
 
   ready: ->
-    setInterval(@checkUpdate, 100)
+    #setInterval(@checkUpdate, 100)
 
   onData: (data) ->
     if data.color
