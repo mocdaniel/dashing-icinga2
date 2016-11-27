@@ -358,6 +358,11 @@ class Icinga2
 
     @all_services_data.each do |service|
       #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
+
+      if (service["attrs"]["state"] == 0)
+        next
+      end
+
       @service_problems[service] = getServiceSeverity(service)
     end
 
