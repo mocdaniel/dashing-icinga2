@@ -34,6 +34,10 @@ class Icinga2
   # general stats
   attr_reader :avg_latency
   attr_reader :avg_execution_time
+  attr_reader :host_active_checks_1min
+  attr_reader :host_passive_checks_1min
+  attr_reader :service_active_checks_1min
+  attr_reader :service_passive_checks_1min
 
   # host stats
   attr_reader :host_count_all
@@ -271,5 +275,10 @@ class Icinga2
     @service_count_in_downtime = cib_data["num_services_in_downtime"].to_int
     @service_count_acknowledged = cib_data["num_services_acknowledged"].to_int
 
+    # check stats
+    @host_active_checks_1min = cib_data["active_host_checks_1min"]
+    @host_passive_checks_1min = cib_data["passive_host_checks_1min"]
+    @service_active_checks_1min = cib_data["active_service_checks_1min"]
+    @service_passive_checks_1min = cib_data["passive_service_checks_1min"]
   end
 end
