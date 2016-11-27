@@ -4,7 +4,7 @@
 that lets you build beautiful dashboards.
 
 This dashing implementation uses the Icinga 2 API
-to show basic alerts on your dashboard.
+to show alerts on your dashboard.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
@@ -40,6 +40,8 @@ Gems:
 In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
 
+# Configuration
+
 ## Icinga 2
 
 Icinga 2 provides either basic auth or client certificates for authentication.
@@ -58,15 +60,31 @@ according to your needs. By default we will only fetch
 data from the `/v1/status` and `/v1/objects` endpoints, but do not require write
 permissions.
 
-In case you want to use client certificates, set the `client_cn` from your connecting
-host and put the client certificate files (private and public key, ca.crt) in the `pki`
-directory.
-The icinga2 job script will attempt to use client certificates once found in the `pki/` directory
-instead of basic auth.
+In case you want to use client certificates, set the `client_cn` accordingly.
 
 ## Dashing Configuration
 
-Edit `jobs/icinga2.erb` and adjust the settings for the Icinga 2 API credentials.
+Edit `config/icinga2.json` and adjust the settings for the Icinga 2 API credentials.
+
+    $ vim config/icinga2.json
+    {
+      "icinga2": {
+        "api": {
+          "host": "localhost",
+          "port": 5665,
+          "user": "dashing",
+          "password": "icinga2ondashingr0xx"
+        }
+      }
+    }
+
+If you don't have any configuration file yet, the default values from the example above
+will be used.
+
+If you prefer to use client certificates, set `pki_path` accordingly. The Icinga 2
+job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
+
+Note: If both methods are configured, the Icinga 2 job prefers client certificates.
 
 # Run
 
@@ -108,35 +126,26 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 
 # Thanks
 
+[bodsch](https://github.com/Icinga/dashing-icinga2/pull/3) for the job rewrite and config file support.
 [roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
 
-# TODO
+# Development
+
+The Icinga 2 dashboard mainly depends on the following files:
+
+* dashboards/icinga2.erb
+* jobs/icinga2.rb
+* lib/icinga2.rb
+* config/icinga2.json
+
+Additional changes are inside the widgets. `simplemon` was added. `meter` was modified to update the
+maximum value at runtime.
+
+## TODO
 
 * Add ticket system demo (e.g. dev.icinga.org)
 * Add Grafana dashboard
-* Fix config.ru settings - [#227](https://github.com/Shopify/dashing/issues/227)
 * Hints for Docker integration (docker-icinga2)
-
-# Developer Hints
-
-## Dashing Installation
-
-    sudo gem install dashing
-    sudo gem install bundler
-
-    dashing new icinga2
-    cd icinga2
-    bundle
-
-    dashing start
-
-## Widgets
-
-    dashing generate widget table
-    dashing generate widget showmon
-
-## Jobs
-
-    dashing generate job icinga2
+* Replace Dashing with [Smashing](https://github.com/SmashingDashboard/smashing)
 
 
