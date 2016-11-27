@@ -21,22 +21,10 @@
 require 'rest-client'
 
 $node_name = Socket.gethostbyname(Socket.gethostname).first
-if defined? settings.icinga2_api_nodename
-  node_name = settings.icinga2_api_nodename
-end
 #$api_url_base = "https://192.168.33.5:5665"
 $api_url_base = "https://localhost:5665"
-if defined? settings.icinga2_api_url
-  api_url_base = settings.icinga2_api_url
-end
 $api_username = "dashing"
-if defined? settings.icinga2_api_username
-  api_username = settings.icinga2_api_username
-end
 $api_password = "icinga2ondashingr0xx"
-if defined? settings.icinga2_api_password
-  api_password = settings.icinga2_api_password
-end
 
 # prepare the rest client ssl stuff
 def prepare_rest_client(api_url)
