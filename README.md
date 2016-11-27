@@ -126,6 +126,7 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 
 # Thanks
 
+[fugstrolch](https://github.com/Icinga/dashing-icinga2/pull/4) for the Icinga Web 2 iframe integration.
 [tobiasvdk](https://github.com/tobiasvdk) for check stats widget and suggestions.
 [bodsch](https://github.com/Icinga/dashing-icinga2/pull/3) for the job rewrite and config file support inspiration.
 [spjmurray](https://github.com/spjmurray/dashing-icinga2/tree/1080p) for styling and 1080p resolution.
