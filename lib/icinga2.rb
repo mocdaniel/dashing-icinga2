@@ -65,21 +65,6 @@ class Icinga2
   attr_reader :all_hosts_data
   attr_reader :all_services_data
 
-  # internal
-  @@log
-  @@config
-  @@host
-  @@port
-  @@user
-  @@password
-  @@pkiPath
-  @@apiUrlBase
-  @@apiVersion
-  @@nodeName
-  @@hasCert
-  @@headers
-  @@options
-
   def initialize(configFile)
     # add logger
     file = File.open('/tmp/dashing-icinga2.log', File::WRONLY | File::APPEND | File::CREAT)
@@ -91,7 +76,6 @@ class Icinga2
     end
 
     # parse config
-    @log.debug(sprintf( '  config file   : %s', configFile))
     configFile = File.expand_path(configFile)
     @log.debug(sprintf( '  config file   : %s', configFile))
 
@@ -175,18 +159,14 @@ class Icinga2
     apiUrl = sprintf('%s/status/IcingaApplication', @apiUrlBase)
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
     data = JSON.parse(restClient.get(@headers).body)
-    result = data['results'][0]['status'] #there's only one row
-
-    return result
+    return data['results'][0]['status'] #there's only one row
   end
 
   def getCIBData()
     apiUrl = sprintf('%s/status/CIB', @apiUrlBase)
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
     data = JSON.parse(restClient.get(@headers).body)
-    result = data['results'][0]['status'] #there's only one row
-
-    return result
+    return data['results'][0]['status'] #there's only one row
   end
 
   def getHostObjects(attrs = nil, filter = nil, joins = nil)
@@ -194,19 +174,15 @@ class Icinga2
     # TODO change to X-HTTP-Method-Override: GET in @headers, use POST and send filters, joins, attrs in request bondy
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
     data = JSON.parse(restClient.get(@headers).body)
-    result = data['results']
-
-    return result
+    return data['results']
   end
 
   def getServiceObjects(attrs = nil, filter = nil, joins = nil)
-    apiUrl = sprintf('%s/objects/services?joins=host', @apiUrlBase)
+    apiUrl = sprintf('%s/objects/services?joins=host', @apiUrlBase) # joins is required!
     # TODO change to X-HTTP-Method-Override: GET in @headers, use POST and send filters, joins, attrs in request bondy
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
     data = JSON.parse(restClient.get(@headers).body)
-    result = data['results']
-
-    return result
+    return data['results']
   end
 
   def formatService(name)
@@ -300,6 +276,14 @@ class Icinga2
       else
         severity += 256
       end
+
+      if (attrs["acknowledgement"] != 0)
+        severity += 2
+      elsif (attrs["downtime_depth"] > 0)
+        severity += 1
+      else
+        severity += 4
+      end
     end
 
     return severity
@@ -358,7 +342,6 @@ class Icinga2
 
     @all_services_data.each do |service|
       #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
-
       if (service["attrs"]["state"] == 0)
         next
       end
@@ -444,6 +427,5 @@ class Icinga2
 
     # severity
     getProblemServices()
-
   end
 end

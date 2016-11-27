@@ -30,13 +30,9 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   puts "CIB Info: " + icinga.cib_data.to_s
 
   # meter widget
-  #host_meter = ((total_problem_hosts.to_f / total_hosts.to_f) * 100).round(2)
   # we'll update the patched meter widget with absolute values (set max dynamically)
   host_meter = icinga.host_count_problems.to_f
   host_meter_max = icinga.host_count_all
-
-  #service_meter = ((total_problem_services.to_f / total_services.to_f) * 100).round(2)
-  # we'll update the patched meter widget with absolute values (set max dynamically)
   service_meter = icinga.service_count_problems.to_f
   service_meter_max = icinga.service_count_all
 
@@ -54,23 +50,11 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   # severity list
   severity_stats = []
   icinga.service_problems_severity.each do |name, state|
-    color = icinga.stateToColor(state.to_int, false)
-    severity_stats.push({ "label" => icinga.formatService(name), "color" => color})
+    severity_stats.push({ "label" => icinga.formatService(name), "color" => icinga.stateToColor(state.to_int, false)})
   end
-
   puts "Severity: " + severity_stats.to_s
 
   ### Events
-  send_event('icinga-version', {
-   value: icinga.version,
-   moreinfo: 'Revision: ' + icinga.version_revision
-  })
-
-  send_event('icinga-uptime', {
-   value: icinga.uptime.to_s,
-   moreinfo: icinga.app_starttime
-  })
-
   send_event('icinga-host-meter', {
    value: host_meter,
    max:   host_meter_max,
