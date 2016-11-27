@@ -39,6 +39,8 @@ class Icinga2
   attr_reader :service_active_checks_1min
   attr_reader :service_passive_checks_1min
 
+  attr_reader :service_problems_severity
+
   # host stats
   attr_reader :host_count_all
   attr_reader :host_count_problems
@@ -77,7 +79,6 @@ class Icinga2
   @@hasCert
   @@headers
   @@options
-
 
   def initialize(configFile)
     # add logger
@@ -199,13 +200,36 @@ class Icinga2
   end
 
   def getServiceObjects(attrs = nil, filter = nil, joins = nil)
-    apiUrl = sprintf('%s/objects/services', @apiUrlBase)
+    apiUrl = sprintf('%s/objects/services?joins=host', @apiUrlBase)
     # TODO change to X-HTTP-Method-Override: GET in @headers, use POST and send filters, joins, attrs in request bondy
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
     data = JSON.parse(restClient.get(@headers).body)
     result = data['results']
 
     return result
+  end
+
+  def formatService(name)
+    service_map = name.split('!', 2)
+    return service_map[0].to_s + " - " + service_map[1].to_s
+  end
+
+  def stateToString(state, is_host = false)
+    if (is_host && state >= 1)
+      return "Down"
+    elsif (is_host && state == 0)
+      return "Up"
+    elsif (state == 0)
+      return "OK"
+    elsif (state == 1)
+      return "Warning"
+    elsif (state == 2)
+      return "Critical"
+    elsif (state == 3)
+      return "Unknown"
+    end
+
+    return "Undefined state. Programming error."
   end
 
   def countProblems(objects)
@@ -224,6 +248,120 @@ class Icinga2
     end
 
     return problems
+  end
+
+  def getObjectHasBeenChecked(object)
+    return object["attrs"]["last_check_result"] != nil
+  end
+
+  # stolen from Icinga Web 2, ./modules/monitoring/library/Monitoring/Backend/Ido/Query/ServicestatusQuery.php
+  def getHostSeverity(host)
+    attrs = host["attrs"]
+
+    severity = 0
+
+    if (attrs["state"] == 0)
+      if (getObjectHasBeenChecked(host))
+        severity += 16
+      end
+
+      if (attrs["acknowledgement"] != 0)
+        severity += 2
+      elsif (attrs["downtime_depth"] > 0)
+        severity += 1
+      else
+        severity += 4
+      end
+    else
+      if (getObjectHasBeenChecked(host))
+        severity += 16
+      elsif (attrs["state"] == 1)
+        severity += 32
+      elsif (attrs["state"] == 2)
+        severity += 64
+      else
+        severity += 256
+      end
+    end
+
+    return severity
+  end
+
+  # stolen from Icinga Web 2, ./modules/monitoring/library/Monitoring/Backend/Ido/Query/ServicestatusQuery.php
+  def getServiceSeverity(service)
+    attrs = service["attrs"]
+
+    severity = 0
+
+    if (attrs["state"] == 0)
+      if (getObjectHasBeenChecked(service))
+        severity += 16
+      end
+
+      if (attrs["acknowledgement"] != 0)
+        severity += 2
+      elsif (attrs["downtime_depth"] > 0)
+        severity += 1
+      else
+        severity += 4
+      end
+    else
+      if (getObjectHasBeenChecked(service))
+        severity += 16
+      elsif (attrs["state"] == 1)
+        severity += 32
+      elsif (attrs["state"] == 2)
+        severity += 128
+      elsif (attrs["state"] == 3)
+        severity += 64
+      else
+        severity += 256
+      end
+
+      # requires joins
+      host_attrs = service["joins"]["host"]
+
+      if (host_attrs["state"] > 0)
+        severity += 1024
+      elsif (attrs["acknowledgement"])
+        severity += 512
+      elsif (attrs["downtime_depth"] > 0)
+        severity += 256
+      else
+        severity += 2048
+      end
+    end
+
+    return severity
+  end
+
+  def getProblemServices(max_items = 5)
+    @service_problems = {}
+
+    @all_services_data.each do |service|
+      #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
+      @service_problems[service] = getServiceSeverity(service)
+    end
+
+    count = 0
+    @service_problems_severity = {}
+
+    # debug
+    #@service_problems.sort_by {|k, v| v}.reverse.each do |obj, severity|
+    #  puts obj["name"] + ": " + severity.to_s
+    #end
+
+    @service_problems.sort_by {|k, v| v}.reverse.each do |obj, severity|
+      if (count >= max_items)
+        break
+      end
+
+      name = obj["name"]
+      state = stateToString(obj["attrs"]["state"].to_int, false)
+      @service_problems_severity[name] = state
+
+      count += 1
+    end
   end
 
   def fetchVersion(version)
@@ -280,5 +418,10 @@ class Icinga2
     @host_passive_checks_1min = cib_data["passive_host_checks_1min"]
     @service_active_checks_1min = cib_data["active_service_checks_1min"]
     @service_passive_checks_1min = cib_data["passive_service_checks_1min"]
+
+
+    # severity
+    getProblemServices()
+
   end
 end

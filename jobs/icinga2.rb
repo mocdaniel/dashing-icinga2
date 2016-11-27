@@ -51,6 +51,14 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   ]
   puts "Checks: " + check_stats.to_s
 
+  # severity list
+  severity_stats = []
+  icinga.service_problems_severity.each do |name, state|
+    #severity_stats.push({ "label" => icinga.formatService(name), "value" => state})
+    severity_stats.push({ "label" => icinga.formatService(name)})
+  end
+
+  puts "Severity: " + severity_stats.to_s
 
   ### Events
   send_event('icinga-version', {
@@ -78,6 +86,10 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   send_event('icinga-checks', {
    items: check_stats,
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
+   color: 'blue' })
+
+  send_event('icinga-severity', {
+   items: severity_stats,
    color: 'blue' })
 
   # down, critical, warning, unknown
