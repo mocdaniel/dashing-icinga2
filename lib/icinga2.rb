@@ -232,6 +232,24 @@ class Icinga2
     return "Undefined state. Programming error."
   end
 
+  def stateToColor(state, is_host = false)
+    if (is_host && state >= 1)
+      return "red"
+    elsif (is_host && state == 0)
+      return "green"
+    elsif (state == 0)
+      return "green"
+    elsif (state == 1)
+      return "yellow"
+    elsif (state == 2)
+      return "red"
+    elsif (state == 3)
+      return "purple"
+    end
+
+    return "Undefined state. Programming error."
+  end
+
   def countProblems(objects)
     problems = 0
 
@@ -357,8 +375,7 @@ class Icinga2
       end
 
       name = obj["name"]
-      state = stateToString(obj["attrs"]["state"].to_int, false)
-      @service_problems_severity[name] = state
+      @service_problems_severity[name] = obj["attrs"]["state"]
 
       count += 1
     end

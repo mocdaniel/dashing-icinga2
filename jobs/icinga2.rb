@@ -54,8 +54,8 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   # severity list
   severity_stats = []
   icinga.service_problems_severity.each do |name, state|
-    #severity_stats.push({ "label" => icinga.formatService(name), "value" => state})
-    severity_stats.push({ "label" => icinga.formatService(name)})
+    color = icinga.stateToColor(state.to_int, false)
+    severity_stats.push({ "label" => icinga.formatService(name), "color" => color})
   end
 
   puts "Severity: " + severity_stats.to_s
