@@ -10,14 +10,11 @@ to show alerts on your dashboard.
 
 # Demo
 
-A demo is available inside the [Icinga Vagrant Boxes](https://github.com/icinga/icinga-vagrant).
+A demo is available inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
 
 # Support
 
 **This is intended for demo purposes.** You may use the provided examples in your own implementation.
-
-Please open issues at [dev.icinga.org](https://dev.icinga.org/projects/icinga-tools). In case
-you've created a PR/patch, open a new issue linking to it as well please :)
 
 If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.org/community/get-help/).
 
@@ -135,6 +132,8 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 
 # Development
 
+Fork the repository on GitHub, commit your changes and send a PR please :)
+
 The Icinga 2 dashboard mainly depends on the following files:
 
 * dashboards/icinga2.erb
@@ -143,7 +142,7 @@ The Icinga 2 dashboard mainly depends on the following files:
 * config/icinga2.json
 
 Additional changes are inside the widgets. `simplemon` was added. `meter` was modified to update the
-maximum value at runtime.
+maximum value at runtime. `list` was updated to highlight colors and change font sizes.
 
 ## TODO
 
