@@ -144,6 +144,27 @@ The Icinga 2 dashboard mainly depends on the following files:
 Additional changes are inside the widgets. `simplemon` was added. `meter` was modified to update the
 maximum value at runtime. `list` was updated to highlight colors and change font sizes.
 
+## Icinga 2 Library
+
+`lib/icinga2.rb` provides a class `icinga` which is responsible
+for reading the configuration file, initializing the api connection
+and fetching data.
+
+Several public attributes are exposed by this class already. You'll
+need to instantiate a new object and then call the `run` method.
+
+Then you are able to access these attributes and public functions
+such as `getHostobjects` and `getServiceObjects`. These two functions
+can be called by passing
+
+* attrs as an array of attribute strings
+* filter as Icinga 2 API filter string
+* joins as an array of joined objects and/or attributes
+
+A simple test runner for testing own modifications has been added
+into `test/icinga2.rb`. You can find additional examples over there as
+well.
+
 ## TODO
 
 * Add ticket system demo (e.g. dev.icinga.org)

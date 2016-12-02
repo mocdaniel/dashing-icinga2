@@ -171,17 +171,57 @@ class Icinga2
 
   def getHostObjects(attrs = nil, filter = nil, joins = nil)
     apiUrl = sprintf('%s/objects/hosts', @apiUrlBase)
-    # TODO change to X-HTTP-Method-Override: GET in @headers, use POST and send filters, joins, attrs in request bondy
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+
+    @headers["X-HTTP-Method-Override"] = "GET"
+    requestBody = {}
+
+    if (attrs)
+      requestBody["attrs"] = attrs
+    end
+
+    if (filter)
+      requestBody["filter"] = filter
+    end
+
+    if (joins)
+      requestBody["joins"] = joins
+    end
+
+    payload = JSON.generate(requestBody)
+    res = restClient.post(payload, @headers)
+    body = res.body
+    data = JSON.parse(body)
     return data['results']
   end
 
   def getServiceObjects(attrs = nil, filter = nil, joins = nil)
-    apiUrl = sprintf('%s/objects/services?joins=host', @apiUrlBase) # joins is required!
-    # TODO change to X-HTTP-Method-Override: GET in @headers, use POST and send filters, joins, attrs in request bondy
+    apiUrl = sprintf('%s/objects/services', @apiUrlBase)
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+
+    @headers["X-HTTP-Method-Override"] = "GET"
+    requestBody = {}
+
+    if (attrs)
+      requestBody["attrs"] = attrs
+    end
+
+    if (filter)
+      requestBody["filter"] = filter
+    end
+
+    tmpJoin = [ "host" ]
+
+    if (joins)
+      requestBody["joins"] = joins
+    end
+
+    #puts "request body: " + requestBody.to_s
+
+    payload = JSON.generate(requestBody)
+    res = restClient.post(payload, @headers)
+    body = res.body
+    data = JSON.parse(body)
     return data['results']
   end
 
@@ -393,7 +433,7 @@ class Icinga2
     @app_starttime = Time.at(@app_data['icingaapplication']['app']['program_start'].to_f)
 
     @all_hosts_data = getHostObjects() #exported
-    @all_services_data = getServiceObjects() #exported
+    @all_services_data = getServiceObjects(nil, nil, [ "host" ]) #exported, requires "host" join
     @cib_data = getCIBData() #exported
 
     uptimeTmp = cib_data["uptime"].round(2)
