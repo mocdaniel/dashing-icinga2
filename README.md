@@ -1,20 +1,17 @@
-
-![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
+# Dashing with Icinga 2
 
 #### Table of Contents
 
 1. [Introduction](#introduction)
-2. [Demo](#demo)
-3. [Support](#support)
-4. [License](#license)
-5. [Requirements](#requirements)
-6. [Configuration](#configuration)
-7. [Run](#run)
-8. [Thanks](#thanks)
-9. [Development](#development)
-10. [TODO](#todo)
+2. [Support](#support)
+3. [License](#license)
+4. [Requirements](#requirements)
+5. [Configuration](#configuration)
+6. [Run](#run)
+7. [Thanks](#thanks)
+8. [Development](#development)
 
-# Introduction
+## Introduction
 
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
@@ -28,23 +25,25 @@ development instructions for your own implementation.
 The dashboard also allows to embed the Icinga Web 2 host and
 service problem lists as iframe.
 
-# Demo
+![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
+
+### Demo
 
 A demo is available inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
 
-# Support
+## Support
 
 You are encouraged to use the existing jobs and dashboards and modify them for your own needs.
 More development insights can be found in [this section](#development).
 
 If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.org/community/get-help/).
 
-# License
+## License
 
 * Dashing is licensed under the [MIT license](https://github.com/Shopify/dashing/blob/master/MIT-LICENSE).
 * Icinga specific jobs and dashboards are licensed under the GPLv2+ license.
 
-# Requirements
+## Requirements
 
 * Ruby, Gems and Bundler
 * Dashing Gem
@@ -62,11 +61,11 @@ Gems:
 In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
 
-# Configuration
+## Configuration
 
-## Icinga 2
+### Icinga 2 API
 
-Icinga 2 provides either basic auth or client certificates for authentication.
+The Icinga 2 API requires either basic auth or client certificates for authentication.
 
 Therefore add a new ApiUser object to your Icinga 2 configuration:
 
@@ -84,7 +83,7 @@ permissions.
 
 In case you want to use client certificates, set the `client_cn` accordingly.
 
-## Dashing Configuration
+### Dashing Configuration
 
 Edit `config/icinga2.json` and adjust the settings for the Icinga 2 API credentials.
 
@@ -108,9 +107,9 @@ job expects the certificate file names based on the local FQDN e.g. `pki/icinga2
 
 Note: If both methods are configured, the Icinga 2 job prefers client certificates.
 
-# Run
+## Run
 
-## Linux
+### Linux
 
 Install all required ruby gems into the system path.
 
@@ -124,7 +123,7 @@ Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:8005](http://localhost:8005)
 
-## Unix and OSX
+### Unix and OSX
 
 On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
 therefore you'll need to fix the eventmachine gem:
@@ -146,7 +145,7 @@ Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:8005](http://localhost:8005)
 
-# Thanks
+## Thanks
 
 [fugstrolch](https://github.com/Icinga/dashing-icinga2/pull/4) for the Icinga Web 2 iframe integration.
 [tobiasvdk](https://github.com/tobiasvdk) for check stats widget and suggestions.
@@ -155,7 +154,7 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 [micke2k](https://github.com/Icinga/dashing-icinga2/pull/2) for proper time formatting.
 [roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
 
-# Development
+## Development
 
 Fork the repository on GitHub, commit your changes and send a PR please :)
 
@@ -169,7 +168,7 @@ The Icinga 2 dashboard mainly depends on the following files:
 Additional changes are inside the widgets. `simplemon` was added. `meter` was modified to update the
 maximum value at runtime. `list` was updated to highlight colors and change font sizes.
 
-## Icinga 2 Library
+### Icinga 2 Library
 
 `lib/icinga2.rb` provides a class `icinga` which is responsible
 for reading the configuration file, initializing the api connection
@@ -195,7 +194,7 @@ well.
 > These code parts may change. Keep this in mind on updates.
 
 
-## Icinga 2 Job
+### Icinga 2 Job
 
 Widgets are updated by calling `send_event` inside the `jobs/icinga2.rb` file
 in the event scheduler.
@@ -225,7 +224,7 @@ Now you are able to access the exported object attributes and call available
 object methods. Please check `libs/icinga2.rb` for specific options. If you
 require more attributes and/or methods please send a PR!
 
-## Icinga 2 Dashboard
+### Icinga 2 Dashboard
 
 The dashboard is located in the `dashboards/icinga2.erb` file and mostly
 consists of an HTML list.
@@ -246,7 +245,7 @@ The following attributes are important:
 * `data-min` and `data-max` are widget specific in this example. They are referenced inside the Coffee script file inside the widget code.
 * `style` can be used to specify certain CSS to make the widget look more beautiful if not already.
 
-## Dashboard Widgets
+### Dashboard Widgets
 
 The widgets are located inside the `widgets` directory. Each widget consists of three files:
 
@@ -254,7 +253,7 @@ The widgets are located inside the `widgets` directory. Each widget consists of 
 * `widget.scss` specifies required styling
 * `widget.coffee` implements the event handlng for the widget, e.g. `OnData` when `send_event` pushes new data.
 
-### Meter
+#### Meter
 
 This widget is used to display host and service problem counts. The maximum value is updated
 at runtime too because of API-created objects.
@@ -276,7 +275,7 @@ and values:
 * `moreinfo` creating a string which is displayed below the meter as legend
 * `color` for specifying the widget's color
 
-### List
+#### List
 
 Used to print the average checks per minute and list service problems by severity.
 
@@ -300,7 +299,7 @@ as `items` attribute. You can add `moreinfo` which provides an additional legend
      color: 'blue' })
 
 
-### Simplemon
+#### Simplemon
 
 Print problem counts by state and coloring. Also add acknowledged objects and those
 in downtime.
@@ -314,7 +313,7 @@ Example:
 `icinga-service-critical` is the value of `data-id` field inside the `dashboards/icinga2.erb`
 file. In order to update the widget you need to send a `value` and a `color` as hash values.
 
-### Icinga Web 2 IFrame
+#### IFrame
 
 You can edit `dashboards/icinga2.erb` to modify the iframe widget
 for Icinga Web 2.
@@ -333,12 +332,12 @@ Example:
       <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
     </li>
 
-## References
+### References
 
 https://www.icinga.com/2016/01/28/awesome-dashing-dashboards-with-icinga-2/
 https://gist.github.com/hussfelt/a6fe71ebd7cce327df29
 
-# TODO
+### TODO
 
 * Add ticket system demo (e.g. github.com/icinga/icinga2)
 * Add Grafana dashboard
