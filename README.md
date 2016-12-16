@@ -1,4 +1,20 @@
-# General
+
+![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
+
+#### Table of Contents
+
+1. [Introduction](#introduction)
+2. [Demo](#demo)
+3. [Support](#support)
+4. [License](#license)
+5. [Requirements](#requirements)
+6. [Configuration](#configuration)
+7. [Run](#run)
+8. [Thanks](#thanks)
+9. [Development](#development)
+10. [TODO](#todo)
+
+# Introduction
 
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
@@ -11,8 +27,6 @@ development instructions for your own implementation.
 
 The dashboard also allows to embed the Icinga Web 2 host and
 service problem lists as iframe.
-
-![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
 # Demo
 
