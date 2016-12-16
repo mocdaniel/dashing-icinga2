@@ -3,8 +3,14 @@
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
 
-This dashing implementation uses the Icinga 2 API
-to show alerts on your dashboard.
+The Icinga 2 dashboard uses the Icinga 2 API to
+visualize what's going on with your monitoring.
+
+It combines several popular widgets and provides
+development instructions for your own implementation.
+
+The dashboard also allows to embed the Icinga Web 2 host and
+service problem lists as iframe.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
@@ -14,7 +20,8 @@ A demo is available inside the [Icinga Vagrant Box "icinga2x"](https://github.co
 
 # Support
 
-**This is intended for demo purposes.** You may use the provided examples in your own implementation.
+You are encouraged to use the existing jobs and dashboards and modify them for your own needs.
+More development insights can be found in [this section](#development).
 
 If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.org/community/get-help/).
 
@@ -27,7 +34,11 @@ If you have any questions, please hop onto the [Icinga community channels](https
 
 * Ruby, Gems and Bundler
 * Dashing Gem
-* Icinga 2 API (v2.5+)
+* Icinga 2 API (v2.6+)
+
+Example on CentOS 7 with enabled EPEL repository:
+
+    yum -y install rubygems rubygem-bundler ruby-devel openssl gcc-c++ make nodejs
 
 Gems:
 
@@ -165,11 +176,156 @@ A simple test runner for testing own modifications has been added
 into `test/icinga2.rb`. You can find additional examples over there as
 well.
 
-## TODO
+> **Note**
+>
+> These code parts may change. Keep this in mind on updates.
 
-* Add ticket system demo (e.g. dev.icinga.org)
+
+## Icinga 2 Job
+
+Widgets are updated by calling `send_event` inside the `jobs/icinga2.rb` file
+in the event scheduler.
+
+The widget data is calculated from the `Icinga2` object class.
+
+Include the Icinga 2 library:
+
+    require './lib/icinga2'
+
+Instantiate a new object called `icinga` from the `Icinga2` class. Add the
+path to the configuration file.
+
+    # initialize data provider
+    icinga = Icinga2.new('config/icinga2.json') # fixed path
+
+Run the scheduler every five seconds and start it now.
+
+    SCHEDULER.every '5s', :first_in => 0 do |job|
+
+Then call the `run` method to fetch the current data into the `icinga` object
+
+      # run data provider
+      icinga.run
+
+Now you are able to access the exported object attributes and call available
+object methods. Please check `libs/icinga2.rb` for specific options. If you
+require more attributes and/or methods please send a PR!
+
+## Icinga 2 Dashboard
+
+The dashboard is located in the `dashboards/icinga2.erb` file and mostly
+consists of an HTML list.
+
+Example:
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100" style="background-color: #0095bf;"></div>
+    </li>
+
+The following attributes are important:
+
+* `data-row` and `data-col` specify the location of the widget on screen.
+* `data-sizex` and `data-sizey` specify the width and height of a widget by tiles.
+* `data-view` defines the name of the widget to use
+* `data-id` specifies the name of the data source for the used widget (important for `send_event` later)
+* `data-title` defines the widget's title on top
+* `data-min` and `data-max` are widget specific in this example. They are referenced inside the Coffee script file inside the widget code.
+* `style` can be used to specify certain CSS to make the widget look more beautiful if not already.
+
+## Dashboard Widgets
+
+The widgets are located inside the `widgets` directory. Each widget consists of three files:
+
+* `widget.html` defines the basic layout
+* `widget.scss` specifies required styling
+* `widget.coffee` implements the event handlng for the widget, e.g. `OnData` when `send_event` pushes new data.
+
+### Meter
+
+This widget is used to display host and service problem counts. The maximum value is updated
+at runtime too because of API-created objects.
+
+Example:
+
+    send_event('icinga-host-meter', {
+     value: host_meter,
+     max:   host_meter_max,
+     moreinfo: "Total hosts: " + host_meter_max.to_s,
+     color: 'blue' })
+
+`icinga-host-meter` is the value of the `data-id` field in the `dashboards/icinga2.erb` file.
+In order to update the widget you'll need to send a hash which contains the following keys
+and values:
+
+* `value` containing the current problem count
+* `max` specifying the current object count
+* `moreinfo` creating a string which is displayed below the meter as legend
+* `color` for specifying the widget's color
+
+### List
+
+Used to print the average checks per minute and list service problems by severity.
+
+Example for check statistics:
+
+Create a new array containing a hash for each table row. The `label` key is required,
+`value` is optional.
+
+    check_stats = [
+      {"label" => "Host (active)", "value" => icinga.host_active_checks_1min},
+      {"label" => "Service (active)", "value" => icinga.service_active_checks_1min},
+    ]
+
+Use this array inside the `icinga-checks` event (`data-id` in the `dashboards/icinga2.erb` file)
+as `items` attribute. You can add `moreinfo` which provides an additional legend for this widget.
+`color` is optional.
+
+    send_event('icinga-checks', {
+     items: check_stats,
+     moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
+     color: 'blue' })
+
+
+### Simplemon
+
+Print problem counts by state and coloring. Also add acknowledged objects and those
+in downtime.
+
+Example:
+
+    send_event('icinga-service-critical', {
+     value: icinga.service_count_critical.to_s,
+     color: 'red' })
+
+`icinga-service-critical` is the value of `data-id` field inside the `dashboards/icinga2.erb`
+file. In order to update the widget you need to send a `value` and a `color` as hash values.
+
+### Icinga Web 2 IFrame
+
+You can edit `dashboards/icinga2.erb` to modify the iframe widget
+for Icinga Web 2.
+
+Example URL:
+
+    /icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc
+
+Add the fullscreen and compact options for those views.
+
+    &showFullscreen&showCompact
+
+Example:
+
+    <li data-row="4" data-col="1" data-sizex="2" data-sizey="2">
+      <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
+    </li>
+
+## References
+
+https://www.icinga.com/2016/01/28/awesome-dashing-dashboards-with-icinga-2/
+https://gist.github.com/hussfelt/a6fe71ebd7cce327df29
+
+# TODO
+
+* Add ticket system demo (e.g. github.com/icinga/icinga2)
 * Add Grafana dashboard
-* Hints for Docker integration (docker-icinga2)
 * Replace Dashing with [Smashing](https://github.com/SmashingDashboard/smashing)
-
-
