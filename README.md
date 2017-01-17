@@ -36,7 +36,7 @@ A demo is available inside the [Icinga Vagrant Box "icinga2x"](https://github.co
 You are encouraged to use the existing jobs and dashboards and modify them for your own needs.
 More development insights can be found in [this section](#development).
 
-If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.org/community/get-help/).
+If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.com/community/get-involved/).
 
 ## License
 
@@ -76,7 +76,7 @@ Therefore add a new ApiUser object to your Icinga 2 configuration:
       permissions = [ "status/query", "objects/query/*" ]
     }
 
-Set the [ApiUser permissions](http://docs.icinga.org/icinga2/latest/doc/module/icinga2/chapter/icinga2-api#icinga2-api-permissions)
+Set the [ApiUser permissions](http://docs.icinga.com/icinga2/latest/doc/module/icinga2/chapter/icinga2-api#icinga2-api-permissions)
 according to your needs. By default we will only fetch
 data from the `/v1/status` and `/v1/objects` endpoints, but do not require write
 permissions.
