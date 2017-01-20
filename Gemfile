@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'dashing'
+gem 'smashing'
 gem 'thin'
 gem 'eventmachine'
-
 gem 'rest-client'
 gem 'json'

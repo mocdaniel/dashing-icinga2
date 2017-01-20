@@ -1,10 +1,10 @@
 {
-  "icinga2": {
-    "api": {
-      "host": "localhost",
-      "port": 5665,
-      "user": "dashing",
-      "password": "icinga2ondashingr0xx"
-    }
-  }
+	"icinga2": {
+		"api": {
+			"host": "localhost",
+			"port": 5665,
+			"user": "smashing",
+			"password": "supersecretpassword"
+		}
+	}
 }
