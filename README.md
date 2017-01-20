@@ -13,7 +13,7 @@
 
 ## Introduction
 
-[Smashing](https://github.com/Smashing/smashing) is the spiritual successor to Dashing, is a Sinatra based framework that lets you build excellent dashboards. It looks especially great on TVs.
+[Smashing](https://github.com/Smashing/smashing/wiki) is the spiritual successor to Dashing, is a Sinatra based framework that lets you build beautiful dashboards.
 
 The Icinga 2 dashboard uses the Icinga 2 API to
 visualize what's going on with your monitoring.
@@ -39,6 +39,7 @@ If you have any questions, please hop onto the [Icinga community channels](https
 
 ## License
 
+* Smashing is licensed under the [MIT license](https://github.com/Smashing/smashing/blob/master/MIT-LICENSE).
 * Dashing is licensed under the [MIT license](https://github.com/Shopify/dashing/blob/master/MIT-LICENSE).
 * Icinga specific jobs and dashboards are licensed under the GPLv2+ license.
 
