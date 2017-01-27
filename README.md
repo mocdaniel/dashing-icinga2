@@ -9,7 +9,8 @@
 5. [Configuration](#configuration)
 6. [Run](#run)
 7. [Thanks](#thanks)
-8. [Development](#development)
+8. [Troubleshooting](#troubleshooting)
+9. [Development](#development)
 
 ## Introduction
 
@@ -24,6 +25,11 @@ development instructions for your own implementation.
 
 The dashboard also allows to embed the Icinga Web 2 host and
 service problem lists as iframe.
+
+> **Note**:
+
+> You still need to install the `dashing` gem in order to
+> use the dashboards, jobs and widgets provided by this project.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
@@ -153,6 +159,30 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 [spjmurray](https://github.com/spjmurray/dashing-icinga2/tree/1080p) for styling and 1080p resolution.
 [micke2k](https://github.com/Icinga/dashing-icinga2/pull/2) for proper time formatting.
 [roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
+
+## Troubleshooting
+
+### Required Information
+
+* Dashing version (`gem list --local dashing`)
+* Ruby version (`ruby -V`)
+* Version of this project (tag name or `git show -1`)
+* Your own modifications to this project, if any
+
+### Widgets are not updated
+
+* Open your browser's development console and check for errors.
+* Ensure that the job runner does not log any errors.
+* Stop the dashing daemon and run it in foreground.
+
+### Connection Errors
+
+If the connection to the Icinga 2 API was interrupted, check for possible network issues. The Icinga 2 daemon might have been reloaded at that time.
+
+* Manually test the Icinga 2 API (check docs.icinga.com for the official documentation)
+* Verify that the configuration file contains the correct API details
+* Modify the `jobs/icinga2.rb` and add additional logging (use `puts` similar to existing examples)
+* Run Dashing in foreground
 
 ## Development
 
