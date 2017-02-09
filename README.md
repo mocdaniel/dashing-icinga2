@@ -120,6 +120,10 @@ Note: If both methods are configured, the Icinga 2 job prefers client certificat
 Install all required ruby gems into the system path.
 
     bundle install --system
+    
+If using CentOS/Fedora/RedHat :
+
+    bundle install --path binpaths
 
 Now start dashing:
 
