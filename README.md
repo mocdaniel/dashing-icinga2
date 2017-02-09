@@ -123,6 +123,7 @@ Install all required ruby gems into the system path.
     
 If using CentOS/Fedora/RedHat :
 
+    cd dashing-icinga2
     bundle install --path binpaths
 
 Now start dashing:
