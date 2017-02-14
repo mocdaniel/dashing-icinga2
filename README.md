@@ -6,6 +6,7 @@
 2. [Support](#support)
 3. [License](#license)
 4. [Requirements](#requirements)
+4. [Installation](#installation)
 5. [Configuration](#configuration)
 6. [Run](#run)
 7. [Thanks](#thanks)
@@ -53,19 +54,88 @@ If you have any questions, please hop onto the [Icinga community channels](https
 
 * Ruby, Gems and Bundler
 * Dashing Gem
-* Icinga 2 API (v2.6+)
+* Icinga 2 (v2.6+) and the REST API
 
-Example on CentOS 7 with enabled EPEL repository:
+## Installation
 
-    yum -y install rubygems rubygem-bundler ruby-devel openssl gcc-c++ make nodejs
+Either clone this repository from GitHub or download the tarball.
 
-Gems:
+Git clone:
 
-    gem install bundler
-    gem install dashing
+```
+cd /usr/share
+git clone https://github.com/Icinga/dashing-icinga2.git
+cd dashing-icinga2
+```
+
+Tarball download:
+
+```
+cd /usr/share
+wget https://github.com/Icinga/dashing-icinga2/archive/master.zip
+unzip master.zip
+mv dashing-icinga2-master dashing-icinga2
+cd dashing-icinga2
+```
+
+
+### Linux
+
+RedHat/CentOS 7 (requires EPEL repository):
+
+```
+yum makecache
+yum -y install epel-release
+yum -y install rubygems rubygem-bundler ruby-devel openssl gcc-c++ make nodejs
+```
+
+Note: The development tools and header files are required for building the `eventmachine` gem.
+
+Debian/Ubuntu:
+
+```
+apt-get update
+apt-get -y install ruby bundler nodejs
+```
+
+Proceed with the `bundler` gem installation for all systems (CentOS, Debian, etc.).
+
+```
+gem install bundler
+```
 
 In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
+
+Install the dependencies using Bundler.
+
+```
+cd /usr/share/dashing-icinga2
+bundle
+```
+
+Proceed to the [configuration](#configuration) section.
+
+### Unix and OSX
+
+On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
+therefore you'll need to fix the eventmachine gem:
+
+```
+brew install openssl
+bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
+bundle install --path binpaths
+```
+
+Note: Dashing is running as thin server which by default uses epoll from within the eventmachine library.
+This is not available on unix-based systems, you can safely ignore this warning:
+
+```
+warning: epoll is not supported on this platform
+```
+
+Proceed to the [configuration](#configuration) section.
+
 
 ## Configuration
 
@@ -75,17 +145,20 @@ The Icinga 2 API requires either basic auth or client certificates for authentic
 
 Therefore add a new ApiUser object to your Icinga 2 configuration:
 
-    vim /etc/icinga2/conf.d/api-users.conf
+```
+vim /etc/icinga2/conf.d/api-users.conf
 
-    object ApiUser "dashing" {
-      password = "icinga2ondashingr0xx"
-      permissions = [ "status/query", "objects/query/*" ]
-    }
+object ApiUser "dashing" {
+  password = "icinga2ondashingr0xx"
+  permissions = [ "status/query", "objects/query/*" ]
+}
+```
 
 Set the [ApiUser permissions](http://docs.icinga.com/icinga2/latest/doc/module/icinga2/chapter/icinga2-api#icinga2-api-permissions)
-according to your needs. By default we will only fetch
-data from the `/v1/status` and `/v1/objects` endpoints, but do not require write
-permissions.
+according to your needs. By default the Icinga 2 job will fetch
+data from the `/v1/status` and `/v1/objects` endpoints, but does not require write
+permissions. If you're extending the API queries on your own, keep in mind to add
+proper permissions.
 
 In case you want to use client certificates, set the `client_cn` accordingly.
 
@@ -93,17 +166,20 @@ In case you want to use client certificates, set the `client_cn` accordingly.
 
 Edit `config/icinga2.json` and adjust the settings for the Icinga 2 API credentials.
 
-    $ vim config/icinga2.json
-    {
-      "icinga2": {
-        "api": {
-          "host": "localhost",
-          "port": 5665,
-          "user": "dashing",
-          "password": "icinga2ondashingr0xx"
-        }
-      }
+```
+vim config/icinga2.json
+
+{
+  "icinga2": {
+    "api": {
+      "host": "localhost",
+      "port": 5665,
+      "user": "dashing",
+      "password": "icinga2ondashingr0xx"
     }
+  }
+}
+```
 
 If you don't have any configuration file yet, the default values from the example above
 will be used.
@@ -115,46 +191,27 @@ Note: If both methods are configured, the Icinga 2 job prefers client certificat
 
 ## Run
 
-### Linux
+You can start dashing as daemon by using this script:
 
-Install all required ruby gems into the system path.
-
-    bundle install --system
-    
-If using CentOS/Fedora/RedHat :
-
-    cd dashing-icinga2
-    bundle install --path binpaths
-
-Now start dashing:
-
-    ./restart-dashing
+```
+./restart-dashing
+```
 
 Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:8005](http://localhost:8005)
 
-### Unix and OSX
+### Foreground
 
-On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
-therefore you'll need to fix the eventmachine gem:
+You can run Dashing in foreground for tests and debugging too:
 
-    brew install openssl
-    bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-    bundle install --path binpaths
+```
+export PATH="/usr/local/bin:$PATH"
+dashing start -p 8005
+```
 
-Note: Dashing is running as thin server which by default uses epoll from within the eventmachine library.
-This is not available on unix-based systems, you can safely ignore this warning:
+In addition to that you should think about an initscript/systemd service file too.
 
-   warning: epoll is not supported on this platform
-
-Now start dashing:
-
-    ./restart-dashing
-
-Additional options are available through `./restart-dashing -h`.
-
-Navigate to [http://localhost:8005](http://localhost:8005)
 
 ## Thanks
 
@@ -171,7 +228,7 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 
 * Dashing version (`gem list --local dashing`)
 * Ruby version (`ruby -V`)
-* Version of this project (tag name or `git show -1`)
+* Version of this project (tarball name, download date, tag name or `git show -1`)
 * Your own modifications to this project, if any
 
 ### Widgets are not updated
@@ -188,6 +245,12 @@ If the connection to the Icinga 2 API was interrupted, check for possible networ
 * Verify that the configuration file contains the correct API details
 * Modify the `jobs/icinga2.rb` and add additional logging (use `puts` similar to existing examples)
 * Run Dashing in foreground
+
+### Misc Errors
+
+* Port 8005 is not reachable. Ensure that the firewall rules are setup accordingly.
+* Iframe is not working. Try [this solution](https://monitoring-portal.org/index.php?thread/39888-icinga2-dashing-iframe-issue-resolved/) and ensure that the `X-Frame-Options`
+variable is not set to `DENY`.
 
 ## Development
 
@@ -238,22 +301,30 @@ The widget data is calculated from the `Icinga2` object class.
 
 Include the Icinga 2 library:
 
-    require './lib/icinga2'
+```ruby
+require './lib/icinga2'
+```
 
 Instantiate a new object called `icinga` from the `Icinga2` class. Add the
 path to the configuration file.
 
-    # initialize data provider
-    icinga = Icinga2.new('config/icinga2.json') # fixed path
+```ruby
+# initialize data provider
+icinga = Icinga2.new('config/icinga2.json') # fixed path
+```
 
 Run the scheduler every five seconds and start it now.
 
-    SCHEDULER.every '5s', :first_in => 0 do |job|
+```ruby
+SCHEDULER.every '5s', :first_in => 0 do |job|
+```
 
 Then call the `run` method to fetch the current data into the `icinga` object
 
-      # run data provider
-      icinga.run
+```ruby
+# run data provider
+icinga.run
+```
 
 Now you are able to access the exported object attributes and call available
 object methods. Please check `libs/icinga2.rb` for specific options. If you
@@ -266,9 +337,11 @@ consists of an HTML list.
 
 Example:
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100" style="background-color: #0095bf;"></div>
-    </li>
+```html
+<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+  <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100" style="background-color: #0095bf;"></div>
+</li>
+```
 
 The following attributes are important:
 
@@ -295,11 +368,13 @@ at runtime too because of API-created objects.
 
 Example:
 
-    send_event('icinga-host-meter', {
-     value: host_meter,
-     max:   host_meter_max,
-     moreinfo: "Total hosts: " + host_meter_max.to_s,
-     color: 'blue' })
+```ruby
+send_event('icinga-host-meter', {
+ value: host_meter,
+ max:   host_meter_max,
+ moreinfo: "Total hosts: " + host_meter_max.to_s,
+ color: 'blue' })
+```
 
 `icinga-host-meter` is the value of the `data-id` field in the `dashboards/icinga2.erb` file.
 In order to update the widget you'll need to send a hash which contains the following keys
@@ -319,19 +394,23 @@ Example for check statistics:
 Create a new array containing a hash for each table row. The `label` key is required,
 `value` is optional.
 
-    check_stats = [
-      {"label" => "Host (active)", "value" => icinga.host_active_checks_1min},
-      {"label" => "Service (active)", "value" => icinga.service_active_checks_1min},
-    ]
+```ruby
+check_stats = [
+  {"label" => "Host (active)", "value" => icinga.host_active_checks_1min},
+  {"label" => "Service (active)", "value" => icinga.service_active_checks_1min},
+]
+```
 
 Use this array inside the `icinga-checks` event (`data-id` in the `dashboards/icinga2.erb` file)
 as `items` attribute. You can add `moreinfo` which provides an additional legend for this widget.
 `color` is optional.
 
-    send_event('icinga-checks', {
-     items: check_stats,
-     moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
-     color: 'blue' })
+```ruby
+send_event('icinga-checks', {
+ items: check_stats,
+ moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
+ color: 'blue' })
+```
 
 
 #### Simplemon
@@ -341,9 +420,11 @@ in downtime.
 
 Example:
 
-    send_event('icinga-service-critical', {
-     value: icinga.service_count_critical.to_s,
-     color: 'red' })
+```ruby
+send_event('icinga-service-critical', {
+ value: icinga.service_count_critical.to_s,
+ color: 'red' })
+```
 
 `icinga-service-critical` is the value of `data-id` field inside the `dashboards/icinga2.erb`
 file. In order to update the widget you need to send a `value` and a `color` as hash values.
@@ -355,17 +436,23 @@ for Icinga Web 2.
 
 Example URL:
 
-    /icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc
+```
+http://192.168.33.5/icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc
+```
 
 Add the fullscreen and compact options for those views.
 
-    &showFullscreen&showCompact
+```
+&showFullscreen&showCompact
+```
 
 Example:
 
-    <li data-row="4" data-col="1" data-sizex="2" data-sizey="2">
-      <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
-    </li>
+```html
+<li data-row="4" data-col="1" data-sizex="2" data-sizey="2">
+  <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
+</li>
+```
 
 ### References
 
