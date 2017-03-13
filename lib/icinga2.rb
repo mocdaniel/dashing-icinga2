@@ -284,8 +284,9 @@ class Icinga2
     return problems
   end
 
+  # use last_check here, takes less traffic than the entire check result
   def getObjectHasBeenChecked(object)
-    return object["attrs"]["last_check_result"] != nil
+    return object["attrs"]["last_check"] > 0
   end
 
   # stolen from Icinga Web 2, ./modules/monitoring/library/Monitoring/Backend/Ido/Query/ServicestatusQuery.php
@@ -380,7 +381,10 @@ class Icinga2
   def getProblemServices(max_items = 5)
     @service_problems = {}
 
-    @all_services_data.each do |service|
+    # only fetch the minimal attribute set required for severity calculation
+    all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+
+    all_services_data.each do |service|
       #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
       if (service["attrs"]["state"] == 0)
         next
@@ -432,8 +436,6 @@ class Icinga2
     @node_name = @app_data['icingaapplication']['app']['node_name']
     @app_starttime = Time.at(@app_data['icingaapplication']['app']['program_start'].to_f)
 
-    @all_hosts_data = getHostObjects() #exported
-    @all_services_data = getServiceObjects(nil, nil, [ "host" ]) #exported, requires "host" join
     @cib_data = getCIBData() #exported
 
     uptimeTmp = cib_data["uptime"].round(2)
@@ -441,6 +443,12 @@ class Icinga2
 
     @avg_latency = cib_data["avg_latency"].round(2)
     @avg_execution_time = cib_data["avg_execution_time"].round(2)
+
+    # fetch the minimal attributes for problem calculation
+    #@all_hosts_data = getHostObjects() #exported
+    #@all_services_data = getServiceObjects(nil, nil, [ "host" ]) #exported, requires "host" join
+    all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
+    all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
 
     @host_count_all = all_hosts_data.size
     @host_count_problems = countProblems(all_hosts_data)
