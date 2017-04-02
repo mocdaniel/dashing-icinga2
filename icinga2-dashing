@@ -1,0 +1,11 @@
+/usr/share/icinga2-dashing/log/thin.log {
+        daily
+        rotate 7
+        compress
+        delaycompress
+        missingok
+        notifempty
+        postrotate
+                /bin/kill -USR1 $(cat /var/run/thin.pid 2> /dev/null) 2> /dev/null || true
+        endscript
+}
