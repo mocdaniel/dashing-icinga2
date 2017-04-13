@@ -68,8 +68,8 @@ class Icinga2
   def initialize(configFile)
     # add logger
     file = File.open('/tmp/dashing-icinga2.log', File::WRONLY | File::APPEND | File::CREAT)
-    @log = Logger.new(file, 'weekly', 1024000)
-    @log.level = Logger::DEBUG
+    @log = Logger.new(file, 'daily', 1024000)
+    @log.level = Logger::INFO
     @log.datetime_format = "%Y-%m-%d %H:%M:%S"
     @log.formatter = proc do |severity, datetime, progname, msg|
       "[#{datetime.strftime(@log.datetime_format)}] #{severity.ljust(5)} : #{msg}\n"
