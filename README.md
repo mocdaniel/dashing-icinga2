@@ -201,6 +201,20 @@ Additional options are available through `./restart-dashing -h`.
 
 Navigate to [http://localhost:8005](http://localhost:8005)
 
+
+### Systemd Service
+
+You can install the provided Systemd service file from `tools/systemd`. It assumes
+that the working directory is `/usr/share/dashing-icinga2` and the Dashing gem
+is installed to `/usr/local/bin/dashing`. Adopt these paths for your own needs.
+
+```
+cp tools/systemd/dashing-icinga2.service /usr/lib/systemd/system/
+systemctl daemon-reload
+systemctl start dashing-icinga2.service
+systemctl status dashing-icinga2.service
+```
+
 ### Foreground
 
 You can run Dashing in foreground for tests and debugging too:
@@ -210,17 +224,25 @@ export PATH="/usr/local/bin:$PATH"
 dashing start -p 8005
 ```
 
-In addition to that you should think about an initscript/systemd service file too.
+In addition to that you should consider an initscript/systemd service file too.
 
+### Logrotate
+
+You can install the provided logrotate script to rotate the Dashing log in `/usr/share/dashing-icinga2/log`.
+
+```
+cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
+```
 
 ## Thanks
 
-[fugstrolch](https://github.com/Icinga/dashing-icinga2/pull/4) for the Icinga Web 2 iframe integration.
-[tobiasvdk](https://github.com/tobiasvdk) for check stats widget and suggestions.
-[bodsch](https://github.com/Icinga/dashing-icinga2/pull/3) for the job rewrite and config file support inspiration.
-[spjmurray](https://github.com/spjmurray/dashing-icinga2/tree/1080p) for styling and 1080p resolution.
-[micke2k](https://github.com/Icinga/dashing-icinga2/pull/2) for proper time formatting.
-[roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
+* [tachtler](https://github.com/Icinga/dashing-icinga2/pull/6) for the Systemd service and logrotate files.
+* [fugstrolch](https://github.com/Icinga/dashing-icinga2/pull/4) for the Icinga Web 2 iframe integration.
+* [tobiasvdk](https://github.com/tobiasvdk) for check stats widget and suggestions.
+* [bodsch](https://github.com/Icinga/dashing-icinga2/pull/3) for the job rewrite and config file support inspiration.
+* [spjmurray](https://github.com/spjmurray/dashing-icinga2/tree/1080p) for styling and 1080p resolution.
+* [micke2k](https://github.com/Icinga/dashing-icinga2/pull/2) for proper time formatting.
+* [roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
 
 ## Troubleshooting
 
