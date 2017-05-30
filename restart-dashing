@@ -27,7 +27,7 @@ fi
 
 DASHING_PORT=8005
 DASHING_PID_FILE="tmp/pids/thin.pid"
-DASHING_BIN=dashing
+DASHING_BIN=smashing
 
 usage(){
 cat << EOF
