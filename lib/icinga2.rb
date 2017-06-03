@@ -48,6 +48,9 @@ class Icinga2
   attr_reader :host_count_down
   attr_reader :host_count_in_downtime
   attr_reader :host_count_acknowledged
+  attr_reader :host_count_handled_warning_problems
+  attr_reader :host_count_handled_critical_problems
+  attr_reader :host_count_handled_unknown_problems
 
   # service stats
   attr_reader :service_count_all
@@ -58,6 +61,9 @@ class Icinga2
   attr_reader :service_count_unknown
   attr_reader :service_count_in_downtime
   attr_reader :service_count_acknowledged
+  attr_reader :service_count_handled_warning_problems
+  attr_reader :service_count_handled_critical_problems
+  attr_reader :service_count_handled_unknown_problems
 
   # data providers
   attr_reader :app_data
@@ -284,6 +290,24 @@ class Icinga2
     return problems
   end
 
+  def countHandledProblems(objects, state)
+    handledProblems = 0
+
+    objects.each do |item|
+      item.each do |k, d|
+        if (k != "attrs")
+          next
+        end
+
+        if (d["state"] == state && (d["downtime_depth"] != 0 || d["acknowledgement"] != 0))
+          handledProblems = handledProblems + 1
+        end
+      end
+    end
+
+    return handledProblems
+  end
+
   # use last_check here, takes less traffic than the entire check result
   def getObjectHasBeenChecked(object)
     return object["attrs"]["last_check"] > 0
@@ -452,6 +476,9 @@ class Icinga2
 
     @host_count_all = all_hosts_data.size
     @host_count_problems = countProblems(all_hosts_data)
+    @host_count_handled_warning_problems = countHandledProblems(all_hosts_data, 1)
+    @host_count_handled_critical_problems = countHandledProblems(all_hosts_data, 2)
+    @host_count_handled_unknown_problems = countHandledProblems(all_hosts_data, 3)
     @host_count_up = cib_data["num_hosts_up"].to_int
     @host_count_down = cib_data["num_hosts_down"].to_int
     @host_count_in_downtime = cib_data["num_hosts_in_downtime"].to_int
@@ -459,6 +486,9 @@ class Icinga2
 
     @service_count_all = all_services_data.size
     @service_count_problems = countProblems(all_services_data)
+    @service_count_handled_warning_problems = countHandledProblems(all_services_data, 1)
+    @service_count_handled_critical_problems = countHandledProblems(all_services_data, 2)
+    @service_count_handled_unknown_problems = countHandledProblems(all_services_data, 3)
     @service_count_ok = cib_data["num_services_ok"].to_int
     @service_count_warning = cib_data["num_services_warning"].to_int
     @service_count_critical = cib_data["num_services_critical"].to_int
