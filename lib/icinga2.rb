@@ -158,14 +158,56 @@ class Icinga2
   def getIcingaApplicationData()
     apiUrl = sprintf('%s/status/IcingaApplication', @apiUrlBase)
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+    max_retries   = 30
+    times_retried = 0
+
+    begin
+      data = JSON.parse(restClient.get(@headers).body)
+    rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+
+      if( times_retried < max_retries )
+        times_retried += 1
+        $stderr.puts(format( 'Cannot execute request %s', apiUrl ))
+        $stderr.puts(format( '   cause: %s', e ))
+        $stderr.puts(format( '   retry %d / %d', times_retried, max_retries ))
+
+        sleep( 4 )
+        retry
+      else
+        $stderr.puts( 'Exiting request ...' )
+
+        return nil
+      end
+    end
+
     return data['results'][0]['status'] #there's only one row
   end
 
   def getCIBData()
     apiUrl = sprintf('%s/status/CIB', @apiUrlBase)
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+    max_retries   = 30
+    times_retried = 0
+
+    begin
+      data = JSON.parse(restClient.get(@headers).body)
+    rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+
+      if( times_retried < max_retries )
+        times_retried += 1
+        $stderr.puts(format( 'Cannot execute request %s', apiUrl ))
+        $stderr.puts(format( '   cause: %s', e ))
+        $stderr.puts(format( '   retry %d / %d', times_retried, max_retries ))
+
+        sleep( 4 )
+        retry
+      else
+        $stderr.puts( 'Exiting request ...' )
+
+        return nil
+      end
+    end
+
     return data['results'][0]['status'] #there's only one row
   end
 
@@ -431,47 +473,83 @@ class Icinga2
   end
 
   def run
-    @app_data = getIcingaApplicationData() #exported
-    fetchVersion(@app_data['icingaapplication']['app']['version'])
-    @node_name = @app_data['icingaapplication']['app']['node_name']
-    @app_starttime = Time.at(@app_data['icingaapplication']['app']['program_start'].to_f)
 
+    @app_data = getIcingaApplicationData() #exported
     @cib_data = getCIBData() #exported
 
-    uptimeTmp = cib_data["uptime"].round(2)
-    @uptime = Time.at(uptimeTmp).utc.strftime("%H:%M:%S")
+    unless( @app_data.nil? )
 
-    @avg_latency = cib_data["avg_latency"].round(2)
-    @avg_execution_time = cib_data["avg_execution_time"].round(2)
+      fetchVersion(@app_data['icingaapplication']['app']['version'])
+      @node_name = @app_data['icingaapplication']['app']['node_name']
+      @app_starttime = Time.at(@app_data['icingaapplication']['app']['program_start'].to_f)
+    else
+      @version = ''
+      @version_revision = ''
+      @node_name = 'unknown'
+      @app_starttime = 0
+    end
 
-    # fetch the minimal attributes for problem calculation
-    #@all_hosts_data = getHostObjects() #exported
-    #@all_services_data = getServiceObjects(nil, nil, [ "host" ]) #exported, requires "host" join
-    all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
-    all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
 
-    @host_count_all = all_hosts_data.size
-    @host_count_problems = countProblems(all_hosts_data)
-    @host_count_up = cib_data["num_hosts_up"].to_int
-    @host_count_down = cib_data["num_hosts_down"].to_int
-    @host_count_in_downtime = cib_data["num_hosts_in_downtime"].to_int
-    @host_count_acknowledged = cib_data["num_hosts_acknowledged"].to_int
+    unless( @cib_data.nil? )
 
-    @service_count_all = all_services_data.size
-    @service_count_problems = countProblems(all_services_data)
-    @service_count_ok = cib_data["num_services_ok"].to_int
-    @service_count_warning = cib_data["num_services_warning"].to_int
-    @service_count_critical = cib_data["num_services_critical"].to_int
-    @service_count_unknown = cib_data["num_services_unknown"].to_int
-    @service_count_in_downtime = cib_data["num_services_in_downtime"].to_int
-    @service_count_acknowledged = cib_data["num_services_acknowledged"].to_int
+      uptimeTmp = cib_data["uptime"].round(2)
+      @uptime = Time.at(uptimeTmp).utc.strftime("%H:%M:%S")
 
-    # check stats
-    @host_active_checks_1min = cib_data["active_host_checks_1min"]
-    @host_passive_checks_1min = cib_data["passive_host_checks_1min"]
-    @service_active_checks_1min = cib_data["active_service_checks_1min"]
-    @service_passive_checks_1min = cib_data["passive_service_checks_1min"]
+      @avg_latency = cib_data["avg_latency"].round(2)
+      @avg_execution_time = cib_data["avg_execution_time"].round(2)
 
+      # fetch the minimal attributes for problem calculation
+      #@all_hosts_data = getHostObjects() #exported
+      #@all_services_data = getServiceObjects(nil, nil, [ "host" ]) #exported, requires "host" join
+      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+
+      @host_count_all = all_hosts_data.size
+      @host_count_problems = countProblems(all_hosts_data)
+      @host_count_up = cib_data["num_hosts_up"].to_int
+      @host_count_down = cib_data["num_hosts_down"].to_int
+      @host_count_in_downtime = cib_data["num_hosts_in_downtime"].to_int
+      @host_count_acknowledged = cib_data["num_hosts_acknowledged"].to_int
+
+      @service_count_all = all_services_data.size
+      @service_count_problems = countProblems(all_services_data)
+      @service_count_ok = cib_data["num_services_ok"].to_int
+      @service_count_warning = cib_data["num_services_warning"].to_int
+      @service_count_critical = cib_data["num_services_critical"].to_int
+      @service_count_unknown = cib_data["num_services_unknown"].to_int
+      @service_count_in_downtime = cib_data["num_services_in_downtime"].to_int
+      @service_count_acknowledged = cib_data["num_services_acknowledged"].to_int
+
+      # check stats
+      @host_active_checks_1min = cib_data["active_host_checks_1min"]
+      @host_passive_checks_1min = cib_data["passive_host_checks_1min"]
+      @service_active_checks_1min = cib_data["active_service_checks_1min"]
+      @service_passive_checks_1min = cib_data["passive_service_checks_1min"]
+    else
+
+      @uptime = 0
+      @avg_latency = 0
+      @avg_execution_time = 0
+      @host_count_all = 0
+      @host_count_problems = 0
+      @host_count_up = 0
+      @host_count_down = 0
+      @host_count_in_downtime = 0
+      @host_count_acknowledged = 0
+      @service_count_all = 0
+      @service_count_problems = 0
+      @service_count_ok = 0
+      @service_count_warning = 0
+      @service_count_critical = 0
+      @service_count_unknown = 0
+      @service_count_in_downtime = 0
+      @service_count_acknowledged = 0
+      # check stats
+      @host_active_checks_1min = 0
+      @host_passive_checks_1min = 0
+      @service_active_checks_1min = 0
+      @service_passive_checks_1min = 0
+    end
 
     # severity
     getProblemServices()
