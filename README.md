@@ -9,7 +9,7 @@
 4. [Installation](#installation)
 5. [Configuration](#configuration)
 6. [Run](#run)
-7. [Thanks](#thanks)
+7. [Authors](#authors)
 8. [Troubleshooting](#troubleshooting)
 9. [Development](#development)
 
@@ -234,17 +234,25 @@ You can install the provided logrotate script to rotate the Dashing log in `/usr
 cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 ```
 
-## Thanks
+## Authors
 
-* [tachtler](https://github.com/Icinga/dashing-icinga2/pull/6) for the Systemd service and logrotate files.
-* [fugstrolch](https://github.com/Icinga/dashing-icinga2/pull/4) for the Icinga Web 2 iframe integration.
+* [dnsmichi](https://github.com/dnsmichi)
+
+Thanks to all contributors! :)
+
+* [mcktr](https://github.com/mcktr) for helping out with [unhandled problems](https://github.com/Icinga/dashing-icinga2/pull/18).
+* [tachtler](https://github.com/tachtler) for the [Systemd service and logrotate](https://github.com/Icinga/dashing-icinga2/pull/6) additions.
+* [fugstrolch](https://github.com/fugstrolch) for the [Icinga Web 2 iframe integration](https://github.com/Icinga/dashing-icinga2/pull/4).
 * [tobiasvdk](https://github.com/tobiasvdk) for check stats widget and suggestions.
-* [bodsch](https://github.com/Icinga/dashing-icinga2/pull/3) for the job rewrite and config file support inspiration.
-* [spjmurray](https://github.com/spjmurray/dashing-icinga2/tree/1080p) for styling and 1080p resolution.
-* [micke2k](https://github.com/Icinga/dashing-icinga2/pull/2) for proper time formatting.
-* [roidelapliue](https://github.com/roidelapluie/dashing-scripts) for the Icinga 1.x dashing script.
+* [bodsch](https://github.com/bodsch) for the [job rewrite and config file support](https://github.com/Icinga/dashing-icinga2/pull/3) inspiration, and [better error handling](https://github.com/Icinga/dashing-icinga2/pull/21).
+* [spjmurray](https://github.com/spjmurray) for [styling and 1080p resolution](https://github.com/spjmurray/dashing-icinga2/tree/1080p).
+* [micke2k](https://github.com/micke2k) for [proper time formatting](https://github.com/Icinga/dashing-icinga2/pull/2).
+* [lazyfrosch](https://github.com/lazyfrosch) for ideas on [Dashing with Icinga](https://github.com/lazyfrosch/dashing-icinga).
+* [roidelapliue](https://github.com/roidelapluie) for the [Icinga 1.x dashing script](https://github.com/roidelapluie/dashing-scripts).
 
 ## Troubleshooting
+
+Please add these details when you are asking a question on the community channels.
 
 ### Required Information
 
