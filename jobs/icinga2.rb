@@ -38,14 +38,19 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
 
   puts "Meter widget: Hosts " + host_meter.to_s + "/" + host_meter_max.to_s + " Services " + service_meter.to_s + "/" + service_meter_max.to_s
 
-  # check stats
-  check_stats = [
-    {"label" => "Host (active)", "value" => icinga.host_active_checks_1min},
-    #{"label" => "Host (passive)", "value" => icinga.host_passive_checks_1min},
-    {"label" => "Service (active)", "value" => icinga.service_active_checks_1min},
-    #{"label" => "Service (passive)", "value" => icinga.service_passive_checks_1min},
+  # icinga stats
+  icinga_stats = [
+    {"label" => "Host checks/min", "value" => icinga.host_active_checks_1min},
+    {"label" => "Service checks/min", "value" => icinga.service_active_checks_1min},
   ]
-  puts "Checks: " + check_stats.to_s
+
+  wqStats = icinga.getWQStats()
+
+  wqStats.each do |name, value|
+    icinga_stats.push( { "label" => name, "value" => "%0.2f" % value } )
+  end
+
+  puts "Stats: " + icinga_stats.to_s
 
   # severity list
   severity_stats = []
@@ -68,8 +73,8 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
    moreinfo: "Total services: " + service_meter_max.to_s,
    color: 'blue' })
 
-  send_event('icinga-checks', {
-   items: check_stats,
+  send_event('icinga-stats', {
+   items: icinga_stats,
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
 
