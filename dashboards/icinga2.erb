@@ -1,12 +1,11 @@
-<!--
 <script type='text/javascript'>
 $(function() {
   // These settings override the defaults set in application.coffee. You can do this on a per dashboard basis.
-  Dashing.widget_base_dimensions = [300, 300]
-  Dashing.numColumns = 4
+  Dashing.widget_base_dimensions = [300,300]
+  Dashing.numColumns = 5
 });
 </script>
--->
+
 <% content_for :title do %>Icinga 2<% end %>
 <div class="gridster">
   <ul>
@@ -21,7 +20,7 @@ $(function() {
       <div data-id="icinga-stats" data-view="List" data-unordered="true" data-title="Stats" style="background-color: #0095bf;"></div>
     </li>
     <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-severity" data-view="List" data-unordered="true" data-title="Problems" style="background-color: #0095bf;"></div>
+      <div data-id="handled-stats" data-view="List" data-unordered="true" data-title="Handled" style="background-color: #0095bf;"></div>
     </li>
 
     <!-- Down, Critical, Warning, Unknown -->
@@ -38,26 +37,16 @@ $(function() {
       <div data-id="icinga-service-problems-unknown" data-view="Simplemon" data-title="Unhandled Services"></div>
     </li>
 
-    <!-- Acknowledged -->
-    <li data-row="3" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-host-ack" data-view="Simplemon" data-title="Hosts Ack"></div>
-    </li>
-    <li data-row="3" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-service-ack" data-view="Simplemon" data-title="Services Ack"></div>
-    </li>
-    <!-- Downtime -->
-    <li data-row="3" data-col="3" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-host-downtime" data-view="Simplemon" data-title="Hosts Downtime"></div>
-    </li>
-    <li data-row="3" data-col="4" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-service-downtime" data-view="Simplemon" data-title="Services Downtime"></div>
+    <!-- Takes two rows for all service problems by severity -->
+    <li data-row="1" data-col="5" data-sizex="1" data-sizey="2">
+      <div data-id="icinga-severity" data-view="List" data-unordered="true" data-title="Problems" style="background-color: #0095bf;"></div>
     </li>
 
     <!-- Icinga Web 2 iFrame -->
-    <li data-row="4" data-col="1" data-sizex="2" data-sizey="2">
+    <li data-row="3" data-col="1" data-sizex="2" data-sizey="2">
       <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
     </li>
-    <li data-row="4" data-col="3" data-sizex="2" data-sizey="2">
+    <li data-row="3" data-col="3" data-sizex="2" data-sizey="2">
       <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&showFullscreen&showCompact"></div>
     </li>
   </ul>
