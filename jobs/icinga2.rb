@@ -38,6 +38,16 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
 
   puts "Meter widget: Hosts " + host_meter.to_s + "/" + host_meter_max.to_s + " Services " + service_meter.to_s + "/" + service_meter_max.to_s
 
+  # calculate host problems adjusted by handled problems
+  # count togther handled host problems
+  host_handled_problems = icinga.host_count_handled_warning_problems + icinga.host_count_handled_critical_problems + icinga.host_count_handled_unknown_problems
+  host_down_adjusted = icinga.host_count_down - host_handled_problems
+
+  # calculate service problems adjusted by handled problems
+  service_warning_adjusted = icinga.service_count_warning - icinga.service_count_handled_warning_problems
+  service_critical_adjusted = icinga.service_count_critical - icinga.service_count_handled_critical_problems
+  service_unknown_adjusted = icinga.service_count_unknown - icinga.service_count_handled_unknown_problems
+
   # check stats
   check_stats = [
     {"label" => "Host (active)", "value" => icinga.host_active_checks_1min},
@@ -79,19 +89,19 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
 
   # down, critical, warning, unknown
   send_event('icinga-host-down', {
-   value: icinga.host_count_down.to_s,
+   value: host_down_adjusted.to_s,
    color: 'red' })
 
   send_event('icinga-service-critical', {
-   value: icinga.service_count_critical.to_s,
+   value: service_critical_adjusted.to_s,
    color: 'red' })
 
   send_event('icinga-service-warning', {
-   value: icinga.service_count_warning.to_s,
+   value: service_warning_adjusted.to_s,
    color: 'yellow' })
 
   send_event('icinga-service-unknown', {
-   value: icinga.service_count_unknown.to_s,
+   value: service_unknown_adjusted.to_s,
    color: 'purple' })
 
   # ack, downtime
