@@ -44,6 +44,7 @@ class Icinga2
   # host stats
   attr_reader :host_count_all
   attr_reader :host_count_problems
+  attr_reader :host_count_problems_down
   attr_reader :host_count_up
   attr_reader :host_count_down
   attr_reader :host_count_in_downtime
@@ -52,6 +53,9 @@ class Icinga2
   # service stats
   attr_reader :service_count_all
   attr_reader :service_count_problems
+  attr_reader :service_count_problems_warning
+  attr_reader :service_count_problems_critical
+  attr_reader :service_count_problems_unknown
   attr_reader :service_count_ok
   attr_reader :service_count_warning
   attr_reader :service_count_critical
@@ -235,6 +239,20 @@ class Icinga2
   def formatService(name)
     service_map = name.split('!', 2)
     return service_map[0].to_s + " - " + service_map[1].to_s
+  end
+
+  def stateFromString(stateStr)
+    if (stateStr == "Down" or stateStr == "Warning")
+      return 1
+    elif (stateStr == "Up" or stateStr == "OK")
+      return 0
+    elif (stateStr == "Critical")
+      return 2
+    elif (stateStr == "Unknown")
+      return 3
+    end
+
+    return "Undefined state. Programming error."
   end
 
   def stateToString(state, is_host = false)
@@ -508,6 +526,8 @@ class Icinga2
 
     @host_count_all = all_hosts_data.size
     @host_count_problems = countProblems(all_hosts_data)
+    @host_count_problems_down = countProblems(all_hosts_data, 1)
+
     @host_count_up = cib_data["num_hosts_up"].to_int
     @host_count_down = cib_data["num_hosts_down"].to_int
     @host_count_in_downtime = cib_data["num_hosts_in_downtime"].to_int
@@ -515,6 +535,10 @@ class Icinga2
 
     @service_count_all = all_services_data.size
     @service_count_problems = countProblems(all_services_data)
+    @service_count_problems_warning = countProblems(all_services_data, 1)
+    @service_count_problems_critical = countProblems(all_services_data, 2)
+    @service_count_problems_unknown = countProblems(all_services_data, 3)
+
     @service_count_ok = cib_data["num_services_ok"].to_int
     @service_count_warning = cib_data["num_services_warning"].to_int
     @service_count_critical = cib_data["num_services_critical"].to_int
