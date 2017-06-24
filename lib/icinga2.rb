@@ -159,32 +159,45 @@ class Icinga2
     end
   end
 
+  def getApiData(apiUrl, requestBody = nil)
+    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
+
+    if requestBody
+      @headers["X-HTTP-Method-Override"] = "GET"
+
+      payload = JSON.generate(requestBody)
+      res = restClient.post(payload, @headers)
+    else
+      res = restClient.get(@headers)
+    end
+
+    body = res.body
+    data = JSON.parse(body)
+
+    return data
+  end
+
   def getIcingaApplicationData()
     apiUrl = sprintf('%s/status/IcingaApplication', @apiUrlBase)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+    data = getApiData(apiUrl)
     return data['results'][0]['status'] #there's only one row
   end
 
   def getCIBData()
     apiUrl = sprintf('%s/status/CIB', @apiUrlBase)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+    data = getApiData(apiUrl)
     return data['results'][0]['status'] #there's only one row
   end
 
   def getStatusData()
     apiUrl = sprintf('%s/status', @apiUrlBase)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
-    data = JSON.parse(restClient.get(@headers).body)
+    data = getApiData(apiUrl)
     return data['results']
   end
 
   def getHostObjects(attrs = nil, filter = nil, joins = nil)
     apiUrl = sprintf('%s/objects/hosts', @apiUrlBase)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
 
-    @headers["X-HTTP-Method-Override"] = "GET"
     requestBody = {}
 
     if (attrs)
@@ -199,18 +212,15 @@ class Icinga2
       requestBody["joins"] = joins
     end
 
-    payload = JSON.generate(requestBody)
-    res = restClient.post(payload, @headers)
-    body = res.body
-    data = JSON.parse(body)
+    # fetch data with requestBody (which means X-HTTP-Method-Override: GET)
+    data = getApiData(apiUrl, requestBody)
+
     return data['results']
   end
 
   def getServiceObjects(attrs = nil, filter = nil, joins = nil)
     apiUrl = sprintf('%s/objects/services', @apiUrlBase)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
 
-    @headers["X-HTTP-Method-Override"] = "GET"
     requestBody = {}
 
     if (attrs)
@@ -229,10 +239,9 @@ class Icinga2
 
     #puts "request body: " + requestBody.to_s
 
-    payload = JSON.generate(requestBody)
-    res = restClient.post(payload, @headers)
-    body = res.body
-    data = JSON.parse(body)
+    # fetch data with requestBody (which means X-HTTP-Method-Override: GET)
+    data = getApiData(apiUrl, requestBody)
+
     return data['results']
   end
 
