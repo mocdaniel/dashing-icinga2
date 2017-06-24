@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color:  #12b0c5;
+$background-color:  #0095bf;
 $value-color:       #fff;
 
 $title-color:       rgba(255, 255, 255, 0.7);
@@ -14,10 +14,15 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
 .widget-list {
 
   background-color: $background-color;
-  vertical-align: top;
 
   .title {
     color: $title-color;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-bottom: 15px;
+    font-size: 25px;
+    text-align: center;
   }
 
   ol, ul {

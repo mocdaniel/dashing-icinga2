@@ -459,7 +459,7 @@ class Icinga2
     return severity
   end
 
-  def getProblemServices(all_services_data, max_items = 5)
+  def getProblemServices(all_services_data, max_items = 20)
     service_problems = {}
 
     all_services_data.each do |service|
