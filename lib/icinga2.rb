@@ -169,6 +169,13 @@ class Icinga2
     return data['results'][0]['status'] #there's only one row
   end
 
+  def getStatusData()
+    apiUrl = sprintf('%s/status', @apiUrlBase)
+    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
+    data = JSON.parse(restClient.get(@headers).body)
+    return data['results']
+  end
+
   def getHostObjects(attrs = nil, filter = nil, joins = nil)
     apiUrl = sprintf('%s/objects/hosts', @apiUrlBase)
     restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
@@ -411,6 +418,45 @@ class Icinga2
 
       count += 1
     end
+  end
+
+  def getWQStats()
+    results = getStatusData()
+
+    stats = {}
+
+    results.each do |r|
+      status = r["status"]
+
+      keyList = [ "work_queue_item_rate", "query_queue_item_rate" ]
+
+      # structure is "type" - "name"
+      # api - json_rpc
+      # idomysqlconnection - ido-mysql
+      status.each do |type, typeval|
+        if not typeval.is_a?(Hash)
+          next
+        end
+
+        typeval.each do |attr, val|
+          #puts attr + " " + val.to_s
+
+          if not val.is_a?(Hash)
+            next
+          end
+
+          keyList.each do |key|
+            if val.has_key? key
+              attrName = attr + " queue rate"
+              stats[attrName] = val[key]
+            end
+          end
+
+        end
+      end
+    end
+
+    return stats
   end
 
   def fetchVersion(version)
