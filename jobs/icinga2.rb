@@ -86,25 +86,25 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   puts "Host Down: " + icinga.host_count_problems_down.to_s
   send_event('icinga-host-problems-down', {
    value: icinga.host_count_problems_down.to_s,
-   moreinfo: "All: " + icinga.host_count_down.to_s,
+   moreinfo: "All Problems: " + icinga.host_count_down.to_s,
    color: 'red' })
 
   puts "Service Critical: " + icinga.service_count_problems_critical.to_s
   send_event('icinga-service-problems-critical', {
    value: icinga.service_count_problems_critical.to_s,
-   moreinfo: "All: " + icinga.service_count_critical.to_s,
+   moreinfo: "All Problems: " + icinga.service_count_critical.to_s,
    color: 'red' })
 
   puts "Service Warning: " + icinga.service_count_problems_warning.to_s
   send_event('icinga-service-problems-warning', {
    value: icinga.service_count_problems_warning.to_s,
-   moreinfo: "All: " + icinga.service_count_warning.to_s,
+   moreinfo: "All Problems: " + icinga.service_count_warning.to_s,
    color: 'yellow' })
 
   puts "Service Unknown: " + icinga.service_count_problems_unknown.to_s
   send_event('icinga-service-problems-unknown', {
    value: icinga.service_count_problems_unknown.to_s,
-   moreinfo: "All: " + icinga.service_count_unknown.to_s,
+   moreinfo: "All Problems: " + icinga.service_count_unknown.to_s,
    color: 'purple' })
 
   # ack, downtime
