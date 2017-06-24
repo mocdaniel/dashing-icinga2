@@ -273,8 +273,18 @@ class Icinga2
     return "Undefined state. Programming error."
   end
 
-  def countProblems(objects)
+  def countProblems(objects, states = nil)
     problems = 0
+
+    compStates = []
+
+    if not states
+      compStates = [ 1, 2, 3]
+    end
+
+    if states.is_a?(Integer)
+      compStates.push(states)
+    end
 
     objects.each do |item|
       item.each do |k, d|
@@ -282,7 +292,7 @@ class Icinga2
           next
         end
 
-        if (d["state"] != 0 && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
+        if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
           problems = problems + 1
         end
       end
