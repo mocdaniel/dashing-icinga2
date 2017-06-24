@@ -66,6 +66,7 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
    color: 'blue' })
 
   send_event('icinga-stats', {
+   title: icinga.version + " (" + icinga.version_revision + ")",
    items: icinga_stats,
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
