@@ -27,7 +27,7 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
   icinga.run
 
   puts "App Info: " + icinga.app_data.to_s
-  puts "CIB Info: " + icinga.cib_data.to_s
+  #puts "CIB Info: " + icinga.cib_data.to_s
 
   # meter widget
   # we'll update the patched meter widget with absolute values (set max dynamically)
@@ -83,35 +83,47 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
    color: 'blue' })
 
   # down, critical, warning, unknown
-  send_event('icinga-host-down', {
-   value: icinga.host_count_down.to_s,
+  puts "Host Down: " + icinga.host_count_problems_down.to_s
+  send_event('icinga-host-problems-down', {
+   value: icinga.host_count_problems_down.to_s,
+   moreinfo: "All: " + icinga.host_count_down.to_s,
    color: 'red' })
 
-  send_event('icinga-service-critical', {
-   value: icinga.service_count_critical.to_s,
+  puts "Service Critical: " + icinga.service_count_problems_critical.to_s
+  send_event('icinga-service-problems-critical', {
+   value: icinga.service_count_problems_critical.to_s,
+   moreinfo: "All: " + icinga.service_count_critical.to_s,
    color: 'red' })
 
-  send_event('icinga-service-warning', {
-   value: icinga.service_count_warning.to_s,
+  puts "Service Warning: " + icinga.service_count_problems_warning.to_s
+  send_event('icinga-service-problems-warning', {
+   value: icinga.service_count_problems_warning.to_s,
+   moreinfo: "All: " + icinga.service_count_warning.to_s,
    color: 'yellow' })
 
-  send_event('icinga-service-unknown', {
-   value: icinga.service_count_unknown.to_s,
+  puts "Service Unknown: " + icinga.service_count_problems_unknown.to_s
+  send_event('icinga-service-problems-unknown', {
+   value: icinga.service_count_problems_unknown.to_s,
+   moreinfo: "All: " + icinga.service_count_unknown.to_s,
    color: 'purple' })
 
   # ack, downtime
+  puts "Service Acknowledged: " + icinga.service_count_acknowledged.to_s
   send_event('icinga-service-ack', {
    value: icinga.service_count_acknowledged.to_s,
    color: 'blue' })
 
+  puts "Host Acknowledged: " + icinga.host_count_acknowledged.to_s
   send_event('icinga-host-ack', {
    value: icinga.host_count_acknowledged.to_s,
    color: 'blue' })
 
+  puts "Service In Downtime: " + icinga.service_count_in_downtime.to_s
   send_event('icinga-service-downtime', {
    value: icinga.service_count_in_downtime.to_s,
    color: 'orange' })
 
+  puts "Host In Downtime: " + icinga.host_count_in_downtime.to_s
   send_event('icinga-host-downtime', {
    value: icinga.host_count_in_downtime.to_s,
    color: 'orange' })
