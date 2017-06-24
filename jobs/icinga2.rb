@@ -72,10 +72,10 @@ SCHEDULER.every '5s', :first_in => 0 do |job|
 
   # handled stats
   handled_stats = [
-    {"label" => "Acknowledgements"},
+    {"label" => "Acknowledgements", "color" => "blue"},
     {"label" => "Hosts", "value" => icinga.host_count_acknowledged},
     {"label" => "Services", "value" => icinga.service_count_acknowledged},
-    {"label" => "Downtimes"},
+    {"label" => "Downtimes", "color" => "blue"},
     {"label" => "Hosts", "value" => icinga.host_count_in_downtime},
     {"label" => "Services", "value" => icinga.service_count_in_downtime},
   ]
