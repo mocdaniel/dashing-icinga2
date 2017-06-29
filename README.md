@@ -18,18 +18,14 @@
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
 
-The Icinga 2 dashboard uses the Icinga 2 API to
-visualize what's going on with your monitoring.
-
-It combines several popular widgets and provides
-development instructions for your own implementation.
-
-The dashboard also allows to embed the Icinga Web 2 host and
-service problem lists as iframe.
+The Icinga 2 dashboard is built on top of Dashing and uses the Icinga 2 API to
+visualize what's going on with your monitoring. It combines several popular widgets
+and provides development instructions for your own implementation. The dashboard
+also allows to embed the Icinga Web 2 host and service problem lists as iframe.
 
 > **Note**:
-
-> You still need to install the `dashing` gem in order to
+>
+> The Icinga 2 dashboard needs the `dashing` Ruby gem in order to
 > use the dashboards, jobs and widgets provided by this project.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
