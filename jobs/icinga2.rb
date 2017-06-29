@@ -22,7 +22,7 @@ require './lib/icinga2'
 # initialize data provider
 icinga = Icinga2.new('config/icinga2.json') # fixed path
 
-SCHEDULER.every '5s', :first_in => 0 do |job|
+SCHEDULER.every '10s', :first_in => 0 do |job|
   # run data provider
   icinga.run
 
