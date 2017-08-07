@@ -105,14 +105,11 @@ class Icinga2
 
       @apiUrlBase = sprintf('https://%s:%d/%s', @host, @port, @apiVersion)
 
-      @nodeName    = Socket.gethostbyname(Socket.gethostname).first
-
       @log.debug(sprintf('  host         : %s', @host))
       @log.debug(sprintf('  port         : %s', @port))
       @log.debug(sprintf('  api url      : %s', @apiUrlBase))
       @log.debug(sprintf('  api user     : %s', @user))
       @log.debug(sprintf('  api password : %s', 'XXXX'))
-      @log.debug(sprintf('  node name    : %s', @nodeName))
 
     rescue JSON::ParserError => e
       @log.error('wrong result (no json)')
@@ -129,6 +126,13 @@ class Icinga2
   end
 
   def checkCert()
+    begin
+      @nodeName = Socket.gethostbyname(Socket.gethostname).first
+      @log.debug(sprintf('node name: %s', @nodeName))
+    rescue SocketError => error
+      @log.error(error)
+    end
+
     if File.file?(sprintf('%s/%s.crt', @pkiPath, @nodeName))
       @log.debug("PKI found, using client certificates for connection to Icinga 2 API")
       certFile = File.read(sprintf('%s/%s.crt', @pkiPath, @nodeName))
