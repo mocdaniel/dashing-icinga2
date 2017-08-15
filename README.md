@@ -18,10 +18,26 @@
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
 
-The Icinga 2 dashboard is built on top of Dashing and uses the Icinga 2 API to
-visualize what's going on with your monitoring. It combines several popular widgets
+
+You can put your important infrastructure stats and metrics on your office
+dashboard.
+
+Data can be pulled with custom jobs or pushed via REST API. You can re-arrange
+widgets via drag&drop.
+
+Possible integrations include [Icinga](https://www.icinga.com/), [Grafana](https://grafana.com/),
+ticket systems such as [RT](https://bestpractical.com/request-tracker/) or [OTRS](https://www.otrs.com),
+[sensors](https://shop.netways.de/), [weather](https://github.com/Shopify/dashing/wiki/Additional-Widgets),
+[schedules](https://blog.netways.de/2013/06/21/netrp-netways-resource-planner/),
+etc. -- literally anything which can be presented as counter or list.
+
+### Icinga 2 Dashboard
+
+The Icinga 2 dashboard is built on top of Dashing and uses the [Icinga 2 API](https://www.icinga.com/products/icinga-2/)
+to visualize what's going on with your monitoring. It combines several popular widgets
 and provides development instructions for your own implementation. The dashboard
-also allows to embed the Icinga Web 2 host and service problem lists as iframe.
+also allows to embed the [Icinga Web 2](https://www.icinga.com/products/icinga-web-2/)
+host and service problem lists as iframe.
 
 > **Note**:
 >
@@ -50,7 +66,7 @@ If you have any questions, please hop onto the [Icinga community channels](https
 
 * Ruby, Gems and Bundler
 * Dashing Gem
-* Icinga 2 (v2.6+) and the REST API
+* Icinga 2 (v2.7+) and the REST API
 
 ## Installation
 
@@ -150,7 +166,7 @@ object ApiUser "dashing" {
 }
 ```
 
-Set the [ApiUser permissions](http://docs.icinga.com/icinga2/latest/doc/module/icinga2/chapter/icinga2-api#icinga2-api-permissions)
+Set the [ApiUser permissions](https://www.icinga.com/docs/icinga2/latest/doc/12-icinga2-api/#permissions)
 according to your needs. By default the Icinga 2 job will fetch
 data from the `/v1/status` and `/v1/objects` endpoints, but does not require write
 permissions. If you're extending the API queries on your own, keep in mind to add
@@ -210,6 +226,8 @@ systemctl daemon-reload
 systemctl start dashing-icinga2.service
 systemctl status dashing-icinga2.service
 ```
+
+This is used inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
 
 ### Foreground
 
