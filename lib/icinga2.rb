@@ -93,12 +93,16 @@ class Icinga2
         @password = @config["icinga2"]["api"]["password"]
         @pkiPath = @config["icinga2"]["api"]["pki_path"]
       else
-        @log.warn(sprintf('Config file %s not found! Using default config.', configFile))
-        @host = "localhost"
-        @port = 5665
-        @user = "dashing"
-        @password = "icinga2ondashingr0xx"
+        @log.warn(sprintf('Config file %s not found. Using ENV vars.', configFile))
+        @host = ENV['ICINGA_API_HOST']
+        @port = ENV['ICINGA_API_PORT']
+        @user = ENV['ICINGA_API_USER']
+        @password = ENV['ICINGA_API_PASSWORD']
         @pkiPath = "pki/"
+
+        if [@host, @port, @user, @password].all? {|value| value.nil? or value == ""}
+          raise ArgumentError.new('No config file or env var found!')
+        end
       end
 
       @apiVersion = "v1" # TODO: allow user to configure version?

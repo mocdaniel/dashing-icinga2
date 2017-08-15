@@ -176,7 +176,7 @@ In case you want to use client certificates, set the `client_cn` accordingly.
 
 ### Dashing Configuration
 
-Edit `config/icinga2.json` and adjust the settings for the Icinga 2 API credentials.
+Move `config/icinga2.json.example` to `config/icinga2.json` and adjust the settings for the Icinga 2 API credentials.
 
 ```
 vim config/icinga2.json
@@ -193,8 +193,7 @@ vim config/icinga2.json
 }
 ```
 
-If you don't have any configuration file yet, the default values from the example above
-will be used.
+If you don't have any configuration file, the environment variables `ICINGA_API_HOST`, `ICINGA_API_PORT`, `ICINGA_API_USER` and `ICINGA_API_PASSWORD` will be used. If these environment variables are not setted, an `ArgumentError` will raise.
 
 If you prefer to use client certificates, set `pki_path` accordingly. The Icinga 2
 job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
