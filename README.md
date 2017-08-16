@@ -198,6 +198,8 @@ will be used.
 
 If you prefer to use client certificates, set `pki_path` accordingly. The Icinga 2
 job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
+You can override this behaviour by specifying the `node_name` configuration option
+explicitly.
 
 Note: If both methods are configured, the Icinga 2 job prefers client certificates.
 
