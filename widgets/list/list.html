@@ -1,18 +1,18 @@
-<h1 class="title" data-bind="title"></h1>
-<br>
-<ol>
-  <li data-foreach-item="items">
-    <span class="label" data-bind-class="item.color" data-bind="item.label"></span>
-    <span class="value" data-bind-class="item.color" data-bind="item.value"></span>
-  </li>
-</ol>
+<div class="header" data-bind="title"></div>
+<div class="content">
+  <ol>
+    <li data-foreach-item="items">
+      <span class="label" data-bind-class="item.color" data-bind="item.label"></span>
+      <span class="value" data-bind-class="item.color" data-bind="item.value"></span>
+    </li>
+  </ol>
 
-<ul class="list-nostyle">
-  <li data-foreach-item="items">
-    <span class="label" data-bind-class="item.color" data-bind="item.label"></span>
-    <span class="value" data-bind-class="item.color" data-bind="item.value"></span>
-  </li>
-</ul>
-
-<p class="more-info" data-bind="moreinfo"></p>
-<p class="updated-at" data-bind="updatedAtMessage"></p>
+  <ul class="list-nostyle">
+    <li data-foreach-item="items">
+      <span class="label" data-bind-class="item.color" data-bind="item.label"></span>
+      <span class="value" data-bind-class="item.color" data-bind="item.value"></span>
+    </li>
+  </ul>
+</div>
+<div class="more-info" data-bind="moreinfo"></div>
+<div class="updated-at" data-bind="updatedAtMessage"></div>
