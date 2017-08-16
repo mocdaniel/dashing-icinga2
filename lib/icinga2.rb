@@ -92,6 +92,7 @@ class Icinga2
         @user = @config["icinga2"]["api"]["user"]
         @password = @config["icinga2"]["api"]["password"]
         @pkiPath = @config["icinga2"]["api"]["pki_path"]
+        @nodeName = @config['icinga2']['api']['node_name']
       else
         @log.warn(sprintf('Config file %s not found! Using default config.', configFile))
         @host = "localhost"
@@ -99,6 +100,7 @@ class Icinga2
         @user = "dashing"
         @password = "icinga2ondashingr0xx"
         @pkiPath = "pki/"
+        @nodeName = nil
       end
 
       @apiVersion = "v1" # TODO: allow user to configure version?
@@ -126,11 +128,13 @@ class Icinga2
   end
 
   def checkCert()
-    begin
-      @nodeName = Socket.gethostbyname(Socket.gethostname).first
-      @log.debug(sprintf('node name: %s', @nodeName))
-    rescue SocketError => error
-      @log.error(error)
+    unless @nodeName
+      begin
+        @nodeName = Socket.gethostbyname(Socket.gethostname).first
+        @log.debug(sprintf('node name: %s', @nodeName))
+      rescue SocketError => error
+        @log.error(error)
+      end
     end
 
     if File.file?(sprintf('%s/%s.crt', @pkiPath, @nodeName))
