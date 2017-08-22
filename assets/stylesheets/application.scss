@@ -49,6 +49,7 @@ body {
   font-size: 20px;
   color: $text-color;
   font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: center;
 }
 
 b, strong {
@@ -112,6 +113,11 @@ h3 {
   font-size: 25px;
   font-weight: 600;
   color: $text-color;
+}
+
+#banner {
+  text-align: left;
+  padding: 10px;
 }
 
 // ----------------------------------------------------------------------------
@@ -273,8 +279,7 @@ h3 {
 }
 
 #container {
-  //padding-top: 5px;
-  //if background-color is not white there's a nasty white line with padding-top
+  display: inline-block;
 }
 
 
