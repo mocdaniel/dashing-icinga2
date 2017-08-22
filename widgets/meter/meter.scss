@@ -3,42 +3,23 @@
 // ----------------------------------------------------------------------------
 $background-color:  #0095bf;
 
-$title-color:       rgba(255, 255, 255, 0.7);
-//$moreinfo-color:    rgba(255, 255, 255, 0.3);
 $moreinfo-color: #fff;
 
 $meter-background:  darken($background-color, 15%);
-//$meter-background: #fff;
 
 // ----------------------------------------------------------------------------
 // Widget-meter styles
 // ----------------------------------------------------------------------------
 .widget-meter {
 
-  background-color: $background-color;
-
   input.meter {
     background-color: $meter-background;
     color: #fff;
   }
 
-  .title {
-    color: $title-color;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    margin-bottom: 15px;
-    font-size: 25px;
-    text-align: center;
-  }
-
   .more-info {
     color: $moreinfo-color;
-    font-size: 30px;
-  }
-
-  .updated-at {
-    color: rgba(0, 0, 0, 0.3);
+    font-size: 26px;
   }
 
 }

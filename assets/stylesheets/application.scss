@@ -16,6 +16,8 @@ $background-danger-color-1: #eeae32;
 $background-danger-color-2: #ff9618;
 $text-danger-color: #fff;
 
+$icinga-blue: #0095bf;
+
 @-webkit-keyframes status-warning-background {
   0%   { background-color: $background-warning-color-1; }
   50%  { background-color: $background-warning-color-2; }
@@ -36,7 +38,7 @@ $text-danger-color: #fff;
 // Base styles
 // ----------------------------------------------------------------------------
 html {
-  background-color: #0095bf;
+  background-color: $icinga-blue;
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -44,7 +46,6 @@ html {
 
 body {
   margin: 0;
-  background-color: $background-color;
   font-size: 20px;
   color: $text-color;
   font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -93,10 +94,13 @@ h1, h2, h3, h4, h5, p {
   margin: 0;
 }
 h1 {
-  margin-bottom: 12px;
-  text-align: center;
-  font-size: 30px;
+  margin-bottom: 16px;
+  font-size: 24px;
   font-weight: 400;
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.8);
 }
 h2 {
   text-transform: uppercase;
@@ -144,12 +148,51 @@ h3 {
 }
 
 .widget {
-  padding: 25px 12px;
+  margin: 0;
   text-align: center;
   width: 100%;
-  display: table-cell;
-  vertical-align: middle;
   height: 100%;
+  background-color: $icinga-blue;
+  /* Hack to fill the surrounding list element */
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Welcome to the future, way better than absolute positioning */
+  display: flex;
+  flex-direction: column;
+  /* Pimp mode */
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: 600;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.content {
+  height: 100%;
+  padding: 10px;
+  /* This prevents more-info and updated-at elements from vanishing */
+  /* If you update to 'overflow: auto;' you can get scroll bars */
+  overflow: hidden;
+}
+
+.more-info {
+  padding: 5px;
+  font-size: 15px;
+}
+
+.updated-at {
+  padding: 5px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .widget.status-warning {
@@ -177,22 +220,6 @@ h3 {
   .title, .more-info {
     color: $text-danger-color;
   }
-}
-
-.more-info {
-  font-size: 15px;
-  position: absolute;
-  bottom: 32px;
-  left: 0;
-  right: 0;
-}
-
-.updated-at {
-  font-size: 15px;
-  position: absolute;
-  bottom: 12px;
-  left: 0;
-  right: 0;
 }
 
 #save-gridster {
