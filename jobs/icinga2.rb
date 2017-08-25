@@ -88,9 +88,13 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   # problem services
   severity_stats = []
   icinga.service_problems_severity.each do |name, state|
-    #severity_stats.push({ "label" => icinga.formatService(name), "color" => icinga.stateToColor(state.to_int, false)})
-    severity_stats.push({ "label" => icinga.formatService(name) })
+    severity_stats.push({
+      "label" => icinga.formatService(name),
+      "color" => icinga.stateToColor(state.to_int, false),
+      "state" => icinga.stateToString(state)
+    })
   end
+  severity_stats = severity_stats.sort_by{|stat| stat["state"]}
   puts "Severity: " + severity_stats.to_s
 
   send_event('icinga-severity', {
