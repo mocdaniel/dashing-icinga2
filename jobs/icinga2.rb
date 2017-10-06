@@ -99,28 +99,56 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
 
   # down, critical, warning, unknown
   puts "Host Down: " + icinga.host_count_problems_down.to_s
+
+  if icinga.host_count_problems_down > 0
+    color = 'red'
+  else
+    color = 'green'
+  end
+
   send_event('icinga-host-problems-down', {
    value: icinga.host_count_problems_down.to_s,
    moreinfo: "All Problems: " + icinga.host_count_down.to_s,
-   color: 'red' })
+   color: color })
 
   puts "Service Critical: " + icinga.service_count_problems_critical.to_s
+
+  if icinga.service_count_problems_critical > 0
+    color = 'red'
+  else
+    color = 'green'
+  end
+
   send_event('icinga-service-problems-critical', {
    value: icinga.service_count_problems_critical.to_s,
    moreinfo: "All Problems: " + icinga.service_count_critical.to_s,
-   color: 'red' })
+   color: color })
 
   puts "Service Warning: " + icinga.service_count_problems_warning.to_s
+
+  if icinga.service_count_problems_warning > 0
+    color = 'yellow'
+  else
+    color = 'green'
+  end
+
   send_event('icinga-service-problems-warning', {
    value: icinga.service_count_problems_warning.to_s,
    moreinfo: "All Problems: " + icinga.service_count_warning.to_s,
-   color: 'yellow' })
+   color: color })
 
   puts "Service Unknown: " + icinga.service_count_problems_unknown.to_s
+
+  if icinga.service_count_problems_unknown > 0
+    color = 'purple'
+  else
+    color = 'green'
+  end
+
   send_event('icinga-service-problems-unknown', {
    value: icinga.service_count_problems_unknown.to_s,
    moreinfo: "All Problems: " + icinga.service_count_unknown.to_s,
-   color: 'purple' })
+   color: color })
 
 
 end
