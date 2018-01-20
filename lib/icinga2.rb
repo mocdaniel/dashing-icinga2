@@ -79,7 +79,45 @@ class Icinga2
       "[#{datetime.strftime(@log.datetime_format)}] #{severity.ljust(5)} : #{msg}\n"
     end
 
-    # parse config
+    # get configuration settings
+    begin
+      puts "First trying to read environment variables"
+      getConfEnv()
+    rescue
+      puts "Environment variables not found, falling back to configuration file " + configFile
+      getConfFile(configFile)
+    end
+
+    @apiVersion = "v1" # TODO: allow user to configure version?
+    @apiUrlBase = sprintf('https://%s:%d/%s', @host, @port, @apiVersion)
+
+    @hasCert = false
+    checkCert()
+
+    @headers = {
+      "Content-Type" => "application/json",
+      "Accept" => "application/json"
+    }
+  end
+
+  def getConfEnv()
+    # prefer environment variables over the configuration file
+    @host = ENV['ICINGA2_API_HOST']
+    @port = ENV['ICINGA2_API_PORT']
+    @user = ENV['ICINGA2_API_USERNAME']
+    @password = ENV['ICINGA2_API_PASSWORD']
+    @pkiPath = ENV['ICINGA2_API_CERT_PATH']
+    @nodeName = ENV['ICINGA2_API_NODENAME']
+
+    # check for the least required variables, the rest is read later on
+    if [@host, @port].all? {|value| value.nil? or value == ""}
+      raise ArgumentError.new('Required environment variables not found!')
+    end
+
+    puts "Using environment variable configuration on '" + @host + ":" + @port + "'."
+  end
+
+  def getConfFile(configFile)
     configFile = File.expand_path(configFile)
     @log.debug(sprintf( '  config file   : %s', configFile))
 
@@ -117,28 +155,10 @@ class Icinga2
         @nodeName = nil
       end
 
-      @apiVersion = "v1" # TODO: allow user to configure version?
-
-      @apiUrlBase = sprintf('https://%s:%d/%s', @host, @port, @apiVersion)
-
-      @log.debug(sprintf('  host         : %s', @host))
-      @log.debug(sprintf('  port         : %s', @port))
-      @log.debug(sprintf('  api url      : %s', @apiUrlBase))
-      @log.debug(sprintf('  api user     : %s', @user))
-      @log.debug(sprintf('  api password : %s', 'XXXX'))
-
     rescue JSON::ParserError => e
       @log.error('wrong result (no json)')
       @log.error(e)
     end
-
-    @hasCert = false
-    checkCert()
-
-    @headers = {
-      "Content-Type" => "application/json",
-      "Accept" => "application/json"
-    }
   end
 
   def checkCert()
