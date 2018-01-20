@@ -1,14 +1,39 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
+$background-color:  #47bbb3;
 $value-color:       #fff;
 
+$background-color-green:  #44bb77;
+$background-color-green-1:  #44bb77;
+$background-color-green-2:  #44bb77;
+$value-color-green:       #fff;
+
+$background-color-red:  #ff5566;
+$background-color-red-1:  #ff5566;
+$background-color-red-2:  #ff5566;
+$value-color-red:       #fff;
+
+$background-color-yellow:  #ffaa44;
+$background-color-yellow-1:  #ffaa44;
+$background-color-yellow-2:  #ffaa44;
+$value-color-yellow:       #fff;
+
+$background-color-purple:  #aa44ff;
+$background-color-purple-1:  #aa44ff;
+$background-color-purple-2:  #aa44ff;
+$value-color-purple:       #fff;
+
+$background-color-grey:  #999999;
+$value-color-grey:       #fff;
 $label-color:       rgba(255, 255, 255, 0.7);
 
 // ----------------------------------------------------------------------------
 // Widget-list styles
 // ----------------------------------------------------------------------------
 .widget-list {
+
+  background-color: $background-color;
 
   ol, ul {
     text-align: left;
