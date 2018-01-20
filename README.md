@@ -296,6 +296,7 @@ cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 
 Thanks to all contributors! :)
 
+* [tutabeier](https://github.com/tutabeier) for [environment variables](https://github.com/Icinga/dashing-icinga2/pull/35) inspiration instead of a local configuration file.
 * [mcktr](https://github.com/mcktr) for helping out with [unhandled problems](https://github.com/Icinga/dashing-icinga2/pull/18).
 * [tachtler](https://github.com/tachtler) for the [Systemd service and logrotate](https://github.com/Icinga/dashing-icinga2/pull/6) additions.
 * [fugstrolch](https://github.com/fugstrolch) for the [Icinga Web 2 iframe integration](https://github.com/Icinga/dashing-icinga2/pull/4).
