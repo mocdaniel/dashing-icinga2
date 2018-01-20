@@ -15,6 +15,10 @@ $label-color:       rgba(255, 255, 255, 0.7);
     color: $label-color;
   }
 
+  ul {
+    color: #ffffff;
+  }
+
   ol {
     list-style-position: inside;
   }
@@ -41,19 +45,19 @@ $label-color:       rgba(255, 255, 255, 0.7);
   }
 
   .green {
-    color: #44bb77;
+    background-color: #44bb77;
     font-size: 15px;
   }
   .yellow {
-    color: #ffaa44;
+    background-color: #ffaa44;
     font-size: 15px;
   }
   .red {
-    color: #ff5566;
+    background-color: #ff5566;
     font-size: 15px;
   }
   .purple {
-    color: #aa44ff;
+    background-color: #aa44ff;
     font-size: 15px;
   }
 }
