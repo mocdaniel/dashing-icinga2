@@ -176,6 +176,8 @@ In case you want to use client certificates, set the `client_cn` accordingly.
 
 ### Dashing Configuration
 
+#### Configuration File
+
 Copy the example configuration from `config/icinga2.json` into `config/icinga2.local.json`
 and adjust the settings for the Icinga 2 API credentials.
 
@@ -222,6 +224,24 @@ do not match the host's FQDN.
 > **Note:**
 >
 > If both methods are configured, the Icinga 2 job prefers client certificates.
+
+#### Environment Variables
+
+If you prefer to configure the Icinga 2 settings in environment variables, you
+can do so as well. This helps with containers or local development tests.
+
+Variable                 | Description
+-------------------------|-------------------------
+ICINGA2\_API\_HOST       | **Required.** Host where the API is listening on.
+ICINGA2\_API\_PORT       | **Required.** Port where the API is listening on.
+ICINGA2\_API\_USERNAME   | **Optional.** Required for basic auth as username.
+ICINGA2\_API\_PASSWORD   | **Optional.** Required for basic auth as password.
+ICINGA2\_API\_CERT\_PATH | **Optional.** Client certificate path.
+ICINGA2\_API\_NODENAME   | **Optional.** If client certificates do not match the host name, override it.
+
+> **Note**
+>
+> Environment variables always override local configuration.
 
 ## Run
 
@@ -331,6 +351,14 @@ The Icinga 2 dashboard mainly depends on the following files:
 
 Additional changes are inside the widgets. `simplemon` was added. `meter` was modified to update the
 maximum value at runtime. `list` was updated to highlight colors and change font sizes.
+
+### Configuration
+
+You can use environment variables to quickly set the required configuration settings:
+
+```
+ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
+```
 
 ### Icinga 2 Library
 
