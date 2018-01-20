@@ -83,9 +83,23 @@ class Icinga2
     configFile = File.expand_path(configFile)
     @log.debug(sprintf( '  config file   : %s', configFile))
 
+    # Allow to use 'icinga2.local.json' or any other '.local.json' defined in jobs
+    configFileLocal = File.dirname(configFile) + "/" + File.basename(configFile,File.extname(configFile)) + ".local" + File.extname(configFile)
+
+    puts "Detecting local config file '" + configFileLocal + "'."
+
+    if (File.exist?(configFileLocal))
+      realConfigFile = configFileLocal
+    else
+      realConfigFile = configFile
+    end
+
+    @log.info(sprintf('Using config file \'%s\'', realConfigFile))
+    puts "Using config file '" + realConfigFile + "'."
+
     begin
-      if (File.exist?(configFile))
-        file = File.read(configFile)
+      if (File.exist?(realConfigFile))
+        file = File.read(realConfigFile)
         @config = JSON.parse(file)
         @host = @config["icinga2"]["api"]["host"]
         @port = @config["icinga2"]["api"]["port"]

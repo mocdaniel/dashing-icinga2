@@ -176,10 +176,15 @@ In case you want to use client certificates, set the `client_cn` accordingly.
 
 ### Dashing Configuration
 
-Edit `config/icinga2.json` and adjust the settings for the Icinga 2 API credentials.
+Copy the example configuration from `config/icinga2.json` into `config/icinga2.local.json`
+and adjust the settings for the Icinga 2 API credentials.
 
 ```
-vim config/icinga2.json
+cp config/icinga2.json config/icinga2.local.json
+```
+
+```
+vim config/icinga2.local.json
 
 {
   "icinga2": {
@@ -193,15 +198,30 @@ vim config/icinga2.json
 }
 ```
 
-If you don't have any configuration file yet, the default values from the example above
-will be used.
-
 If you prefer to use client certificates, set `pki_path` accordingly. The Icinga 2
 job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
 You can override this behaviour by specifying the `node_name` configuration option
 explicitly.
 
-Note: If both methods are configured, the Icinga 2 job prefers client certificates.
+```
+{
+  "icinga2": {
+    "api": {
+      "host": "localhost",
+      "port": 5665,
+      "user": "dashing",
+      "pki_path": "pki/"
+    }
+  }
+}
+```
+
+You can optionally set the `node_name` attribute if the certificate file names
+do not match the host's FQDN.
+
+> **Note:**
+>
+> If both methods are configured, the Icinga 2 job prefers client certificates.
 
 ## Run
 
