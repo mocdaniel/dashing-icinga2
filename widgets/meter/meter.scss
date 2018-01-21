@@ -5,7 +5,8 @@ $background-color:  #0095bf;
 $title-color: #fff;
 $moreinfo-color: #fff;
 
-$meter-background:  darken($background-color, 15%);
+$meter-background:  darken($background-color, 12%);
+$meter-color: rgba(255, 255, 255, 0.95);
 
 // ----------------------------------------------------------------------------
 // Widget-meter styles
@@ -16,7 +17,7 @@ $meter-background:  darken($background-color, 15%);
 
   input.meter {
     background-color: $meter-background;
-    color: #fff;
+    color: $meter-color;
   }
 
   .title {
