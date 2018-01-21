@@ -106,59 +106,42 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
    items: result,
    color: 'blue' })
 
-  # down, critical, warning, unknown
-  puts "Host Down: " + icinga.host_count_problems_down.to_s
+  # Combined view of unhandled host problems (only if there are some)
+  unhandled_host_problems = []
 
-  if icinga.host_count_problems_down > 0
-    color = 'red'
-  else
-    color = 'green'
+  if (icinga.host_count_problems_down > 0)
+    unhandled_host_problems.push(
+      { "color" => icinga.stateToColor(1, true), "value" => icinga.host_count_problems_down },
+    )
   end
 
-  send_event('icinga-host-problems-down', {
-   value: icinga.host_count_problems_down.to_s,
-   moreinfo: "All Problems: " + icinga.host_count_down.to_s,
-   color: color })
+  send_event('icinga-host-problems', {
+    items: unhandled_host_problems,
+    moreinfo: "All Problems: " + icinga.host_count_problems_down.to_s
+  })
 
-  puts "Service Critical: " + icinga.service_count_problems_critical.to_s
+  # Combined view of unhandled service problems (only if there are some)
+  unhandled_service_problems = []
 
-  if icinga.service_count_problems_critical > 0
-    color = 'red'
-  else
-    color = 'green'
+  if (icinga.service_count_problems_critical > 0)
+    unhandled_service_problems.push(
+      { "color" => icinga.stateToColor(2, false), "value" => icinga.service_count_problems_critical },
+    )
+  end
+  if (icinga.service_count_problems_warning > 0)
+    unhandled_service_problems.push(
+      { "color" => icinga.stateToColor(1, false), "value" => icinga.service_count_problems_warning },
+    )
+  end
+  if (icinga.service_count_problems_unknown > 0)
+    unhandled_service_problems.push(
+      { "color" => icinga.stateToColor(3, false), "value" => icinga.service_count_problems_unknown }
+    )
   end
 
-  send_event('icinga-service-problems-critical', {
-   value: icinga.service_count_problems_critical.to_s,
-   moreinfo: "All Problems: " + icinga.service_count_critical.to_s,
-   color: color })
-
-  puts "Service Warning: " + icinga.service_count_problems_warning.to_s
-
-  if icinga.service_count_problems_warning > 0
-    color = 'yellow'
-  else
-    color = 'green'
-  end
-
-  send_event('icinga-service-problems-warning', {
-   value: icinga.service_count_problems_warning.to_s,
-   moreinfo: "All Problems: " + icinga.service_count_warning.to_s,
-   color: color })
-
-  puts "Service Unknown: " + icinga.service_count_problems_unknown.to_s
-
-  if icinga.service_count_problems_unknown > 0
-    color = 'purple'
-  else
-    color = 'green'
-  end
-
-  send_event('icinga-service-problems-unknown', {
-   value: icinga.service_count_problems_unknown.to_s,
-   moreinfo: "All Problems: " + icinga.service_count_unknown.to_s,
-   color: color })
-
-
+  send_event('icinga-service-problems', {
+    items: unhandled_service_problems,
+    moreinfo: "All Problems: " + (icinga.service_count_problems_critical + icinga.service_count_problems_warning + icinga.service_count_problems_unknown).to_s
+  })
 end
 
