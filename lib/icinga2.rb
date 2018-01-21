@@ -30,6 +30,7 @@ class Icinga2
   attr_reader :node_name
   attr_reader :app_starttime
   attr_reader :uptime
+  attr_reader :icingaweb2_url
 
   # general stats
   attr_reader :avg_latency
@@ -109,6 +110,9 @@ class Icinga2
     @pkiPath = ENV['ICINGA2_API_CERT_PATH']
     @nodeName = ENV['ICINGA2_API_NODENAME']
 
+    # external attribute
+    @icingaweb2_url = ENV['ICINGAWEB2_URL']
+
     # check for the least required variables, the rest is read later on
     if [@host, @port].all? {|value| value.nil? or value == ""}
       raise ArgumentError.new('Required environment variables not found!')
@@ -139,12 +143,25 @@ class Icinga2
       if (File.exist?(realConfigFile))
         file = File.read(realConfigFile)
         @config = JSON.parse(file)
-        @host = @config["icinga2"]["api"]["host"]
-        @port = @config["icinga2"]["api"]["port"]
-        @user = @config["icinga2"]["api"]["user"]
-        @password = @config["icinga2"]["api"]["password"]
-        @pkiPath = @config["icinga2"]["api"]["pki_path"]
-        @nodeName = @config['icinga2']['api']['node_name']
+
+        if @config.key? 'icinga2'
+          config_icinga2 = @config['icinga2']
+
+          if config_icinga2.key? 'api'
+            @host = @config["icinga2"]["api"]["host"]
+            @port = @config["icinga2"]["api"]["port"]
+            @user = @config["icinga2"]["api"]["user"]
+            @password = @config["icinga2"]["api"]["password"]
+            @pkiPath = @config["icinga2"]["api"]["pki_path"]
+            @nodeName = @config['icinga2']['api']['node_name']
+          end
+        end
+
+        puts "Reading config" + @config.to_s
+        if @config.key? 'icingaweb2'
+          # external attribute
+          @icingaweb2_url = @config['icingaweb2']['url']
+        end
       else
         @log.warn(sprintf('Config file %s not found! Using default config.', configFile))
         @host = "localhost"
@@ -153,6 +170,9 @@ class Icinga2
         @password = "icinga2ondashingr0xx"
         @pkiPath = "pki/"
         @nodeName = nil
+
+        # external attribute
+        @icingaweb2_url = 'http://localhost/icingaweb2'
       end
 
     rescue JSON::ParserError => e

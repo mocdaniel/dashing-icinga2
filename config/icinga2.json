@@ -6,5 +6,8 @@
       "user": "dashing",
       "password": "icinga2ondashingr0xx"
     }
+  },
+  "icingaweb2": {
+    "url": "http://localhost/icingaweb2"
   }
 }

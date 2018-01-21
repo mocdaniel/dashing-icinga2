@@ -44,12 +44,12 @@ $(function() {
       <div data-id="icinga-severity" data-view="List" data-unordered="true" data-title="Problems" style="background-color: #0095bf;"></div>
     </li>
 
-    <!-- Icinga Web 2 iFrame -->
+    <!-- Icinga Web 2 iFrame. getIcingaWeb2Url() is defined in config.ru and reads from config/icinga2*.json -->
     <li data-row="3" data-col="1" data-sizex="2" data-sizey="2">
-      <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
+      <div data-id="iframe" data-view="Iframe" data-url="<%=getIcingaWeb2Url()%>/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
     </li>
     <li data-row="3" data-col="3" data-sizex="2" data-sizey="2">
-      <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&showFullscreen&showCompact"></div>
+      <div data-id="iframe" data-view="Iframe" data-url="<%=getIcingaWeb2Url()%>/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&showFullscreen&showCompact"></div>
     </li>
   </ul>
 

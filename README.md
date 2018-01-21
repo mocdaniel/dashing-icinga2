@@ -181,6 +181,9 @@ In case you want to use client certificates, set the `client_cn` accordingly.
 Copy the example configuration from `config/icinga2.json` into `config/icinga2.local.json`
 and adjust the settings for the Icinga 2 API credentials.
 
+The `icingaweb2` section allows you to specify the Icinga Web 2 URL
+for the iframe widgets. This is read on startup once.
+
 ```
 cp config/icinga2.json config/icinga2.local.json
 ```
@@ -196,6 +199,9 @@ vim config/icinga2.local.json
       "user": "dashing",
       "password": "icinga2ondashingr0xx"
     }
+  },
+  "icingaweb2": {
+    "url": "http://localhost/icingaweb2"
   }
 }
 ```
@@ -214,6 +220,9 @@ explicitly.
       "user": "dashing",
       "pki_path": "pki/"
     }
+  },
+  "icingaweb2": {
+    "url": "http://localhost/icingaweb2"
   }
 }
 ```
@@ -238,6 +247,7 @@ ICINGA2\_API\_USERNAME   | **Optional.** Required for basic auth as username.
 ICINGA2\_API\_PASSWORD   | **Optional.** Required for basic auth as password.
 ICINGA2\_API\_CERT\_PATH | **Optional.** Client certificate path.
 ICINGA2\_API\_NODENAME   | **Optional.** If client certificates do not match the host name, override it.
+ICINGAWEB2\_URL          | **Optional.** Set the Icinga Web 2 Url. Defaults to `http://localhost/icingaweb2`.
 
 > **Note**
 >
