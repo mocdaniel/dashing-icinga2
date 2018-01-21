@@ -1,41 +1,25 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color: #0095bf;
 $title-color: #fff;
 $value-color: #fff;
 $moreinfo-color: #fff;
 
-$background-color-green:  #44bb77;
-$background-color-green-1:  #44bb77;
-$background-color-green-2:  #44bb77;
-$value-color-green:       #fff;
-
-$background-color-red:  #ff5566;
-$background-color-red-1:  #ff5566;
-$background-color-red-2:  #ff5566;
-$value-color-red:       #fff;
-
-$background-color-yellow:  #ffaa44;
-$background-color-yellow-1:  #ffaa44;
-$background-color-yellow-2:  #ffaa44;
-$value-color-yellow:       #fff;
-
-$background-color-purple:  #aa44ff;
-$background-color-purple-1:  #aa44ff;
-$background-color-purple-2:  #aa44ff;
-$value-color-purple:       #fff;
-
-$background-color-grey:  #999999;
-$value-color-grey:       #fff;
 $label-color:       rgba(255, 255, 255, 0.7);
 
+$background-color: transparent;
+$background-color-green:  rgba(68, 187, 119, 0.5);
+$background-color-red:  rgba(255, 85, 102, 0.5);
+$background-color-yellow:  rgba(255, 170, 68, 0.5);
+$background-color-purple:  rgba(170, 68, 255, 0.5);
+$background-color-grey:  rgba(153, 153, 153, 0.5);
 // ----------------------------------------------------------------------------
 // Widget-list styles
 // ----------------------------------------------------------------------------
 .widget-list {
 
   background-color: $background-color;
+  font-size: 15px;
 
   ol, ul {
     text-align: left;
@@ -60,31 +44,25 @@ $label-color:       rgba(255, 255, 255, 0.7);
 
   .label {
     color: $label-color;
-    font-size: 15px;
   }
 
   .value {
     float: right;
     margin-left: 10px;
     font-weight: 500;
-    font-size: 15px;
     color: $value-color;
   }
 
   .green {
-    background-color: #44bb77;
-    font-size: 15px;
+    background-color: $background-color-green;
   }
   .yellow {
-    background-color: #ffaa44;
-    font-size: 15px;
+    background-color: $background-color-yellow;
   }
   .red {
-    background-color: #ff5566;
-    font-size: 15px;
+    background-color: $background-color-red;
   }
   .purple {
-    background-color: #aa44ff;
-    font-size: 15px;
+    background-color: $background-color-purple;
   }
 }
