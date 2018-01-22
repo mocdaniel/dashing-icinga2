@@ -91,14 +91,19 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
     severity_stats.push({
       "label" => icinga.formatService(name),
       "color" => icinga.stateToColor(state.to_int, false),
-      "state" => icinga.stateToString(state)
+      "state" => state.to_int
     })
   end
-  severity_stats = severity_stats.sort_by{|stat| stat["state"]}
-  puts "Severity: " + severity_stats.to_s
+
+  order = [ 2,1,3 ]
+  result = severity_stats.sort do |a, b|
+    order.index(a['state']) <=> order.index(b['state'])
+  end
+
+  puts "Severity: " + result.to_s
 
   send_event('icinga-severity', {
-   items: severity_stats,
+   items: result,
    color: 'blue' })
 
   # down, critical, warning, unknown
