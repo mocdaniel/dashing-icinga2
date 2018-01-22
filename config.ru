@@ -1,4 +1,5 @@
 require 'dashing'
+require './lib/icinga2'
 
 configure do
   set :auth_token, 'YOUR_AUTH_TOKEN'
@@ -13,6 +14,19 @@ configure do
     def protected!
      # Put any authentication code you want in here.
      # This method is run before accessing any resource.
+    end
+
+    # Specify Icinga Web 2 URL
+    # https://github.com/Shopify/dashing/issues/509
+    def getIcingaWeb2Url()
+      # read configuration and try to fetch the correct path
+      icinga = Icinga2.new('config/icinga2.json') # fixed path
+
+      if icinga.icingaweb2_url != nil
+        return icinga.icingaweb2_url
+      else
+        return 'http://192.168.33.5/icingaweb2'
+      end
     end
   end
 end
