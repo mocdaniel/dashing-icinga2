@@ -36,8 +36,13 @@ $icinga-blue: rgba(0, 149, 191, 1);
 // ----------------------------------------------------------------------------
 html {
   background-image: url("icinga-hero-background.jpg");
-  //background-color: $icinga-blue;
   background-color: $background-color;
+  /* Stretch the background image, don't duplicate it */
+  -webkit-background-size: cover; /* For WebKit */
+  -moz-background-size: cover;    /* Mozilla */
+  -o-background-size: cover;      /* Opera */
+  background-size: cover;         /* Generic */
+
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
