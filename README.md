@@ -68,6 +68,13 @@ If you have any questions, please hop onto the [Icinga community channels](https
 * Dashing Gem
 * Icinga 2 (v2.8+) and the REST API
 
+Supported browsers and clients:
+
+* Linux, Unix, \*Pi
+* Chrome, Firefox, Safari
+
+Windows is [not supported](https://github.com/Icinga/dashing-icinga2/issues/47).
+
 ## Installation
 
 Either clone this repository from GitHub or download the tarball.
