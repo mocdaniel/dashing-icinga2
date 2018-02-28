@@ -322,6 +322,7 @@ cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 
 Thanks to all contributors! :)
 
+* [flourish86](https://github.com/flourish86) for the UX design and CSS tips.
 * [marconett](https://github.com/marconett) for the [colorized and sorted problem list widget](https://github.com/Icinga/dashing-icinga2/pull/41).
 * [tutabeier](https://github.com/tutabeier) for [environment variables](https://github.com/Icinga/dashing-icinga2/pull/35) inspiration instead of a local configuration file.
 * [mcktr](https://github.com/mcktr) for helping out with [unhandled problems](https://github.com/Icinga/dashing-icinga2/pull/18).
