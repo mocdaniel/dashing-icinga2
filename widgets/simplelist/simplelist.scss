@@ -1,21 +1,9 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$title-color: #fff;
-$value-color: #fff;
-$moreinfo-color: #fff;
+// Import global settings (color, size, etc.)
 
-//$title-color:       rgba(255, 255, 255, 0.7);
-$title-color-uns:       rgba(0, 0, 0, 0.7);
-//$moreinfo-color:    rgba(255, 255, 255, 0.7);
-
-
-$background-color: transparent;
-$background-color-green:  rgba(68, 187, 119, 0.5);
-$background-color-red:  rgba(255, 85, 102, 0.5);
-$background-color-yellow:  rgba(255, 170, 68, 0.5);
-$background-color-purple:  rgba(170, 68, 255, 0.5);
-$background-color-grey:  rgba(153, 153, 153, 0.5);
+@import "application.scss"; 
 
 // ----------------------------------------------------------------------------
 // Widget-number styles

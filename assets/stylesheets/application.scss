@@ -5,21 +5,24 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$text-color: rgba(255, 255, 255, 0.97);
-$value-color: rgba(255, 255, 255, 0.97);
+$text-color: 			rgba(255, 255, 255, 0.97);
+$value-color: 			rgba(255, 255, 255, 0.97);
 
-$title-color:       rgba(255, 255, 255, 0.7);
-$title-color-uns:       rgba(0, 0, 0, 0.7);
-$moreinfo-color:    rgba(255, 255, 255, 0.7);
+$label-color:       		rgba(255, 255, 255, 0.7);
+$title-color:       		rgba(255, 255, 255, 0.7);
+$title-color-uns:       	rgba(0, 0, 0, 0.7);
+$moreinfo-color:    		rgba(255, 255, 255, 0.7);
+$updatedat-color: 		rgba(255, 255, 255, 0.0); //hide last updated entirely
 
-$background-color: transparent;
-$background-color-green:  rgba(68, 187, 119, 0.5);
-$background-color-red:  rgba(255, 85, 102, 0.5);
-$background-color-yellow:  rgba(255, 170, 68, 0.5);
-$background-color-purple:  rgba(170, 68, 255, 0.5);
-$background-color-grey:  rgba(153, 153, 153, 0.5);
+$background-color: 		transparent;
+$background-color-transparent-factor: 0.75; //change this to influence transparency factor on simplelist/list background color
 
-//$icinga-blue: #0095bf;
+$background-color-green: 	rgba(68, 187, 119, $background-color-transparent-factor);
+$background-color-red:  	rgba(255, 85, 102, $background-color-transparent-factor);
+$background-color-yellow:	rgba(255, 170, 68, $background-color-transparent-factor);
+$background-color-purple:  	rgba(170, 68, 255, $background-color-transparent-factor);
+$background-color-grey:  	rgba(153, 153, 153, $background-color-transparent-factor);
+
 $icinga-blue: rgba(0, 149, 191, 1);
 
 @mixin animation($animation-name, $duration, $function, $animation-iteration-count:""){
@@ -195,7 +198,7 @@ h3 {
 .updated-at {
   padding: 5px;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.3);
+  color: $updatedat-color;
 }
 
 #save-gridster {
