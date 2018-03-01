@@ -39,16 +39,16 @@ and provides development instructions for your own implementation. The dashboard
 also allows to embed the [Icinga Web 2](https://www.icinga.com/products/icinga-web-2/)
 host and service problem lists as iframe.
 
+![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
+
 > **Note**:
 >
 > The Icinga 2 dashboard needs the `dashing` Ruby gem in order to
 > use the dashboards, jobs and widgets provided by this project.
 
-![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
-
 ### Demo
 
-A demo is available inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
+A full demo is available inside the [standalone](https://github.com/icinga/icinga-vagrant) Icinga Vagrant box.
 
 ## Support
 
