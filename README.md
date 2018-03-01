@@ -18,14 +18,9 @@
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
 
-
 You can put your important infrastructure stats and metrics on your office
-dashboard.
-
-Data can be pulled with custom jobs or pushed via REST API. You can re-arrange
-widgets via drag&drop.
-
-Possible integrations include [Icinga](https://www.icinga.com/), [Grafana](https://grafana.com/),
+dashboard. Data can be pulled with custom jobs or pushed via REST API. You can re-arrange
+widgets via drag&drop. Possible integrations include [Icinga](https://www.icinga.com/), [Grafana](https://grafana.com/),
 ticket systems such as [RT](https://bestpractical.com/request-tracker/) or [OTRS](https://www.otrs.com),
 [sensors](https://shop.netways.de/), [weather](https://github.com/Shopify/dashing/wiki/Additional-Widgets),
 [schedules](https://blog.netways.de/2013/06/21/netrp-netways-resource-planner/),
@@ -37,7 +32,7 @@ The Icinga 2 dashboard is built on top of Dashing and uses the [Icinga 2 API](ht
 to visualize what's going on with your monitoring. It combines several popular widgets
 and provides development instructions for your own implementation. The dashboard
 also allows to embed the [Icinga Web 2](https://www.icinga.com/products/icinga-web-2/)
-host and service problem lists as iframe.
+host and service problem lists as Iframe.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
@@ -53,7 +48,8 @@ A full demo is available inside the [standalone](https://github.com/icinga/icing
 ## Support
 
 You are encouraged to use the existing jobs and dashboards and modify them for your own needs.
-More development insights can be found in [this section](#development).
+More development insights can be found in [this section](#development). If you need help with
+development or want to sponsor a feature request, kindly get in touch at info@icinga.com
 
 If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.com/community/get-involved/).
 
@@ -350,6 +346,7 @@ Please add these details when you are asking a question on the community channel
 
 * Dashing version (`gem list --local dashing`)
 * Ruby version (`ruby -V`)
+* Icinga 2 version (`icinga2 --version`)
 * Version of this project (tarball name, download date, tag name or `git show -1`)
 * Your own modifications to this project, if any
 
@@ -361,9 +358,10 @@ Please add these details when you are asking a question on the community channel
 
 ### Connection Errors
 
-If the connection to the Icinga 2 API was interrupted, check for possible network issues. The Icinga 2 daemon might have been reloaded at that time.
+If the connection to the Icinga 2 API was interrupted, check for possible network issues.
+The Icinga 2 daemon might have been reloaded at that time.
 
-* Manually test the Icinga 2 API (check docs.icinga.com for the official documentation)
+* Manually test the Icinga 2 API (check https://www.icinga.com/docs for the official documentation)
 * Verify that the configuration file contains the correct API details
 * Modify the `jobs/icinga2.rb` and add additional logging (use `puts` similar to existing examples)
 * Run Dashing in foreground
