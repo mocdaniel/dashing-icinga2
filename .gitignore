@@ -4,3 +4,4 @@ history.yml
 log
 tmp
 *.lock
+config/icinga2.local.json
