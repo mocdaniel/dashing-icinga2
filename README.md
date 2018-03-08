@@ -311,6 +311,34 @@ Or with environment variables:
 ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
 ```
 
+### Docker
+
+You can run Dashing in Docker environment:
+
+Build a container:
+
+```
+git clone https://github.com/Icinga/dashing-icinga2.git
+cd dashing-icinga2
+docker build -t dashing-icinga2:latest .
+```
+
+Customize configuration with environment variables:
+
+```
+export ICINGA2_API_HOST=icinga2.example.org
+export ICINGA2_API_PASSWORD=secret
+```
+
+Run a docker container:
+
+```
+docker run -ti --rm -e ICINGA2_API_HOST -e ICINGA2_API_PASSWORD -p 8005:8005 dashing-icinga2:latest
+```
+
+Navigate to [http://localhost:8005](http://localhost:8005)
+
+
 ### Logrotate
 
 You can install the provided logrotate script to rotate the Dashing log in `/usr/share/dashing-icinga2/log`.
@@ -642,4 +670,3 @@ https://community.spiceworks.com/how_to/147719-icinga2-dashing
 https://linoxide.com/monitoring-2/setup-monitoring-dashing-icinga2/
 http://brunner-it.de/2016/08/04/icinga2-dashing-installieren/
 https://www.unixe.de/icinga2-dashing/
-
