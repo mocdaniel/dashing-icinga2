@@ -1,25 +1,31 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color:  #0095bf;
+// Import global settings (color, size, etc.)
 
-$moreinfo-color: #fff;
+@import "application.scss";
 
-$meter-background:  darken($background-color, 15%);
+$meter-background:  darken($icinga-blue, 12%);
+$meter-color: rgba(255, 255, 255, 0.95);
 
 // ----------------------------------------------------------------------------
 // Widget-meter styles
 // ----------------------------------------------------------------------------
 .widget-meter {
 
+  background-color: $background-color;
+
   input.meter {
     background-color: $meter-background;
-    color: #fff;
+    color: $meter-color;
+  }
+
+  .title {
+    color: $title-color;
   }
 
   .more-info {
     color: $moreinfo-color;
-    font-size: 26px;
   }
 
 }

@@ -1,6 +1,10 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
+// Import global settings (color, size, etc.)
+
+@import "application.scss";
+
 $background-color:  #47bbb3;
 $value-color:       #fff;
 

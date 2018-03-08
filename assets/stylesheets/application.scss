@@ -5,29 +5,26 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color: #fff;
-$text-color: #fff;
+$text-color: 			rgba(255, 255, 255, 0.97);
+$value-color: 			rgba(255, 255, 255, 0.97);
 
-$background-warning-color-1: #e82711;
-$background-warning-color-2: #9b2d23;
-$text-warning-color: #fff;
+$label-color:       		rgba(255, 255, 255, 0.7);
+$title-color:       		rgba(255, 255, 255, 0.7);
+$title-color-uns:       	rgba(0, 0, 0, 0.7);
+$moreinfo-color:    		rgba(255, 255, 255, 0.7);
+$updatedat-color: 		rgba(255, 255, 255, 0.0); //hide last updated entirely
 
-$background-danger-color-1: #eeae32;
-$background-danger-color-2: #ff9618;
-$text-danger-color: #fff;
+$background-color: 		transparent;
+$background-color-transparent-factor: 0.75; //change this to influence transparency factor on simplelist/list background color
 
-$icinga-blue: #0095bf;
+$background-color-green: 	rgba(68, 187, 119, $background-color-transparent-factor);
+$background-color-red:  	rgba(255, 85, 102, $background-color-transparent-factor);
+$background-color-yellow:	rgba(255, 170, 68, $background-color-transparent-factor);
+$background-color-purple:  	rgba(170, 68, 255, $background-color-transparent-factor);
+$background-color-grey:  	rgba(153, 153, 153, $background-color-transparent-factor);
 
-@-webkit-keyframes status-warning-background {
-  0%   { background-color: $background-warning-color-1; }
-  50%  { background-color: $background-warning-color-2; }
-  100% { background-color: $background-warning-color-1; }
-}
-@-webkit-keyframes status-danger-background {
-  0%   { background-color: $background-danger-color-1; }
-  50%  { background-color: $background-danger-color-2; }
-  100% { background-color: $background-danger-color-1; }
-}
+$icinga-blue: rgba(0, 149, 191, 1);
+
 @mixin animation($animation-name, $duration, $function, $animation-iteration-count:""){
   -webkit-animation:  $animation-name $duration $function #{$animation-iteration-count};
   -moz-animation:     $animation-name $duration $function #{$animation-iteration-count};
@@ -38,7 +35,14 @@ $icinga-blue: #0095bf;
 // Base styles
 // ----------------------------------------------------------------------------
 html {
-  background-color: $icinga-blue;
+  background-image: url("icinga-hero-background.jpg");
+  background-color: $background-color;
+  /* Stretch the background image, don't duplicate it */
+  -webkit-background-size: cover; /* For WebKit */
+  -moz-background-size: cover;    /* Mozilla */
+  -o-background-size: cover;      /* Opera */
+  background-size: cover;         /* Generic */
+
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -158,7 +162,8 @@ h3 {
   text-align: center;
   width: 100%;
   height: 100%;
-  background-color: $icinga-blue;
+  //background-color: $icinga-blue;
+  background-color: $background-color;
   /* Hack to fill the surrounding list element */
   position: absolute;
   top: 0;
@@ -198,34 +203,7 @@ h3 {
 .updated-at {
   padding: 5px;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.3);
-}
-
-.widget.status-warning {
-  background-color: $background-warning-color-1;
-  @include animation(status-warning-background, 2s, ease, infinite);
-
-  .icon-warning-sign {
-    display: inline-block;
-  }
-
-  .title, .more-info {
-    color: $text-warning-color;
-  }
-}
-
-.widget.status-danger {
-  color: $text-danger-color;
-  background-color: $background-danger-color-1;
-  @include animation(status-danger-background, 2s, ease, infinite);
-
-  .icon-warning-sign {
-    display: inline-block;
-  }
-
-  .title, .more-info {
-    color: $text-danger-color;
-  }
+  color: $updatedat-color;
 }
 
 #save-gridster {

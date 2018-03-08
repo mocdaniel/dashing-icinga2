@@ -1,0 +1,11 @@
+<div class="header" data-bind="title"></div>
+
+<div class="content" data-bind-class="color">
+    <li data-foreach-item="items" data-bind-class="item.color">
+      <h3><span class="value" data-bind="item.value"></span></h3>
+    </li>
+</div>
+
+<div class="more-info" data-bind="moreinfo | raw"></div>
+
+<div class="updated-at" data-bind="updatedAtMessage"></div>

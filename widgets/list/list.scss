@@ -1,14 +1,17 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$value-color:       #fff;
+// Import global settings (color, size, etc.)
 
-$label-color:       rgba(255, 255, 255, 0.7);
+@import "application.scss";
 
 // ----------------------------------------------------------------------------
 // Widget-list styles
 // ----------------------------------------------------------------------------
 .widget-list {
+
+  background-color: $background-color;
+  font-size: 15px;
 
   ol, ul {
     text-align: left;
@@ -33,31 +36,25 @@ $label-color:       rgba(255, 255, 255, 0.7);
 
   .label {
     color: $label-color;
-    font-size: 15px;
   }
 
   .value {
     float: right;
     margin-left: 10px;
     font-weight: 500;
-    font-size: 15px;
     color: $value-color;
   }
 
   .green {
-    background-color: #44bb77;
-    font-size: 15px;
+    background-color: $background-color-green;
   }
   .yellow {
-    background-color: #ffaa44;
-    font-size: 15px;
+    background-color: $background-color-yellow;
   }
   .red {
-    background-color: #ff5566;
-    font-size: 15px;
+    background-color: $background-color-red;
   }
   .purple {
-    background-color: #aa44ff;
-    font-size: 15px;
+    background-color: $background-color-purple;
   }
 }

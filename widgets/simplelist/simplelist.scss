@@ -1,35 +1,37 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color:  #47bbb3;
-$value-color:       #fff;
+// Import global settings (color, size, etc.)
 
-$title-color:       rgba(255, 255, 255, 0.7);
-$moreinfo-color:    rgba(255, 255, 255, 0.7);
+@import "application.scss"; 
 
 // ----------------------------------------------------------------------------
 // Widget-number styles
 // ----------------------------------------------------------------------------
-.widget-number {
+.widget-simplelist {
 
   background-color: $background-color;
 
-  .title {
-    color: $title-color;
-  }
-
   .value {
+    margin-top: 40px;
     color: $value-color;
   }
 
-  .change-rate {
-    font-weight: 500;
-    font-size: 30px;
-    color: $value-color;
+  h3 {
+    font-size: 40px;
+    font-weight: 600;
   }
 
-  .more-info {
-    color: $moreinfo-color;
+  .green {
+    background-color: $background-color-green;
   }
-
+  .yellow {
+    background-color: $background-color-yellow;
+  }
+  .red {
+    background-color: $background-color-red;
+  }
+  .purple {
+    background-color: $background-color-purple;
+  }
 }

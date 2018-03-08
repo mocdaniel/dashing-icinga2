@@ -18,14 +18,9 @@
 [Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
 that lets you build beautiful dashboards.
 
-
 You can put your important infrastructure stats and metrics on your office
-dashboard.
-
-Data can be pulled with custom jobs or pushed via REST API. You can re-arrange
-widgets via drag&drop.
-
-Possible integrations include [Icinga](https://www.icinga.com/), [Grafana](https://grafana.com/),
+dashboard. Data can be pulled with custom jobs or pushed via REST API. You can re-arrange
+widgets via drag&drop. Possible integrations include [Icinga](https://www.icinga.com/), [Grafana](https://grafana.com/),
 ticket systems such as [RT](https://bestpractical.com/request-tracker/) or [OTRS](https://www.otrs.com),
 [sensors](https://shop.netways.de/), [weather](https://github.com/Shopify/dashing/wiki/Additional-Widgets),
 [schedules](https://blog.netways.de/2013/06/21/netrp-netways-resource-planner/),
@@ -37,23 +32,24 @@ The Icinga 2 dashboard is built on top of Dashing and uses the [Icinga 2 API](ht
 to visualize what's going on with your monitoring. It combines several popular widgets
 and provides development instructions for your own implementation. The dashboard
 also allows to embed the [Icinga Web 2](https://www.icinga.com/products/icinga-web-2/)
-host and service problem lists as iframe.
+host and service problem lists as Iframe.
+
+![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
 > **Note**:
 >
 > The Icinga 2 dashboard needs the `dashing` Ruby gem in order to
 > use the dashboards, jobs and widgets provided by this project.
 
-![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
-
 ### Demo
 
-A demo is available inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
+A full demo is available inside the [standalone](https://github.com/icinga/icinga-vagrant) Icinga Vagrant box.
 
 ## Support
 
 You are encouraged to use the existing jobs and dashboards and modify them for your own needs.
-More development insights can be found in [this section](#development).
+More development insights can be found in [this section](#development). If you need help with
+development or want to sponsor a feature request, kindly get in touch at info@icinga.com
 
 If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.com/community/get-involved/).
 
@@ -66,7 +62,14 @@ If you have any questions, please hop onto the [Icinga community channels](https
 
 * Ruby, Gems and Bundler
 * Dashing Gem
-* Icinga 2 (v2.7+) and the REST API
+* Icinga 2 (v2.8+) and the REST API
+
+Supported browsers and clients:
+
+* Linux, Unix, \*Pi
+* Chrome, Firefox, Safari
+
+Windows is [not supported](https://github.com/Icinga/dashing-icinga2/issues/47).
 
 ## Installation
 
@@ -128,9 +131,9 @@ bundle
 
 Proceed to the [configuration](#configuration) section.
 
-### Unix and OSX
+### Unix and macOS
 
-On OSX El Capitan [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
+On macOS [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
 therefore you'll need to fix the eventmachine gem:
 
 ```
@@ -139,8 +142,8 @@ bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/includ
 bundle install --path binpaths
 ```
 
-Note: Dashing is running as thin server which by default uses epoll from within the eventmachine library.
-This is not available on unix-based systems, you can safely ignore this warning:
+Note: Dashing is running inside thin server which by default uses epoll from within the eventmachine library.
+This is not available on Unix based systems, you can safely ignore this warning:
 
 ```
 warning: epoll is not supported on this platform
@@ -153,13 +156,19 @@ Proceed to the [configuration](#configuration) section.
 
 ### Icinga 2 API
 
-The Icinga 2 API requires either basic auth or client certificates for authentication.
+The Icinga 2 API requires either basic authentication or client certificates.
 
-Therefore add a new ApiUser object to your Icinga 2 configuration:
+Add a new ApiUser object to your Icinga 2 configuration. Choose the
+path depending on your setup type. Keep in mind that synced ApiUser
+objects expose the login information to other Icinga 2 instances.
 
 ```
 vim /etc/icinga2/conf.d/api-users.conf
 
+vim /etc/icinga2/zones.d/global-templates/api-users.conf
+```
+
+```
 object ApiUser "dashing" {
   password = "icinga2ondashingr0xx"
   permissions = [ "status/query", "objects/query/*" ]
@@ -167,19 +176,19 @@ object ApiUser "dashing" {
 ```
 
 Set the [ApiUser permissions](https://www.icinga.com/docs/icinga2/latest/doc/12-icinga2-api/#permissions)
-according to your needs. By default the Icinga 2 job will fetch
-data from the `/v1/status` and `/v1/objects` endpoints, but does not require write
+according to your needs. By default the Icinga 2 job fetches
+data from the `/v1/status` and `/v1/objects` API endpoints, but does not require write
 permissions. If you're extending the API queries on your own, keep in mind to add
 proper permissions.
 
-In case you want to use client certificates, set the `client_cn` accordingly.
+In case you want to use client certificates, set the `client_cn` attribute accordingly.
 
 ### Dashing Configuration
 
 #### Configuration File
 
 Copy the example configuration from `config/icinga2.json` into `config/icinga2.local.json`
-and adjust the settings for the Icinga 2 API credentials.
+and adjust the settings for the Icinga 2 API credentials in the `icinga2` section.
 
 The `icingaweb2` section allows you to specify the Icinga Web 2 URL
 for the iframe widgets. This is read on startup once.
@@ -206,7 +215,7 @@ vim config/icinga2.local.json
 }
 ```
 
-If you prefer to use client certificates, set `pki_path` accordingly. The Icinga 2
+If you prefer to use client certificates, set the `pki_path` attribute. The Icinga 2
 job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
 You can override this behaviour by specifying the `node_name` configuration option
 explicitly.
@@ -218,7 +227,8 @@ explicitly.
       "host": "localhost",
       "port": 5665,
       "user": "dashing",
-      "pki_path": "pki/"
+      "pki_path": "pki/",
+      "node_name": "icinga2-master1.localdomain"
     }
   },
   "icingaweb2": {
@@ -226,9 +236,6 @@ explicitly.
   }
 }
 ```
-
-You can optionally set the `node_name` attribute if the certificate file names
-do not match the host's FQDN.
 
 > **Note:**
 >
@@ -253,22 +260,17 @@ ICINGAWEB2\_URL          | **Optional.** Set the Icinga Web 2 Url. Defaults to `
 >
 > Environment variables always override local configuration.
 
+Example:
+
+```
+ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
+```
+
 ## Run
-
-You can start dashing as daemon by using this script:
-
-```
-./restart-dashing
-```
-
-Additional options are available through `./restart-dashing -h`.
-
-Navigate to [http://localhost:8005](http://localhost:8005)
-
 
 ### Systemd Service
 
-You can install the provided Systemd service file from `tools/systemd`. It assumes
+Install the provided Systemd service file from `tools/systemd`. It assumes
 that the working directory is `/usr/share/dashing-icinga2` and the Dashing gem
 is installed to `/usr/local/bin/dashing`. Adopt these paths for your own needs.
 
@@ -281,6 +283,19 @@ systemctl status dashing-icinga2.service
 
 This is used inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
 
+### Script
+
+You can start dashing as daemon by using this script:
+
+```
+./restart-dashing
+```
+
+Additional options are available through `./restart-dashing -h`.
+
+Navigate to [http://localhost:8005](http://localhost:8005)
+
+
 ### Foreground
 
 You can run Dashing in foreground for tests and debugging too:
@@ -290,7 +305,11 @@ export PATH="/usr/local/bin:$PATH"
 dashing start -p 8005
 ```
 
-In addition to that you should consider an initscript/systemd service file too.
+Or with environment variables:
+
+```
+ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
+```
 
 ### Logrotate
 
@@ -306,6 +325,7 @@ cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 
 Thanks to all contributors! :)
 
+* [flourish86](https://github.com/flourish86) for the UX design and CSS tips.
 * [marconett](https://github.com/marconett) for the [colorized and sorted problem list widget](https://github.com/Icinga/dashing-icinga2/pull/41).
 * [tutabeier](https://github.com/tutabeier) for [environment variables](https://github.com/Icinga/dashing-icinga2/pull/35) inspiration instead of a local configuration file.
 * [mcktr](https://github.com/mcktr) for helping out with [unhandled problems](https://github.com/Icinga/dashing-icinga2/pull/18).
@@ -326,6 +346,7 @@ Please add these details when you are asking a question on the community channel
 
 * Dashing version (`gem list --local dashing`)
 * Ruby version (`ruby -V`)
+* Icinga 2 version (`icinga2 --version`)
 * Version of this project (tarball name, download date, tag name or `git show -1`)
 * Your own modifications to this project, if any
 
@@ -337,9 +358,10 @@ Please add these details when you are asking a question on the community channel
 
 ### Connection Errors
 
-If the connection to the Icinga 2 API was interrupted, check for possible network issues. The Icinga 2 daemon might have been reloaded at that time.
+If the connection to the Icinga 2 API was interrupted, check for possible network issues.
+The Icinga 2 daemon might have been reloaded at that time.
 
-* Manually test the Icinga 2 API (check docs.icinga.com for the official documentation)
+* Manually test the Icinga 2 API (check https://www.icinga.com/docs for the official documentation)
 * Verify that the configuration file contains the correct API details
 * Modify the `jobs/icinga2.rb` and add additional logging (use `puts` similar to existing examples)
 * Run Dashing in foreground
@@ -347,8 +369,8 @@ If the connection to the Icinga 2 API was interrupted, check for possible networ
 ### Misc Errors
 
 * Port 8005 is not reachable. Ensure that the firewall rules are setup accordingly.
-* Iframe is not working. Try [this solution](https://monitoring-portal.org/index.php?thread/39888-icinga2-dashing-iframe-issue-resolved/) and ensure that the `X-Frame-Options`
-variable is not set to `DENY`.
+* Iframe is not working. Try [this solution](https://monitoring-portal.org/woltlab/index.php?thread/39888-icinga2-dashing-iframe-issue-resolved/)
+and ensure that the `X-Frame-Options` variable is **not** set to `DENY`.
 
 ## Development
 
@@ -356,12 +378,12 @@ Fork the repository on GitHub, commit your changes and send a PR please :)
 
 The Icinga 2 dashboard mainly depends on the following files:
 
-* dashboards/icinga2.erb
-* jobs/icinga2.rb
-* lib/icinga2.rb
-* config/icinga2.json
+* `dashboards/icinga2.erb`
+* `jobs/icinga2.rb`
+* `lib/icinga2.rb`
+* `config/icinga2.json`
 
-Additional changes are inside the widgets. `simplemon` was added. `meter` was modified to update the
+Additional changes are inside the widgets. `simplemon` and `simplelist` have been added. `meter` was modified to update the
 maximum value at runtime. `list` was updated to highlight colors and change font sizes.
 
 ### Configuration
@@ -439,11 +461,14 @@ require more attributes and/or methods please send a PR!
 ### Icinga 2 Dashboard
 
 The dashboard is located in the `dashboards/icinga2.erb` file and mostly
-consists of an HTML list.
+consists of an HTML list. It can be used as template where variables are
+read from the `config.ru` file but that's for advanced usage.
 
 Example:
 
 ```html
+vim dashboards/icinga2.erb
+
 <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
   <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100" style="background-color: #0095bf;"></div>
 </li>
@@ -475,14 +500,25 @@ at runtime too because of API-created objects.
 Example:
 
 ```ruby
-send_event('icinga-host-meter', {
- value: host_meter,
- max:   host_meter_max,
- moreinfo: "Total hosts: " + host_meter_max.to_s,
- color: 'blue' })
+vim jobs/icinga2.rb
+
+  send_event('icinga-host-meter', {
+   value: host_meter,
+   max:   host_meter_max,
+   moreinfo: "Total hosts: " + host_meter_max.to_s,
+   color: 'blue' })
 ```
 
 `icinga-host-meter` is the value of the `data-id` field in the `dashboards/icinga2.erb` file.
+
+```
+vim dashboards/icinga2.erb
+
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100"></div>
+    </li>
+```
+
 In order to update the widget you'll need to send a hash which contains the following keys
 and values:
 
@@ -501,23 +537,51 @@ Create a new array containing a hash for each table row. The `label` key is requ
 `value` is optional.
 
 ```ruby
-check_stats = [
-  {"label" => "Host (active)", "value" => icinga.host_active_checks_1min},
-  {"label" => "Service (active)", "value" => icinga.service_active_checks_1min},
-]
+vim jobs/icinga2.rb
+
+  icinga_stats = [
+    {"label" => "Host checks/min", "value" => icinga.host_active_checks_1min},
+    {"label" => "Service checks/min", "value" => icinga.service_active_checks_1min},
+  ]
 ```
 
-Use this array inside the `icinga-checks` event (`data-id` in the `dashboards/icinga2.erb` file)
+Use this array inside the `icinga-stats` event (`data-id` in the `dashboards/icinga2.erb` file)
 as `items` attribute. You can add `moreinfo` which provides an additional legend for this widget.
 `color` is optional.
 
 ```ruby
-send_event('icinga-checks', {
- items: check_stats,
- moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
- color: 'blue' })
+vim jobs/icinga2.rb
+
+  send_event('icinga-stats', {
+   title: icinga.version + " (" + icinga.version_revision + ")",
+   items: icinga_stats,
+   moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
+   color: 'blue' })
 ```
 
+#### Simplelist
+
+Print problem counts by state as background color in a simple list.
+
+Example:
+
+```ruby
+vim jobs/icinga2.rb
+
+  # Combined view of unhandled host problems (only if there are some)
+  unhandled_host_problems = []
+
+  if (icinga.host_count_problems_down > 0)
+    unhandled_host_problems.push(
+      { "color" => icinga.stateToColor(1, true), "value" => icinga.host_count_problems_down },
+    )
+  end
+
+  send_event('icinga-host-problems', {
+    items: unhandled_host_problems,
+    moreinfo: "All Problems: " + icinga.host_count_problems_down.to_s
+  })
+```
 
 #### Simplemon
 
@@ -527,6 +591,8 @@ in downtime.
 Example:
 
 ```ruby
+vim jobs/icinga2.rb
+
 send_event('icinga-service-critical', {
  value: icinga.service_count_critical.to_s,
  color: 'red' })
@@ -538,12 +604,13 @@ file. In order to update the widget you need to send a `value` and a `color` as 
 #### IFrame
 
 You can edit `dashboards/icinga2.erb` to modify the iframe widget
-for Icinga Web 2.
+for Icinga Web 2. Keep in mind that you keep the template function `<%=getIcingaWeb2Url()%>`
+in order to read the Icinga Web 2 Host and URL from the configuration.
 
 Example URL:
 
 ```
-http://192.168.33.5/icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc
+/icingaweb2/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc
 ```
 
 Add the fullscreen and compact options for those views.
@@ -555,18 +622,24 @@ Add the fullscreen and compact options for those views.
 Example:
 
 ```html
-<li data-row="4" data-col="1" data-sizex="2" data-sizey="2">
-  <div data-id="iframe" data-view="Iframe" data-url="http://192.168.33.5/icingaweb2/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
-</li>
+    <!-- Icinga Web 2 iFrame. getIcingaWeb2Url() is defined in config.ru and reads from config/icinga2*.json -->
+    <li data-row="3" data-col="1" data-sizex="2" data-sizey="2">
+      <div data-id="iframe" data-view="Iframe" data-url="<%=getIcingaWeb2Url()%>/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
+    </li>
+    <li data-row="3" data-col="3" data-sizex="2" data-sizey="2">
+      <div data-id="iframe" data-view="Iframe" data-url="<%=getIcingaWeb2Url()%>/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&showFullscreen&showCompact"></div>
+    </li>
 ```
 
 ### References
 
 https://www.icinga.com/2016/01/28/awesome-dashing-dashboards-with-icinga-2/
-https://gist.github.com/hussfelt/a6fe71ebd7cce327df29
+https://www.icinga.com/2016/12/22/merry-xmas-dashing-with-icinga-2-v1-1-0-is-here/
+https://www.icinga.com/2017/07/13/dashing-for-icinga-2-v1-3-0-released/
 
-### TODO
+https://www.antonissen.net/2017/02/19/monitoring-your-network-with-icinga-2-final-part-6/
+https://community.spiceworks.com/how_to/147719-icinga2-dashing
+https://linoxide.com/monitoring-2/setup-monitoring-dashing-icinga2/
+http://brunner-it.de/2016/08/04/icinga2-dashing-installieren/
+https://www.unixe.de/icinga2-dashing/
 
-* Add ticket system demo (e.g. github.com/icinga/icinga2)
-* Add Grafana dashboard
-* Replace Dashing with [Smashing](https://github.com/SmashingDashboard/smashing)
