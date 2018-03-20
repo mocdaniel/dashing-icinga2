@@ -38,8 +38,10 @@ host and service problem lists as Iframe.
 
 > **Note**:
 >
-> The Icinga 2 dashboard needs the `dashing` Ruby gem in order to
-> use the dashboards, jobs and widgets provided by this project.
+> You can use this dashboard as a basis for your own implementation.
+>
+> This project is a playground for widgets, data adapters, jobs and much more.
+> Future releases may introduce changes incompatible to your local modifications.
 
 ### Demo
 
