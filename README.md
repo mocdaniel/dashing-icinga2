@@ -36,24 +36,16 @@ host and service problem lists as Iframe.
 
 ![Dashing Icinga 2](public/dashing_icinga2_overview.png "Dashing Icinga 2")
 
-> **Note**:
->
-> You can use this dashboard as a basis for your own implementation.
->
-> This project is a playground for widgets, data adapters, jobs and much more.
-> Future releases may introduce changes incompatible to your local modifications.
-
-### Demo
-
-A full demo is available inside the [standalone](https://github.com/icinga/icinga-vagrant) Icinga Vagrant box.
-
 ## Support
 
-You are encouraged to use the existing jobs and dashboards and modify them for your own needs.
-More development insights can be found in [this section](#development). If you need help with
-development or want to sponsor a feature request, kindly get in touch at info@icinga.com
+This is a demo playground with jobs, widgets and dashboards. You can use and modify them for
+your own needs.
 
-If you have any questions, please hop onto the [Icinga community channels](https://www.icinga.com/community/get-involved/).
+> Keep in mind that the authors of this project can not support your own modifications or
+> help you with advanced Ruby, etc. implementations. You can learn from this project's history
+> and peek into more development insights in [this section](#development).
+
+If you have any questions, please hop onto https://monitoring-portal.org
 
 ## License
 
@@ -73,8 +65,8 @@ Supported browsers and clients:
 
 **Windows with IE and Edge is not supported since SSE (Server Sent Events) are not implemented.**
 
-For more details please read [#47](https://github.com/Icinga/dashing-icinga2/issues/47#issuecomment-374166481)
-and [#62](https://github.com/Icinga/dashing-icinga2/issues/62).
+For more details please read [#47](https://github.com/dnsmichi/dashing-icinga2/issues/47#issuecomment-374166481)
+and [#62](https://github.com/dnsmichi/dashing-icinga2/issues/62).
 
 ## Installation
 
@@ -84,7 +76,7 @@ Git clone:
 
 ```
 cd /usr/share
-git clone https://github.com/Icinga/dashing-icinga2.git
+git clone https://github.com/dnsmichi/dashing-icinga2.git
 cd dashing-icinga2
 ```
 
@@ -92,7 +84,7 @@ Tarball download:
 
 ```
 cd /usr/share
-wget https://github.com/Icinga/dashing-icinga2/archive/master.zip
+wget https://github.com/dnsmichi/dashing-icinga2/archive/master.zip
 unzip master.zip
 mv dashing-icinga2-master dashing-icinga2
 cd dashing-icinga2
@@ -286,8 +278,6 @@ systemctl start dashing-icinga2.service
 systemctl status dashing-icinga2.service
 ```
 
-This is used inside the [Icinga Vagrant Box "icinga2x"](https://github.com/icinga/icinga-vagrant).
-
 ### Script
 
 You can start dashing as daemon by using this script:
@@ -331,15 +321,15 @@ cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 Thanks to all contributors! :)
 
 * [flourish86](https://github.com/flourish86) for the UX design and CSS tips.
-* [marconett](https://github.com/marconett) for the [colorized and sorted problem list widget](https://github.com/Icinga/dashing-icinga2/pull/41).
-* [tutabeier](https://github.com/tutabeier) for [environment variables](https://github.com/Icinga/dashing-icinga2/pull/35) inspiration instead of a local configuration file.
-* [mcktr](https://github.com/mcktr) for helping out with [unhandled problems](https://github.com/Icinga/dashing-icinga2/pull/18).
-* [tachtler](https://github.com/tachtler) for the [Systemd service and logrotate](https://github.com/Icinga/dashing-icinga2/pull/6) additions.
-* [fugstrolch](https://github.com/fugstrolch) for the [Icinga Web 2 iframe integration](https://github.com/Icinga/dashing-icinga2/pull/4).
+* [marconett](https://github.com/marconett) for the [colorized and sorted problem list widget](https://github.com/dnsmichi/dashing-icinga2/pull/41).
+* [tutabeier](https://github.com/tutabeier) for [environment variables](https://github.com/dnsmichi/dashing-icinga2/pull/35) inspiration instead of a local configuration file.
+* [mcktr](https://github.com/mcktr) for helping out with [unhandled problems](https://github.com/dnsmichi/dashing-icinga2/pull/18).
+* [tachtler](https://github.com/tachtler) for the [Systemd service and logrotate](https://github.com/dnsmichi/dashing-icinga2/pull/6) additions.
+* [fugstrolch](https://github.com/fugstrolch) for the [Icinga Web 2 iframe integration](https://github.com/dnsmichi/dashing-icinga2/pull/4).
 * [tobiasvdk](https://github.com/tobiasvdk) for check stats widget and suggestions.
-* [bodsch](https://github.com/bodsch) for the [job rewrite and config file support](https://github.com/Icinga/dashing-icinga2/pull/3) inspiration, and [better error handling](https://github.com/Icinga/dashing-icinga2/pull/21).
+* [bodsch](https://github.com/bodsch) for the [job rewrite and config file support](https://github.com/dnsmichi/dashing-icinga2/pull/3) inspiration, and [better error handling](https://github.com/dnsmichi/dashing-icinga2/pull/21).
 * [spjmurray](https://github.com/spjmurray) for [styling and 1080p resolution](https://github.com/spjmurray/dashing-icinga2/tree/1080p).
-* [micke2k](https://github.com/micke2k) for [proper time formatting](https://github.com/Icinga/dashing-icinga2/pull/2).
+* [micke2k](https://github.com/micke2k) for [proper time formatting](https://github.com/dnsmichi/dashing-icinga2/pull/2).
 * [lazyfrosch](https://github.com/lazyfrosch) for ideas on [Dashing with Icinga](https://github.com/lazyfrosch/dashing-icinga).
 * [roidelapliue](https://github.com/roidelapluie) for the [Icinga 1.x dashing script](https://github.com/roidelapluie/dashing-scripts).
 
