@@ -271,8 +271,17 @@ Install the provided Systemd service file from `tools/systemd`. It assumes
 that the working directory is `/usr/share/dashing-icinga2` and the Dashing gem
 is installed to `/usr/local/bin/dashing`. Adopt these paths for your own needs.
 
+#### Redhat/CentOS
 ```
 cp tools/systemd/dashing-icinga2.service /usr/lib/systemd/system/
+systemctl daemon-reload
+systemctl start dashing-icinga2.service
+systemctl status dashing-icinga2.service
+```
+
+#### Debian
+```bash
+cp tools/systemd/dashing-icinga2.service /lib/systemd/system/
 systemctl daemon-reload
 systemctl start dashing-icinga2.service
 systemctl status dashing-icinga2.service
