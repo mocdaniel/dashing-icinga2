@@ -1,4 +1,4 @@
-/usr/share/icinga2-dashing/log/thin.log {
+/usr/share/dashing-icinga2/log/thin.log {
         daily
         rotate 7
         compress
