@@ -9,5 +9,6 @@
   },
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
-  }
+  },
+  "suppress_flicker": false
 }

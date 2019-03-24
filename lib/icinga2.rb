@@ -154,6 +154,7 @@ class Icinga2
             @password = @config["icinga2"]["api"]["password"]
             @pkiPath = @config["icinga2"]["api"]["pki_path"]
             @nodeName = @config['icinga2']['api']['node_name']
+            @suppressFlicker = @config['suppress_flicker']
           end
         end
 
@@ -170,6 +171,7 @@ class Icinga2
         @password = "icinga2ondashingr0xx"
         @pkiPath = "pki/"
         @nodeName = nil
+        @suppressFlicker = false
 
         # external attribute
         @icingaweb2_url = 'http://localhost/icingaweb2'
@@ -418,8 +420,14 @@ class Icinga2
           next
         end
 
-        if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
-          problems = problems + 1
+        if @suppressFlicker
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['last_hard_state'] != 0.0)
+            problems = problems + 1
+          end
+        else
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
+            problems = problems + 1
+          end
         end
       end
     end
@@ -698,8 +706,16 @@ class Icinga2
 
     ## Objects data
     # fetch the minimal attributes for problem calculation
-    all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
-    all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+    all_hosts_data = nil
+    all_services_data = nil
+
+    if @suppressFlicker
+      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+    else
+      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+    end
 
     unless(all_hosts_data.nil?)
       @host_count_all = all_hosts_data.size
