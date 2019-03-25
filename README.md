@@ -209,11 +209,11 @@ vim config/icinga2.local.json
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
   },
-  "suppress_flicker": false
+  "show_only_hard_state_problems": false
 }
 ```
 
-The `suppress_flicker`-option lets dashing ignore warnings and criticals until they become a hard state warning or hard state critical (off by default).
+The `show_only_hard_state_problems`-option lets dashing ignore warnings and criticals until they become a hard state warning or hard state critical (off by default).
 
 If you prefer to use client certificates, set the `pki_path` attribute. The Icinga 2
 job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
@@ -234,7 +234,7 @@ explicitly.
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
   },
-  "suppress_flicker": false
+  "show_only_hard_state_problems": false
 }
 ```
 

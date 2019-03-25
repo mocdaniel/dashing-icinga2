@@ -154,7 +154,7 @@ class Icinga2
             @password = @config["icinga2"]["api"]["password"]
             @pkiPath = @config["icinga2"]["api"]["pki_path"]
             @nodeName = @config['icinga2']['api']['node_name']
-            @suppressFlicker = @config['suppress_flicker']
+            @suppressFlicker = @config['show_only_hard_state_problems']
           end
         end
 

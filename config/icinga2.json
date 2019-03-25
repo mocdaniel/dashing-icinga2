@@ -10,5 +10,5 @@
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
   },
-  "suppress_flicker": false
+  "show_only_hard_state_problems": false
 }
