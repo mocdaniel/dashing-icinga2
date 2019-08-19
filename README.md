@@ -45,7 +45,7 @@ your own needs.
 > help you with advanced Ruby, etc. implementations. You can learn from this project's history
 > and peek into more development insights in [this section](#development).
 
-If you have any questions, please hop onto https://monitoring-portal.org
+If you have any questions, please hop onto https://community.icinga.com
 
 ## License
 
