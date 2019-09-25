@@ -600,7 +600,7 @@ class Icinga2
     version_map = version.split('-', 2)
     version_str = version_map[0]
     # strip v2.4.10 (default) and r2.4.10 (Debian)
-    version_str = version_str.scan(/^[vr]+(.*)/).last.first
+    version_str = version_str.scan(/^[vr]?(.*)/).last.first
 
     if version_map.size() > 1
       @version_revision = version_map[1]
