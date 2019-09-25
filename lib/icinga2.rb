@@ -530,6 +530,11 @@ class Icinga2
         next
       end
 
+      #Skip services in a scheduled downtime
+      if (service["attrs"]["downtime_depth"] > 0)
+        next
+      end
+
       service_problems[service] = getServiceSeverity(service)
     end
 
