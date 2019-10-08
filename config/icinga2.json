@@ -9,5 +9,8 @@
   },
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
+  },
+  "dashboard": {
+    "show_only_hard_state_problems": false
   }
 }

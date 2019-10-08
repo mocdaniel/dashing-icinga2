@@ -113,6 +113,8 @@ class Icinga2
     # external attribute
     @icingaweb2_url = ENV['ICINGAWEB2_URL']
 
+    @showOnlyHardStateProblems = ENV['DASHBOARD_SHOW_ONLY_HARD_STATE_PROBLEMS']
+
     # check for the least required variables, the rest is read later on
     if [@host, @port].all? {|value| value.nil? or value == ""}
       raise ArgumentError.new('Required environment variables not found!')
@@ -154,6 +156,7 @@ class Icinga2
             @password = @config["icinga2"]["api"]["password"]
             @pkiPath = @config["icinga2"]["api"]["pki_path"]
             @nodeName = @config['icinga2']['api']['node_name']
+            @showOnlyHardStateProblems = @config['dashboard']['show_only_hard_state_problems']
           end
         end
 
@@ -170,6 +173,7 @@ class Icinga2
         @password = "icinga2ondashingr0xx"
         @pkiPath = "pki/"
         @nodeName = nil
+        @showOnlyHardStateProblems = false
 
         # external attribute
         @icingaweb2_url = 'http://localhost/icingaweb2'
@@ -418,8 +422,14 @@ class Icinga2
           next
         end
 
-        if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
-          problems = problems + 1
+        if @showOnlyHardStateProblems
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['last_hard_state'] != 0.0)
+            problems = problems + 1
+          end
+        else
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
+            problems = problems + 1
+          end
         end
       end
     end
@@ -526,7 +536,13 @@ class Icinga2
 
     all_services_data.each do |service|
       #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
-      if (service["attrs"]["state"] == 0)
+      if (service["attrs"]["state"] == 0) or
+        (service["attrs"]["downtime_depth"] > 0) or
+        (service["attrs"]["acknowledgement"] > 0)
+        next
+      end
+
+      if @showOnlyHardStateProblems and (service["attrs"]["last_hard_state"] == 0.0)
         next
       end
 
@@ -698,8 +714,16 @@ class Icinga2
 
     ## Objects data
     # fetch the minimal attributes for problem calculation
-    all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
-    all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+    all_hosts_data = nil
+    all_services_data = nil
+
+    if @showOnlyHardStateProblems
+      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+    else
+      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+    end
 
     unless(all_hosts_data.nil?)
       @host_count_all = all_hosts_data.size
