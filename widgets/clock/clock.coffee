@@ -4,15 +4,24 @@ class Dashing.Clock extends Dashing.Widget
     setInterval(@startTime, 500)
 
   startTime: =>
-    today = new Date()
+    zone = @get('timezone')
+    optionsDate = {
+      timeZone: zone,
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    };
+    optionsTime = {
+      timeZone: zone,
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    };
 
-    h = today.getHours()
-    m = today.getMinutes()
-    s = today.getSeconds()
-    m = @formatTime(m)
-    s = @formatTime(s)
-    @set('time', h + ":" + m + ":" + s)
-    @set('date', today.toDateString())
+    date = new Date().toLocaleDateString('en-US', optionsDate);
+    time = new Date().toLocaleTimeString('en-US', optionsTime);
 
-  formatTime: (i) ->
-    if i < 10 then "0" + i else i
+    @set('time', time)
+    @set('date', date)
+    @set('title', @get('title'))

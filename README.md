@@ -643,6 +643,23 @@ Example:
     </li>
 ```
 
+
+#### Clock
+
+Show the time in a specific timezone. Enter the timezone as found in `/usr/share/zoneinfo` on Linux.
+
+Example:
+
+```html
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-view="Clock" data-title="UTC" data-timezone="UTC"></div>
+    </li>
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+      <div data-view="Clock" data-title="New York" data-timezone="America/New_York"></div>
+    </li>
+```
+
+
 ### References
 
 https://www.icinga.com/2016/01/28/awesome-dashing-dashboards-with-icinga-2/
