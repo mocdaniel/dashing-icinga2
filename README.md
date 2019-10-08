@@ -213,7 +213,8 @@ vim config/icinga2.local.json
 }
 ```
 
-The `show_only_hard_state_problems`-option lets dashing ignore warnings and criticals until they become a hard state warning or hard state critical (off by default).
+The `show_only_hard_state_problems` option ignores NOT-OK states until they
+reach a hard NOT-OK state (off by default).
 
 If you prefer to use client certificates, set the `pki_path` attribute. The Icinga 2
 job expects the certificate file names based on the local FQDN e.g. `pki/icinga2-master1.localdomain.crt`.
@@ -234,7 +235,9 @@ explicitly.
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
   },
-  "show_only_hard_state_problems": false
+  "dashboard": {
+    "show_only_hard_state_problems": false
+  }
 }
 ```
 
@@ -256,6 +259,7 @@ ICINGA2\_API\_PASSWORD   | **Optional.** Required for basic auth as password.
 ICINGA2\_API\_CERT\_PATH | **Optional.** Client certificate path.
 ICINGA2\_API\_NODENAME   | **Optional.** If client certificates do not match the host name, override it.
 ICINGAWEB2\_URL          | **Optional.** Set the Icinga Web 2 Url. Defaults to `http://localhost/icingaweb2`.
+DASHBOARD_SHOW_ONLY_HARD_STATE_PROBLEMS | **Optional.** Set `show_only_hard_state_problems` configuration option, toggle with `0|1`.
 
 > **Note**
 >

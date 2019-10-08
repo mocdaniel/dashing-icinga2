@@ -10,5 +10,7 @@
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
   },
-  "show_only_hard_state_problems": false
+  "dashboard": {
+    "show_only_hard_state_problems": false
+  }
 }
