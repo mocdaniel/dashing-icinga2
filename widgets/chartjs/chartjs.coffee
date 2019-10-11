@@ -16,6 +16,11 @@ class Dashing.Chartjs extends Dashing.Widget
     @colorNames = @get("colornames") && @get("colornames").split(",")
 
   ready: ->
+    Chart.defaults.global.legend.position = 'bottom'
+    Chart.defaults.global.legend.display = false
+    Chart.defaults.global.layout.padding = { left: 10, right: 10, top: 40, bottom: 10 }
+    Chart.defaults.global.elements.point.radius = 5
+
     @draw()
 
   onData: (data) ->
@@ -64,6 +69,13 @@ class Dashing.Chartjs extends Dashing.Widget
 
   tap: (o, fn) -> fn(o); o
 
+  # Keep this in sync with application.scss
+  #$background-color-green:        rgba(68, 187, 119, $background-color-transparent-factor);
+  #$background-color-red:          rgba(255, 85, 102, $background-color-transparent-factor);
+  #$background-color-yellow:       rgba(255, 170, 68, $background-color-transparent-factor);
+  #$background-color-purple:       rgba(170, 68, 255, $background-color-transparent-factor);
+  #$background-color-grey:         rgba(153, 153, 153, $background-color-transparent-factor);
+
   colorCode: ->
     aqua: "0, 255, 255"
     black: "0, 0, 0"
@@ -71,20 +83,20 @@ class Dashing.Chartjs extends Dashing.Widget
     cyan:  "0, 255, 255"
     darkgray: "77, 83, 96"
     fuschia: "255, 0, 255"
-    gray: "128, 128, 128"
-    green: "0, 128, 0"
+    gray: "153, 153, 153"
+    green: "68, 187, 119"
     lightgray: "220, 220, 220"
     lime: "0, 255, 0"
     magenta: "255, 0, 255"
     maroon: "128, 0, 0"
     navy: "0, 0, 128"
     olive: "128, 128, 0"
-    purple: "128, 0, 128"
-    red: "255, 0, 0"
+    purple: "170, 68, 255"
+    red: "255, 85, 102"
     silver: "192, 192, 192"
     teal: "0, 128, 128"
     white: "255, 255, 255"
-    yellow: "255, 255, 0"
+    yellow: "255, 170, 68"
 
   colors: (colorNames) ->
     backgroundColor: colorNames.map (colorName) => @backgroundColor(colorName)
@@ -95,7 +107,7 @@ class Dashing.Chartjs extends Dashing.Widget
     pointHoverBackgroundColor: colorNames.map (colorName) => @pointHoverBackgroundColor(colorName)
     pointHoverBorderColor: colorNames.map (colorName) => @pointHoverBorderColor(colorName)
 
-  backgroundColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 0.2)"
+  backgroundColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 0.8)"
   borderColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 1)"
   pointBackgroundColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 1)"
   pointBorderColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 1)"

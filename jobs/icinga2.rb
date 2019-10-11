@@ -53,6 +53,15 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   puts "Stats: " + icinga_stats.to_s
 
   ### Events
+  send_event('doughnut-pie-services', {
+    type: "doughnut",
+    header: "Services",
+    labels: [ "OK", "Warning", "Critical", "Unknown" ],
+    datasets: [ icinga.service_count_ok, icinga.service_count_problems_warning, icinga.service_count_problems_critical, icinga.service_count_problems_unknown],
+    options: { "legend": { "position": 'bottom' } }
+  })
+
+
   send_event('icinga-host-meter', {
    value: host_meter,
    max:   host_meter_max,

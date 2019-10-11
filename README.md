@@ -688,6 +688,11 @@ Example:
     </li>
 ```
 
+#### Chartjs
+
+Original from [tywhang](https://github.com/tywhang/smashing-chartjs-example).
+
+
 
 #### Clock
 
