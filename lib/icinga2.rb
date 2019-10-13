@@ -146,6 +146,8 @@ class Icinga2
         file = File.read(realConfigFile)
         @config = JSON.parse(file)
 
+        puts "Reading config" + @config.to_s
+
         if @config.key? 'icinga2'
           config_icinga2 = @config['icinga2']
 
@@ -156,11 +158,17 @@ class Icinga2
             @password = @config["icinga2"]["api"]["password"]
             @pkiPath = @config["icinga2"]["api"]["pki_path"]
             @nodeName = @config['icinga2']['api']['node_name']
-            @showOnlyHardStateProblems = @config['dashboard']['show_only_hard_state_problems']
           end
         end
 
-        puts "Reading config" + @config.to_s
+        if @config.key? 'dashboard'
+          config_dashboard = @config['dashboard']
+
+          if config_dashboard.key? 'show_only_hard_state_problems' # retire this check later
+            @showOnlyHardStateProblems = config_dashboard['show_only_hard_state_problems']
+          end
+        end
+
         if @config.key? 'icingaweb2'
           # external attribute
           @icingaweb2_url = @config['icingaweb2']['url']
