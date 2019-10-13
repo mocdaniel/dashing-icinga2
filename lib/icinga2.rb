@@ -26,7 +26,6 @@ require 'time'
 class Icinga2
   # general info
   attr_reader :version
-  attr_reader :version_revision
   attr_reader :node_name
   attr_reader :app_starttime
   attr_reader :uptime
@@ -620,24 +619,17 @@ class Icinga2
 
   def fetchVersion(version)
     #version = "v2.4.10-504-gab4ba18"
-    #version = "v2.4.10"
-    version_map = version.split('-', 2)
-    version_str = version_map[0]
+    #version = "2.11.0-1"
     # strip v2.4.10 (default) and r2.4.10 (Debian)
-    version_str = version_str.scan(/^[vr]?(.*)/).last.first
+    # icinga2/lib/base/utility.cpp - ParseVersion
 
-    if version_map.size() > 1
-      @version_revision = version_map[1]
-    else
-      @version_revision = "release"
-    end
+    version_str = version[/^[vr]?(2\.\d+\.\d+).*$/,1]
 
     @version = version_str
   end
 
   def initializeAttributes()
     @version = "Not running"
-    @version_revision = ""
     @node_name = ""
     @app_starttime = 0
     @uptime = 0

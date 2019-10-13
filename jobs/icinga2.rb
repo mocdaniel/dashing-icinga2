@@ -26,7 +26,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   # run data provider
   icinga.run
 
-  puts "App Info: " + icinga.app_data.to_s
+  puts "App Info: " + icinga.app_data.to_s + " Version: " + icinga.version
   #puts "CIB Info: " + icinga.cib_data.to_s
 
   # meter widget
@@ -66,7 +66,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
    color: 'blue' })
 
   send_event('icinga-stats', {
-   title: icinga.version + " (" + icinga.version_revision + ")",
+   title: icinga.version,
    items: icinga_stats,
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
