@@ -39,13 +39,15 @@ host and service problem lists as Iframe.
 ## Support
 
 This is a demo playground with jobs, widgets and dashboards. You can use and modify them for
-your own needs.
+your own needs. You can also send PRs with custom widgets and propose their use in the dashboard.
 
-> Keep in mind that the authors of this project can not support your own modifications or
-> help you with advanced Ruby, etc. implementations. You can learn from this project's history
-> and peek into more development insights in [this section](#development).
+In terms of implementation specific questions, please read the [development docs](#development)
+first. For other questions, join the [Icinga community](https://community.icinga.com).
 
-If you have any questions, please hop onto https://community.icinga.com
+If you like this project, please consider sponsoring my open source work:
+
+* [GitHub Sponsors](https://github.com/users/dnsmichi/sponsorship)
+* [Paypal](https://paypal.me/dnsmichi)
 
 ## License
 
