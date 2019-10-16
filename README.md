@@ -49,8 +49,9 @@ If you have any questions, please hop onto https://community.icinga.com
 
 ## License
 
+* The code for jobs, dashboards and libraries is licensed under the MIT license.
 * Dashing is licensed under the [MIT license](https://github.com/Shopify/dashing/blob/master/MIT-LICENSE).
-* Icinga specific jobs and dashboards are licensed under the GPLv2+ license.
+* Chartjs is licensed under the [MIT license](https://github.com/chartjs/Chart.js/blob/master/LICENSE.md).
 
 ## Requirements
 
