@@ -1,5 +1,27 @@
 # Change Log
 
+## [3.0.0 ](https://github.com/dnsmichi/dashing-icinga2/milestone/4?closed=1)
+
+### Enhancements
+
+* Refine Icinga Dashboard #86
+  * Use ChartJS for Doughnut and Bar Charts
+  * Host/Service Overview Charts
+  * Connected Endpoints Charts
+  * Active Checks Charts
+  * Downtimes & Acknowledgement Charts
+  * Add clock widget with timezone
+* Provide Docker container `dnsmichi/dashing-icinga2` #85
+* Add option to show only hard state problems #73 (thanks Dambakk)
+* Add timezone to clock widget #74 (thanks Dambakk)
+* Add title support for the Iframe widget for Icinga Web #90
+* Support either Dashing or Smashing as Ruby gem #88
+
+### Fixes
+
+* Version detection broken with Icinga 2.11 #83
+
+
 ## [2.0.0](https://github.com/Icinga/dashing-icinga2/tree/2.0.0) (2018-03-08)
 [Full Changelog](https://github.com/Icinga/dashing-icinga2/compare/v1.3.0...2.0.0)
 
