@@ -56,8 +56,8 @@ If you have any questions, please hop onto https://community.icinga.com
 ## Requirements
 
 * Ruby, Gems and Bundler
-* Dashing Gem
-* Icinga 2 (v2.8+) and the REST API
+* Dashing or Smashing Ruby Gem
+* Icinga 2 (v2.11+) and the REST API
 
 Supported browsers and clients:
 
@@ -137,6 +137,13 @@ gem install bundler
 In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
 
+> **Note**
+>
+> In case you want to use `smashing` instead of `dashing`,
+> set the environment variable like this:
+>
+> `export DASHING_PROVIDER=smashing`
+
 Install the dependencies using Bundler.
 
 ```
@@ -147,6 +154,13 @@ bundle
 Proceed to the [configuration](#configuration) section.
 
 ### Unix and macOS
+
+> **Note**
+>
+> In case you want to use `smashing` instead of `dashing`,
+> set the environment variable like this:
+>
+> `export DASHING_PROVIDER=smashing`
 
 On macOS [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
 therefore you'll need to fix the eventmachine gem:
@@ -227,7 +241,9 @@ vim config/icinga2.local.json
   "icingaweb2": {
     "url": "http://localhost/icingaweb2"
   },
-  "show_only_hard_state_problems": false
+  "dashboard": {
+    "show_only_hard_state_problems": false
+  }
 }
 ```
 
@@ -297,7 +313,13 @@ Install the provided Systemd service file from `tools/systemd`. It assumes
 that the working directory is `/usr/share/dashing-icinga2` and the Dashing gem
 is installed to `/usr/local/bin/dashing`. Adopt these paths for your own needs.
 
+> **Note**
+>
+> In order to use `smashing` instead of `dashing`, modify `tools/systemd/dashing-icinga2.service`
+> to run the smashing binary.
+
 #### Redhat/CentOS
+
 ```
 cp tools/systemd/dashing-icinga2.service /usr/lib/systemd/system/
 systemctl daemon-reload
@@ -306,6 +328,7 @@ systemctl status dashing-icinga2.service
 ```
 
 #### Debian
+
 ```bash
 cp tools/systemd/dashing-icinga2.service /lib/systemd/system/
 systemctl daemon-reload
@@ -341,6 +364,8 @@ Or with environment variables:
 ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
 ```
 
+Replace the calls above to `dashing` with `smashing` if you are using this Gem instead.
+
 ### Logrotate
 
 You can install the provided logrotate script to rotate the Dashing log in `/usr/share/dashing-icinga2/log`.
@@ -374,7 +399,7 @@ Please add these details when you are asking a question on the community channel
 
 ### Required Information
 
-* Dashing version (`gem list --local dashing`)
+* Dashing/Smashing version (`gem list --local dashing`)
 * Ruby version (`ruby -V`)
 * Icinga 2 version (`icinga2 --version`)
 * Version of this project (tarball name, download date, tag name or `git show -1`)
