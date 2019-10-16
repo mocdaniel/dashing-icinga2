@@ -44,35 +44,18 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
     {"label" => "Service checks/min", "value" => icinga.service_active_checks_1min},
   ]
 
-  wqStats = icinga.getWQStats()
+  wqStats, clusterStats = icinga.getIcingaStats()
 
   wqStats.each do |name, value|
     icinga_stats.push( { "label" => name, "value" => "%0.2f" % value } )
   end
+  #clusterStats.each do |name, value|
+  #  icinga_stats.push( { "label" => name, "value" => "%0.2f" % value } )
+  #end
 
   puts "Stats: " + icinga_stats.to_s
 
   ### Events
-  send_event('doughnut-pie-services', {
-    type: "doughnut",
-    header: "Services",
-    labels: [ "OK", "Warning", "Critical", "Unknown" ],
-    datasets: [ icinga.service_count_ok, icinga.service_count_problems_warning, icinga.service_count_problems_critical, icinga.service_count_problems_unknown],
-    options: { "legend": { "position": 'bottom' } }
-  })
-
-
-  send_event('icinga-host-meter', {
-   value: host_meter,
-   max:   host_meter_max,
-   moreinfo: "Total hosts: " + host_meter_max.to_s,
-   color: 'blue' })
-
-  send_event('icinga-service-meter', {
-   value: service_meter,
-   max:   service_meter_max,
-   moreinfo: "Total services: " + service_meter_max.to_s,
-   color: 'blue' })
 
   send_event('icinga-stats', {
    title: icinga.version,
@@ -80,19 +63,74 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
 
-  # handled stats
-  handled_stats = [
-    {"label" => "Acknowledgements", "color" => "blue"},
-    {"label" => "Hosts", "value" => icinga.host_count_acknowledged},
-    {"label" => "Services", "value" => icinga.service_count_acknowledged},
-    {"label" => "Downtimes", "color" => "blue"},
-    {"label" => "Hosts", "value" => icinga.host_count_in_downtime},
-    {"label" => "Services", "value" => icinga.service_count_in_downtime},
-  ]
+  #### Dougnuts
+  send_event('doughnut-pie-hosts', {
+    type: "doughnut",
+    header: "Hosts",
+    labels: [ "UP", "Down" ],
+    datasets: [ icinga.host_count_up, icinga.host_count_problems_down],
+  })
 
-  send_event('handled-stats', {
-   items: handled_stats,
-   color: 'blue' })
+  send_event('doughnut-pie-services', {
+    type: "doughnut",
+    header: "Services",
+    labels: [ "OK", "Warning", "Critical", "Unknown" ],
+    datasets: [ icinga.service_count_ok, icinga.service_count_problems_warning, icinga.service_count_problems_critical, icinga.service_count_problems_unknown],
+  })
+  send_event('bar-chart-endpoints', {
+    header: "Endpoints",
+    labels: [ "Connected", "Not Connected" ],
+    datasets: [ clusterStats["num_conn_endpoints"], clusterStats["num_not_conn_endpoints"]],
+  })
+
+  #### Bar Charts
+  send_event('bar-chart-checks', {
+    #type: "horizontalBar",
+    type: "bar",
+    header: "Active Checks",
+    labels: [ "Hosts/min", "Services/min" ],
+    datasets: [ icinga.host_active_checks_1min, icinga.service_active_checks_1min],
+  })
+  send_event('bar-chart-downtimes', {
+    #type: "horizontalBar",
+    type: "bar",
+    header: "Downtimes",
+    labels: [ "Hosts", "Services" ],
+    datasets: [ icinga.host_count_in_downtime, icinga.service_count_in_downtime],
+  })
+  send_event('bar-chart-acks', {
+    #type: "horizontalBar",
+    type: "bar",
+    header: "Acknowledgements",
+    labels: [ "Hosts", "Services" ],
+    datasets: [ icinga.host_count_acknowledged, icinga.service_count_acknowledged],
+  })
+
+#  send_event('icinga-host-meter', {
+#   value: host_meter,
+#   max:   host_meter_max,
+#   moreinfo: "Total hosts: " + host_meter_max.to_s,
+#   color: 'blue' })
+#
+#  send_event('icinga-service-meter', {
+#   value: service_meter,
+#   max:   service_meter_max,
+#   moreinfo: "Total services: " + service_meter_max.to_s,
+#   color: 'blue' })
+
+  # handled stats
+#  handled_stats = [
+#    {"label" => "Acknowledgements", "color" => "blue"},
+#    {"label" => "Hosts", "value" => icinga.host_count_acknowledged},
+#    {"label" => "Services", "value" => icinga.service_count_acknowledged},
+#    {"label" => "Downtimes", "color" => "blue"},
+#    {"label" => "Hosts", "value" => icinga.host_count_in_downtime},
+#    {"label" => "Services", "value" => icinga.service_count_in_downtime},
+#  ]
+#
+#  send_event('handled-stats', {
+#   items: handled_stats,
+#   color: 'blue' })
 
   # problem services
   severity_stats = []

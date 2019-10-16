@@ -1,3 +1,30 @@
+
+#`function generateLabels(chart) {
+#  var data = chart.data;
+#  if (data.labels.length && data.datasets.length) {
+#    return data.labels.map(function(label, i) {
+#      var meta = chart.getDatasetMeta(0);
+#      var style = meta.controller.getStyle(i);
+#
+#      // fetch the value
+#      var value = chart.config.data.datasets[arc._datasetIndex].data[arc._index];
+#
+#      return {
+#        // Add the numbers next to the label
+#        text: label + ": " + value,
+#        fillStyle: style.backgroundColor,
+#        strokeStyle: style.borderColor,
+#        lineWidth: style.borderWidth,
+#        hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
+#
+#        // Extra data used for toggling the correct item
+#        index: i
+# 	    };
+#    });
+#  }
+#  return [];
+#}`
+
 class Dashing.Chartjs extends Dashing.Widget
 
   constructor: ->
@@ -16,10 +43,29 @@ class Dashing.Chartjs extends Dashing.Widget
     @colorNames = @get("colornames") && @get("colornames").split(",")
 
   ready: ->
-    Chart.defaults.global.legend.position = 'bottom'
-    Chart.defaults.global.legend.display = false
-    Chart.defaults.global.layout.padding = { left: 10, right: 10, top: 40, bottom: 10 }
+    Chart.defaults.global.defaultColor = 'rgb(255, 255, 255)'
+    Chart.defaults.global.defaultFontColor = 'rgb(255, 255, 255)'
+    Chart.defaults.global.legend.labels.fontColor = 'rgb(255, 255, 255)'
+    Chart.defaults.global.layout.padding = { left: 10, right: 10, top: 10, bottom: 10 }
     Chart.defaults.global.elements.point.radius = 5
+    Chart.defaults.global.legend.display = false
+    Chart.defaults.global.legend.position = 'bottom'
+
+    Chart.defaults.doughnut.legend.position = 'right'
+    Chart.defaults.doughnut.legend.display = true
+
+    Chart.defaults.bar.barThickness = 'flex'
+    #Chart.defaults.bar.legend.display = false
+    Chart.defaults.bar.backgroundColor = 'rgb(255, 255, 255)'
+    Chart.defaults.bar.scales.yAxes = [{
+            ticks: {
+                beginAtZero: true
+            }
+          }]
+
+    # Override original legend label generator
+    # https://github.com/chartjs/Chart.js/blob/master/src/controllers/controller.doughnut.js#L45
+    # Chart.defaults.global.legend.labels.generateLabels = generateLabels
 
     @draw()
 

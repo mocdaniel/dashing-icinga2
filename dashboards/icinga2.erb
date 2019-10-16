@@ -16,45 +16,125 @@ $(function() {
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div data-view="Clock" data-title="UTC" data-timezone="UTC"></div>
     </li>
-    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-stats" data-view="List" data-unordered="true" data-title="Statistics"></div>
-    </li>
 
-    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
-      <p>Services</p>
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+      <div
+        data-id="doughnut-pie-hosts"
+        data-view="Chartjs"
+        data-type="doughnut"
+        data-title="Hosts"
+        data-labels="Up,Down"
+        data-colornames="green,red"
+        data-datasets="20,13,12,0"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
       <div
         data-id="doughnut-pie-services"
         data-view="Chartjs"
         data-type="doughnut"
+        data-title="Services"
         data-labels="OK,Warning,Critical,Unknown"
         data-colornames="green,yellow,red,purple"
         data-datasets="20,13,12,0"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+    <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+      <div
+        data-id="bar-chart-endpoints"
+        data-view="Chartjs"
+        data-type="bar"
+        data-header="Endpoints"
+        data-title="Endpoints"
+        data-labels="Connected,Not Connected"
+        data-colornames="green,red"
+        data-datasets="42,404"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+
+    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-stats" data-view="List" data-unordered="true" data-title="Statistics"></div>
+    </li>
+
+    <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+      <div
+        data-id="bar-chart-checks"
+        data-view="Chartjs"
+        data-type="horizontalBar"
+        data-header="Active Checks"
+        data-title="Active Checks"
+        data-labels="Hosts/min,Services/min"
+        data-colornames="aqua,lime"
+        data-datasets="42,404"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+
+    <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+      <div
+        data-id="bar-chart-downtimes"
+        data-view="Chartjs"
+        data-type="horizontalBar"
+        data-header="Downtimes"
+        data-title="Downtimes"
+        data-labels="Hosts,Services"
+        data-colornames="blue,green"
+        data-datasets="42,404"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+
+    <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
+      <div
+        data-id="bar-chart-acks"
+        data-view="Chartjs"
+        data-type="horizontalBar"
+        data-header="Acknowledgements"
+        data-title="Acknowledgements"
+        data-labels="Hosts,Services"
+        data-colornames="blue,green"
+        data-datasets="42,404"
+        data-height="300"
+        data-width="300"
       ></div>
     </li>
 
     <!-- Problems -->
+    <!--
     <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
       <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100"></div>
     </li>
     <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
       <div data-id="icinga-service-meter" data-view="Meter" data-title="Service Problems" data-min="0" data-max="100"></div>
     </li>
+    -->
 
     <!-- Handled -->
+    <!--
     <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
       <div data-id="handled-stats" data-view="List" data-unordered="true" data-title="Handled"></div>
     </li>
+    -->
     <!-- Unhandled Host and Service Problems -->
+    <!--
     <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
       <div data-id="icinga-host-problems" data-view="Simplelist" data-title="Unhandled Hosts"></div>
     </li>
     <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
       <div data-id="icinga-service-problems" data-view="Simplelist" data-title="Unhandled Services"></div>
     </li>
-
+    -->
 
     <!-- Takes two rows for all service problems by severity -->
-    <li data-row="1" data-col="5" data-sizex="1" data-sizey="2">
+    <li data-row="1" data-col="5" data-sizex="1" data-sizey="3">
       <div data-id="icinga-severity" data-view="List" data-unordered="true" data-title="Problems"></div>
     </li>
 
