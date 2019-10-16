@@ -1,7 +1,11 @@
 source 'https://rubygems.org'
 
-# force the most recent dashing version to avoid #48
-gem 'dashing', '>= 1.3.7'
+if dashing = ENV['DASHING_PROVIDER']
+  gem dashing, :require => false
+else
+  # force the most recent dashing version to avoid #48
+  gem 'dashing', '>= 1.3.7', :require => false
+end
 
 # dashing server
 gem 'thin'
