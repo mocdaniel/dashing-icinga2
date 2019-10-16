@@ -578,18 +578,21 @@ class Icinga2
     return service_problems, service_problems_severity
   end
 
-  def getWQStats()
+  def getIcingaStats()
     results = getStatusData()
 
-    stats = {}
+    wqStats = {}
+    clusterStats = {}
 
     results.each do |r|
       status = r["status"]
 
-      keyList = [ "work_queue_item_rate", "query_queue_item_rate" ]
+      wqKeyList = [ "work_queue_item_rate", "query_queue_item_rate" ]
+      clusterKeyList = [ "num_conn_endpoints", "num_not_conn_endpoints", "anonymous_clients", "clients" ]
 
       # structure is "type" - "name"
       # api - json_rpc
+      # api - http
       # idomysqlconnection - ido-mysql
       status.each do |type, typeval|
         if not typeval.is_a?(Hash)
@@ -597,16 +600,31 @@ class Icinga2
         end
 
         typeval.each do |attr, val|
-          #puts attr + " " + val.to_s
+          puts attr + " " + val.to_s
+
+          # collect top level matches, e.g. num_conn_endpoints
+          clusterKeyList.each do |key|
+            # puts "Matching top level key " + key + " with attr " + attr + " val " + val.to_s
+            if key == attr
+              clusterStats[attr] = val
+            end
+          end
 
           if not val.is_a?(Hash)
             next
           end
 
-          keyList.each do |key|
+          # collect inner parts, e.g. json_rpc.anonymous_clients
+          clusterKeyList.each do |key|
+            if val.has_key? key
+              clusterStats[attr] = val[key]
+            end
+          end
+
+          wqKeyList.each do |key|
             if val.has_key? key
               attrName = attr + " queue rate"
-              stats[attrName] = val[key]
+              wqStats[attrName] = val[key]
             end
           end
 
@@ -614,7 +632,7 @@ class Icinga2
       end
     end
 
-    return stats
+    return wqStats, clusterStats
   end
 
   def fetchVersion(version)
