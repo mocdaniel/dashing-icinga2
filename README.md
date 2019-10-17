@@ -46,7 +46,7 @@ first. For other questions, join the [Icinga community](https://community.icinga
 
 If you like this project, please consider sponsoring my open source work:
 
-* [GitHub Sponsors](https://github.com/users/dnsmichi/sponsorship)
+* [GitHub Sponsors](https://github.com/sponsors/dnsmichi)
 * [Paypal](https://paypal.me/dnsmichi)
 
 ## License
