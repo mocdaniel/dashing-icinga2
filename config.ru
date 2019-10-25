@@ -28,6 +28,16 @@ configure do
         return 'http://192.168.33.5/icingaweb2'
       end
     end
+
+    def getTimeZone()
+      # read configuration and try to fetch the correct path
+      icinga = Icinga2.new('config/icinga2.json') # fixed path
+      if icinga.time_zone != nil
+        return icinga.time_zone
+      else
+        return "UTC"
+      end
+    end
   end
 end
 
