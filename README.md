@@ -544,6 +544,7 @@ The following attributes are important:
 * `data-title` defines the widget's title on top
 * `data-min` and `data-max` are widget specific in this example. They are referenced inside the Coffee script file inside the widget code.
 * `style` can be used to specify certain CSS to make the widget look more beautiful if not already.
+* `class=scrollable` allows for scrolling of crammed widgets. Works for most widgets but is mostly meant to be used with `List` and `Simplelist`.
 
 ### Dashboard Widgets
 
