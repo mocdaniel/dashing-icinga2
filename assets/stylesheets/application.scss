@@ -268,3 +268,16 @@ h3 {
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
 
+// ----------------------------------------------------------------------------
+// Adding scrolling functionality to widgets for all browsers
+// ----------------------------------------------------------------------------
+.scrollable {
+  overflow: hidden;
+}
+
+.scrollable .content {
+  height: 100%;
+  overflow-y: scroll;
+  margin-right: -50px;
+  padding-right: 50px;
+}
