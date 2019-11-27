@@ -102,12 +102,18 @@ class Dashing.Chartjs extends Dashing.Widget
         return
 
   circularChart: (id, { type, labels, colors, datasets, options }) ->
-    data = @merge labels: labels, datasets: [@merge data: datasets, @colors(colors)]
-    new Chart(document.getElementById(id), { type: type, data: data }, options)
+    @ensureChartExists()
+    @chart.data = @merge labels: labels, datasets: [@merge data: datasets, @colors(colors)]
+    @chart.update()
 
   linearChart: (id, { type, labels, header, colors, datasets, options }) ->
-    data = @merge labels: labels, datasets: [@merge(@colors(colors), label: header, data: datasets)]
-    new Chart(document.getElementById(id), { type: type, data: data }, options)
+    @ensureChartExists()
+    @chart.data = @merge labels: labels, datasets: [@merge(@colors(colors), label: header, data: datasets)]
+    @chart.update()
+
+  ensureChartExists: () ->
+    if typeof @chart == "undefined"
+      @chart = new Chart(document.getElementById(@id), { type: @type, data: @merge labels: @labels, datasets: [@merge data: @datasets, @colors(@colorNames)] }, @options)
 
   merge: (xs...) =>
     if xs?.length > 0
