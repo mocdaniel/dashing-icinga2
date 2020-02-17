@@ -733,13 +733,19 @@ In order to test things, add `bash` as the last parameter. This avoids running `
 
 ### References
 
-https://www.icinga.com/2016/01/28/awesome-dashing-dashboards-with-icinga-2/
-https://www.icinga.com/2016/12/22/merry-xmas-dashing-with-icinga-2-v1-1-0-is-here/
-https://www.icinga.com/2017/07/13/dashing-for-icinga-2-v1-3-0-released/
+- https://community.icinga.com/t/extend-icinga-dashing-for-your-own-needs/763
+- https://community.icinga.com/t/dashing-for-icinga-3-0-0/2523
+- https://www.icinga.com/2016/01/28/awesome-dashing-dashboards-with-icinga-2/
+- https://www.icinga.com/2016/12/22/merry-xmas-dashing-with-icinga-2-v1-1-0-is-here/
+- https://www.icinga.com/2017/07/13/dashing-for-icinga-2-v1-3-0-released/
 
-https://www.antonissen.net/2017/02/19/monitoring-your-network-with-icinga-2-final-part-6/
-https://community.spiceworks.com/how_to/147719-icinga2-dashing
-https://linoxide.com/monitoring-2/setup-monitoring-dashing-icinga2/
-http://brunner-it.de/2016/08/04/icinga2-dashing-installieren/
-https://www.unixe.de/icinga2-dashing/
+- https://www.antonissen.net/2017/02/19/monitoring-your-network-with-icinga-2-final-part-6/
+- https://community.spiceworks.com/how_to/147719-icinga2-dashing
+- https://linoxide.com/monitoring-2/setup-monitoring-dashing-icinga2/
+- http://brunner-it.de/2016/08/04/icinga2-dashing-installieren/
+- https://www.unixe.de/icinga2-dashing/
+
+#### Feedback
+
+- https://twitter.com/Mikeschova/status/1229415489627181056 
 
