@@ -65,8 +65,9 @@ Supported browsers and clients:
 
 * Linux, Unix, \*Pi
 * Chrome, Firefox, Safari
+* "new" Edge [v79 and above]
 
-**Windows with IE and Edge is not supported since SSE (Server Sent Events) are not implemented.**
+**Windows with IE and old Edge (without Chromium) is not supported since SSE (Server Sent Events) are not implemented.**
 
 For more details please read [#47](https://github.com/dnsmichi/dashing-icinga2/issues/47#issuecomment-374166481)
 and [#62](https://github.com/dnsmichi/dashing-icinga2/issues/62).
