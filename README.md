@@ -42,12 +42,7 @@ This is a demo playground with jobs, widgets and dashboards. You can use and mod
 your own needs. You can also send PRs with custom widgets and propose their use in the dashboard.
 
 In terms of implementation specific questions, please read the [development docs](#development)
-first. For other questions, join the [Icinga community](https://community.icinga.com).
-
-If you like this project, please consider sponsoring my open source work:
-
-* [GitHub Sponsors](https://github.com/sponsors/dnsmichi)
-* [Paypal](https://paypal.me/dnsmichi)
+first.
 
 ## License
 
@@ -69,14 +64,11 @@ Supported browsers and clients:
 
 **Windows with IE and old Edge (without Chromium) is not supported since SSE (Server Sent Events) are not implemented.**
 
-For more details please read [#47](https://github.com/dnsmichi/dashing-icinga2/issues/47#issuecomment-374166481)
-and [#62](https://github.com/dnsmichi/dashing-icinga2/issues/62).
-
 ## Installation
 
 ### Docker
 
-The Docker image is located at [dnsmichi/dashing-icinga2](https://hub.docker.com/r/dnsmichi/dashing-icinga2).
+The Docker image is located at [dnsmichi/dashing-icinga2](https://hub.docker.com/r/dnsmichi/dashing-icinga2).**Note: To be updated.**
 You can also build your own Docker image from the provided Dockerfile. Modify it when needed.
 
 The environment variables from this project can be used to configure the container.
@@ -382,6 +374,8 @@ cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 ```
 
 ## Authors
+
+Original author:
 
 * [dnsmichi](https://github.com/dnsmichi)
 
