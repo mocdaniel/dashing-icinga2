@@ -89,7 +89,7 @@ Git clone:
 
 ```
 cd /usr/share
-git clone https://github.com/dnsmichi/dashing-icinga2.git
+git clone https://github.com/mocdaniel/dashing-icinga2.git
 cd dashing-icinga2
 ```
 
@@ -97,7 +97,7 @@ Tarball download:
 
 ```
 cd /usr/share
-wget https://github.com/dnsmichi/dashing-icinga2/archive/master.zip
+wget https://github.com/mocdaniel/dashing-icinga2/archive/master.zip
 unzip master.zip
 mv dashing-icinga2-master dashing-icinga2
 cd dashing-icinga2
@@ -106,7 +106,7 @@ cd dashing-icinga2
 
 ### Linux
 
-RedHat/CentOS 7 (requires EPEL repository):
+#### RedHat/CentOS 7 (requires EPEL repository):
 
 ```
 yum makecache
@@ -116,14 +116,14 @@ yum -y install rubygems rubygem-bundler ruby-devel openssl gcc-c++ make nodejs
 
 Note: The development tools and header files are required for building the `eventmachine` gem.
 
-Debian/Ubuntu:
+#### Debian/Ubuntu:
 
 ```
 apt-get update
 apt-get -y install ruby bundler nodejs
 ```
 
-Proceed with the `bundler` gem installation for all systems (CentOS, Debian, etc.).
+Proceed with the `bundler` gem installation.
 
 ```
 gem install bundler
@@ -132,6 +132,7 @@ gem install bundler
 In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
 
+#### Proceed with bundling for all systems (CentOS, Ubuntu, Debian etc.)
 > **Note**
 >
 > In case you want to use `smashing` instead of `dashing`,
@@ -139,12 +140,16 @@ add the `--no-document` flags.
 >
 > `export DASHING_PROVIDER=smashing`
 
-Install the dependencies using Bundler.
+Install the dependencies using Bundler. **Do not run this as root.**
 
 ```
 cd /usr/share/dashing-icinga2
 bundle
 ```
+
+>**Note**
+> In case bundle complains about missing write access to `/usr/share/dashing-icinga2/Gemfile.lock`,
+> add write permissions accordingly
 
 Proceed to the [configuration](#configuration) section.
 
@@ -378,6 +383,9 @@ cp tools/logrotate/dashing-icinga2 /etc/logrotate.d
 Original author:
 
 * [dnsmichi](https://github.com/dnsmichi)
+
+Maintainer as of May 2020:
+* [mocdaniel](https://github.com/mocdaniel)
 
 Thanks to all contributors! :)
 
