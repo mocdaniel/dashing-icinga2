@@ -68,15 +68,15 @@ Supported browsers and clients:
 
 ### Docker
 
-The Docker image is located at [dnsmichi/dashing-icinga2](https://hub.docker.com/r/dnsmichi/dashing-icinga2).**Note: To be updated.**
-You can also build your own Docker image from the provided Dockerfile. Modify it when needed.
+The Docker image is located at [dbodky/dashing-icinga2](https://hub.docker.com/r/dbodky/dashing-icinga2).
+You can also build your own Docker image from the provided Dockerfile. Modify it when needed. When pulling the image from DockerHub, the correct image architecture should get pulled automatically.
 
 The environment variables from this project can be used to configure the container.
 
 Example on macOS with Docker for Mac:
 
 ```
-docker run -it -p 5666:5665 -p 8005:8005 -e ICINGA2_API_HOST='docker.for.mac.localhost' -e ICINGA2_API_PORT=5665 -e ICINGA2_API_USERNAME='root' -e ICINGA2_API_PASSWORD='icinga' dnsmichi/dashing-icinga2
+docker run -it -p 5666:5665 -p 8005:8005 -e ICINGA2_API_HOST='docker.for.mac.localhost' -e ICINGA2_API_PORT=5665 -e ICINGA2_API_USERNAME='root' -e ICINGA2_API_PASSWORD='icinga' dbodky/dashing-icinga2
 ```
 
 Note that the Docker container exposes port 8005 by default. Modifying this requires you to build your own image.
@@ -720,15 +720,15 @@ Example:
 ### Docker
 
 ```
-docker build . -t dnsmichi/dashing-icinga2
+docker build . -t dbodky/dashing-icinga2
 docker login
-docker push dnsmichi/dashing-icinga2
+docker push dbodky/dashing-icinga2
 ```
 
 Test with Docker for Mac:
 
 ```
-docker run -it -p 8005:8005 -e ICINGA2_API_HOST='docker.for.mac.localhost' -e ICINGA2_API_PORT=5665 -e ICINGA2_API_USERNAME='root' -e ICINGA2_API_PASSWORD='icinga' dnsmichi/dashing-icinga2
+docker run -it -p 8005:8005 -e ICINGA2_API_HOST='docker.for.mac.localhost' -e ICINGA2_API_PORT=5665 -e ICINGA2_API_USERNAME='root' -e ICINGA2_API_PASSWORD='icinga' dbodky/dashing-icinga2
 ```
 
 In order to test things, add `bash` as the last parameter. This avoids running `start.sh` and allows to test further.
