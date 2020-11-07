@@ -1,4 +1,4 @@
-https://img.shields.io/docker/cloud/build/dbodky/dashing-icinga2
+![](https://img.shields.io/docker/cloud/build/dbodky/dashing-icinga2)
 # Dashing with Icinga 2
 
 #### Table of Contents
