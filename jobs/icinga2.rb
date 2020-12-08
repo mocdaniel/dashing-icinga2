@@ -26,7 +26,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   # run data provider
   icinga.run
 
-  puts "App Info: " + icinga.app_data.to_s + " Version: " + icinga.version
+  #puts "App Info: " + icinga.app_data.to_s + " Version: " + icinga.version
   #puts "CIB Info: " + icinga.cib_data.to_s
 
   # meter widget
@@ -36,7 +36,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   service_meter = icinga.service_count_problems.to_f
   service_meter_max = icinga.service_count_all
 
-  puts "Meter widget: Hosts " + host_meter.to_s + "/" + host_meter_max.to_s + " Services " + service_meter.to_s + "/" + service_meter_max.to_s
+  #puts "Meter widget: Hosts " + host_meter.to_s + "/" + host_meter_max.to_s + " Services " + service_meter.to_s + "/" + service_meter_max.to_s
 
   # icinga stats
   icinga_stats = [
@@ -53,12 +53,23 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   #  icinga_stats.push( { "label" => name, "value" => "%0.2f" % value } )
   #end
 
-  puts "Stats: " + icinga_stats.to_s
+  #puts "Stats: " + icinga_stats.to_s
 
   ### Events
+  send_event('icinga-host-meter', {
+   value: host_meter,
+   max:   host_meter_max,
+   moreinfo: "Total hosts: " + host_meter_max.to_s,
+   color: 'blue' })
+
+  send_event('icinga-service-meter', {
+   value: service_meter,
+   max:   service_meter_max,
+   moreinfo: "Total services: " + service_meter_max.to_s,
+   color: 'blue' })
 
   send_event('icinga-stats', {
-   title: icinga.version,
+   title: "Icinga " + icinga.version,
    items: icinga_stats,
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
@@ -147,7 +158,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
     order.index(a['state']) <=> order.index(b['state'])
   end
 
-  puts "Severity: " + result.to_s
+  #puts "Severity: " + result.to_s
 
   send_event('icinga-severity', {
    items: result,

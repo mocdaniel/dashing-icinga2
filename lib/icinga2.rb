@@ -89,7 +89,7 @@ class Icinga2
       getConfFile(configFile)
     end
 
-    @apiVersion = "v1" # TODO: allow user to configure version?
+    @apiVersion = "v1"
     @apiUrlBase = sprintf('https://%s:%d/%s', @host, @port, @apiVersion)
 
     @hasCert = false
@@ -250,6 +250,9 @@ class Icinga2
       if requestBody
         @headers["X-HTTP-Method-Override"] = "GET"
         payload = JSON.generate(requestBody)
+
+        # debug
+        #puts "Payload: " + payload
         res = restClient.post(payload, @headers)
       else
         res = restClient.get(@headers)
@@ -267,6 +270,8 @@ class Icinga2
     end
 
     body = res.body
+    # debug
+    #puts "Body: " + body
     data = JSON.parse(body)
 
     return data
@@ -365,7 +370,8 @@ class Icinga2
 
   def formatService(name)
     service_map = name.split('!', 2)
-    return service_map[0].to_s + " - " + service_map[1].to_s
+    return service_map[0].to_s
+    # + " - " + service_map[1].to_s
   end
 
   def stateFromString(stateStr)
@@ -440,6 +446,42 @@ class Icinga2
         if @showOnlyHardStateProblems
           if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['last_hard_state'] != 0.0)
             problems = problems + 1
+          end
+        else
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
+            problems = problems + 1
+          end
+        end
+      end
+    end
+
+    return problems
+  end
+
+  def countProblemsServices(objects, states = nil)
+    problems = 0
+
+    compStates = []
+
+    if not states
+      compStates = [ 1, 2, 3]
+    end
+
+    if states.is_a?(Integer)
+      compStates.push(states)
+    end
+
+    objects.each do |item|
+      item.each do |k, d|
+        if (k != "attrs")
+          next
+        end
+
+        if @showOnlyHardStateProblems
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['last_hard_state'] != 0.0)
+            if (item["joins"]["host"]["state"] == 0.0)
+              problems = problems + 1
+            end
           end
         else
           if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
@@ -546,14 +588,28 @@ class Icinga2
     return severity
   end
 
-  def getProblemServices(all_services_data, max_items = 20)
+  def getProblemServices(all_services_data, all_hosts_data, max_items = 30)
     service_problems = {}
+    host_problems = {}
+
+    if(all_hosts_data != nil)
+      testw = "not nil."
+    else
+      testw = "nil."
+    end
+
+    #service_problems[] = "failed"
+
+
+    #service_problems["dies ist ein Test"] = 500
 
     all_services_data.each do |service|
       #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
+
       if (service["attrs"]["state"] == 0) or
         (service["attrs"]["downtime_depth"] > 0) or
-        (service["attrs"]["acknowledgement"] > 0)
+        (service["attrs"]["acknowledgement"] > 0) or
+        (service["joins"]["host"]["state"] == 1.0)
         next
       end
 
@@ -572,12 +628,41 @@ class Icinga2
     #  puts obj["name"] + ": " + severity.to_s
     #end
 
+    # debug
+    #service_problems_severity["dies 6 ist ein Test-Host der Down ist"] = 2.0
+    all_hosts_data.each do |host|
+        if (host["attrs"]["state"] == 0) or
+          (host["attrs"]["downtime_depth"] > 0) or
+          (host["attrs"]["acknowledgement"] > 0)
+            next
+        end
+
+        if @showOnlyHardStateProblems and (host["attrs"]["last_hard_state"] == 0.0)
+          next
+        end
+
+        host_display_name = host["attrs"]["display_name"]
+        host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
+        host_display_name_clean_split = host_display_name_clean.split(': ')
+        host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
+
+        service_problems_severity[host_display_name_for_display + " is DOWN"] = 2.0
+    end
+
     service_problems.sort_by {|k, v| v}.reverse.each do |obj, severity|
       if (count >= max_items)
         break
       end
 
-      name = obj["name"]
+      test2 = obj["joins"]["host"]["state"].to_s
+
+      host_display_name = obj["joins"]["host"]["display_name"]
+      host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
+      host_display_name_clean_split = host_display_name_clean.split(': ')
+      host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
+      service_display_name = obj["attrs"]["display_name"]
+      name = host_display_name_for_display + " - " + service_display_name
+
       service_problems_severity[name] = obj["attrs"]["state"]
 
       count += 1
@@ -608,7 +693,7 @@ class Icinga2
         end
 
         typeval.each do |attr, val|
-          puts attr + " " + val.to_s
+          # puts attr + " " + val.to_s
 
           # collect top level matches, e.g. num_conn_endpoints
           clusterKeyList.each do |key|
@@ -743,12 +828,13 @@ class Icinga2
     all_hosts_data = nil
     all_services_data = nil
 
+    # betr: Falls Filterung erwünscht ist, z.B. auf eine bestimmte Hostgruppe, kann dies der Funktion getHostObjects resp. getServiceObjects übergeben werden
     if @showOnlyHardStateProblems
-      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
-      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+      all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
     else
-      all_hosts_data = getHostObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
-      all_services_data = getServiceObjects([ "name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+      all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
     end
 
     unless(all_hosts_data.nil?)
@@ -759,13 +845,13 @@ class Icinga2
 
     unless(all_services_data.nil?)
       @service_count_all = all_services_data.size
-      @service_count_problems = countProblems(all_services_data)
-      @service_count_problems_warning = countProblems(all_services_data, 1)
-      @service_count_problems_critical = countProblems(all_services_data, 2)
-      @service_count_problems_unknown = countProblems(all_services_data, 3)
+      @service_count_problems = countProblemsServices(all_services_data)
+      @service_count_problems_warning = countProblemsServices(all_services_data, 1)
+      @service_count_problems_critical = countProblemsServices(all_services_data, 2)
+      @service_count_problems_unknown = countProblemsServices(all_services_data, 3)
 
       # severity
-      @service_problems, @service_problems_severity = getProblemServices(all_services_data)
+      @service_problems, @service_problems_severity = getProblemServices(all_services_data, all_hosts_data)
     end
 
   end
