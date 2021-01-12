@@ -241,7 +241,7 @@ class Icinga2
   end
 
   def getApiData(apiUrl, requestBody = nil)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
+    restClient = RestClient::Resource.new(apiUrl, @options)
 
     maxRetries = 30
     retried = 0
@@ -371,7 +371,6 @@ class Icinga2
   def formatService(name)
     service_map = name.split('!', 2)
     return service_map[0].to_s
-    # + " - " + service_map[1].to_s
   end
 
   def stateFromString(stateStr)
@@ -598,11 +597,6 @@ class Icinga2
       testw = "nil."
     end
 
-    #service_problems[] = "failed"
-
-
-    #service_problems["dies ist ein Test"] = 500
-
     all_services_data.each do |service|
       #puts "Severity for " + service["name"] + ": " + getServiceSeverity(service).to_s
 
@@ -623,13 +617,6 @@ class Icinga2
     count = 0
     service_problems_severity = {}
 
-    # debug
-    #@service_problems.sort_by {|k, v| v}.reverse.each do |obj, severity|
-    #  puts obj["name"] + ": " + severity.to_s
-    #end
-
-    # debug
-    #service_problems_severity["dies 6 ist ein Test-Host der Down ist"] = 2.0
     all_hosts_data.each do |host|
         if (host["attrs"]["state"] == 0) or
           (host["attrs"]["downtime_depth"] > 0) or
@@ -654,12 +641,10 @@ class Icinga2
         break
       end
 
-      test2 = obj["joins"]["host"]["state"].to_s
-
       host_display_name = obj["joins"]["host"]["display_name"]
       host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
       host_display_name_clean_split = host_display_name_clean.split(': ')
-      host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
+      host_display_name_for_display = host_display_name_clean_split[0].to_s
       service_display_name = obj["attrs"]["display_name"]
       name = host_display_name_for_display + " - " + service_display_name
 
@@ -828,7 +813,6 @@ class Icinga2
     all_hosts_data = nil
     all_services_data = nil
 
-    # betr: Falls Filterung erwünscht ist, z.B. auf eine bestimmte Hostgruppe, kann dies der Funktion getHostObjects resp. getServiceObjects übergeben werden
     if @showOnlyHardStateProblems
       all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
       all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
