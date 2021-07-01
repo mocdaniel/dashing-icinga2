@@ -443,7 +443,7 @@ class Icinga2
         end
 
         if @showOnlyHardStateProblems
-          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['last_hard_state'] != 0.0)
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['state_type'] != 0.0)
             problems = problems + 1
           end
         else
@@ -477,7 +477,7 @@ class Icinga2
         end
 
         if @showOnlyHardStateProblems
-          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['last_hard_state'] != 0.0)
+          if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0 && d['state_type'] != 0.0)
             if (item["joins"]["host"]["state"] == 0.0)
               problems = problems + 1
             end
@@ -607,7 +607,7 @@ class Icinga2
         next
       end
 
-      if @showOnlyHardStateProblems and (service["attrs"]["last_hard_state"] == 0.0)
+      if @showOnlyHardStateProblems and (service["attrs"]["state_type"] == 0.0)
         next
       end
 
@@ -624,16 +624,12 @@ class Icinga2
             next
         end
 
-        if @showOnlyHardStateProblems and (host["attrs"]["last_hard_state"] == 0.0)
+        if @showOnlyHardStateProblems and (host["attrs"]["state_type"] == 0.0)
           next
         end
 
         host_display_name = host["attrs"]["display_name"]
-        host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
-        host_display_name_clean_split = host_display_name_clean.split(': ')
-        host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
-
-        service_problems_severity[host_display_name_for_display + " is DOWN"] = 2.0
+        service_problems_severity[host_display_name + " is DOWN"] = 2.0
     end
 
     service_problems.sort_by {|k, v| v}.reverse.each do |obj, severity|
@@ -814,8 +810,8 @@ class Icinga2
     all_services_data = nil
 
     if @showOnlyHardStateProblems
-      all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
-      all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
+      all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check", "state_type" ], nil, nil)
+      all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check", "state_type" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
     else
       all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, nil)
       all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
