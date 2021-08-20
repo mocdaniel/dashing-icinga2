@@ -1,6 +1,6 @@
-FROM ruby:buster
+FROM ruby:2.7-buster
 
-MAINTAINER Michael Friedrich <michael.friedrich@gmail.com>
+MAINTAINER Daniel Bodky <dbodky@gmail.com>
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
