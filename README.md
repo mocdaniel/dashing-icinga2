@@ -702,6 +702,10 @@ Example:
 Original from [tywhang](https://github.com/tywhang/smashing-chartjs-example).
 
 
+#### Roundchartjs
+
+A fork of [tywhang's](https://github.com/tywhang/smashing-chartjs-example) Chartjs widget, with minimal HTML changes in order to render round charts (specifically `doughnut` and `pie` in the correct size for dashing-icinga2's default widget settings.
+
 
 #### Clock
 
