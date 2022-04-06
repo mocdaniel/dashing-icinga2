@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libssl-dev nodejs build-essential \
   && rm -rf /var/lib/apt/lists/* && mkdir -p /usr/share/dashing-icinga2
 
-RUN echo 'gem: --no-document' >> /etc/gemrc && gem install --quiet bundle bundler dashing
+RUN echo 'gem: --no-document' >> /etc/gemrc && gem install --quiet bundler
 
 WORKDIR /usr/share/dashing-icinga2
 ADD Gemfile /usr/share/dashing-icinga2

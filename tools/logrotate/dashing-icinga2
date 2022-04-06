@@ -1,4 +1,4 @@
-/usr/share/dashing-icinga2/log/thin.log {
+/usr/share/dashing-icinga2/log/puma.log {
         daily
         rotate 7
         compress
@@ -6,6 +6,6 @@
         missingok
         notifempty
         postrotate
-                /bin/kill -USR1 $(cat /var/run/thin.pid 2> /dev/null) 2> /dev/null || true
+                /bin/kill -USR1 $(cat /var/run/puma.pid 2> /dev/null) 2> /dev/null || true
         endscript
 }

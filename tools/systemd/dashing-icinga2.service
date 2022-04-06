@@ -3,11 +3,10 @@ Description=Dashing-Icinga2 host/service/network monitoring system
 After=syslog.target network.target postgresql.service mariadb.service carbon-cache.service icinga2.service
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+Type=notify
+WatchdogSec=10
 WorkingDirectory=/usr/share/dashing-icinga2
-ExecStart=/usr/local/bin/dashing start -d -p 8005 --pid /var/run/thin.pid
-ExecStop=/usr/local/bin/dashing stop
+ExecStart=/usr/local/bin/puma -p 8005 --pid /var/run/puma.pid
 
 [Install]
 WantedBy=multi-user.target

@@ -1,6 +1,8 @@
 ![](https://img.shields.io/docker/cloud/build/dbodky/dashing-icinga2)
 # Dashing with Icinga 2
 
+** As of v3.3 dashing-icinga2 will actually use** `smashing` and not `dashing` anymore.
+
 #### Table of Contents
 
 1. [Introduction](#introduction)
@@ -16,7 +18,7 @@
 
 ## Introduction
 
-[Dashing](http://shopify.github.io/dashing/) is a Sinatra based framework
+[Smashing](https://smashing.github.io/) is a Sinatra based framework
 that lets you build beautiful dashboards.
 
 You can put your important infrastructure stats and metrics on your office
@@ -29,7 +31,7 @@ etc. -- literally anything which can be presented as counter or list.
 
 ### Icinga 2 Dashboard
 
-The Icinga 2 dashboard is built on top of Dashing and uses the [Icinga 2 API](https://www.icinga.com/products/icinga-2/)
+The Icinga 2 dashboard is built on top of Smashing and uses the [Icinga 2 API](https://www.icinga.com/products/icinga-2/)
 to visualize what's going on with your monitoring. It combines several popular widgets
 and provides development instructions for your own implementation. The dashboard
 also allows to embed the [Icinga Web 2](https://www.icinga.com/products/icinga-web-2/)
@@ -48,13 +50,13 @@ first.
 ## License
 
 * The code for jobs, dashboards and libraries is licensed under the MIT license.
-* Dashing is licensed under the [MIT license](https://github.com/Shopify/dashing/blob/master/MIT-LICENSE).
+* Smashing is licensed under the [MIT license](https://github.com/Smashing/smashing/blob/master/MIT-LICENSE).
 * Chartjs is licensed under the [MIT license](https://github.com/chartjs/Chart.js/blob/master/LICENSE.md).
 
 ## Requirements
 
 * Ruby, Gems and Bundler
-* Dashing or Smashing Ruby Gem
+* Smashing Ruby Gem
 * Icinga 2 (v2.11+) and the REST API
 
 Supported browsers and clients:
@@ -134,12 +136,6 @@ In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
 
 #### Proceed with bundling for all systems (CentOS, Ubuntu, Debian etc.)
-> **Note**
->
-> In case you want to use `smashing` instead of `dashing`,
-> set the environment variable like this:
->
-> `export DASHING_PROVIDER=smashing`
 
 Install the dependencies using Bundler. **Do not run this as root.**
 
@@ -156,13 +152,6 @@ Proceed to the [configuration](#configuration) section.
 
 ### Unix and macOS
 
-> **Note**
->
-> In case you want to use `smashing` instead of `dashing`,
-> set the environment variable like this:
->
-> `export DASHING_PROVIDER=smashing`
-
 On macOS [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
 therefore you'll need to fix the eventmachine gem:
 
@@ -170,13 +159,6 @@ therefore you'll need to fix the eventmachine gem:
 brew install openssl
 bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
 bundle install --path binpaths
-```
-
-Note: Dashing is running inside thin server which by default uses epoll from within the eventmachine library.
-This is not available on Unix based systems, you can safely ignore this warning:
-
-```
-warning: epoll is not supported on this platform
 ```
 
 Proceed to the [configuration](#configuration) section.
@@ -213,7 +195,7 @@ proper permissions.
 
 In case you want to use client certificates, set the `client_cn` attribute accordingly.
 
-### Dashing Configuration
+### Smashing Configuration
 
 #### Configuration File
 
@@ -307,7 +289,7 @@ DASHBOARD_TIMEZONE       | **Optional.** Set the `timezone` option for the dashb
 Example:
 
 ```
-ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
+ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga puma config.ru -p 8005
 ```
 
 ## Run
@@ -315,13 +297,8 @@ ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICING
 ### Systemd Service
 
 Install the provided Systemd service file from `tools/systemd`. It assumes
-that the working directory is `/usr/share/dashing-icinga2` and the Dashing gem
-is installed to `/usr/local/bin/dashing`. Adopt these paths for your own needs.
-
-> **Note**
->
-> In order to use `smashing` instead of `dashing`, modify `tools/systemd/dashing-icinga2.service`
-> to run the smashing binary.
+that the working directory is `/usr/share/dashing-icinga2` and the Smashing gem
+is installed to `/usr/local/bin/smashing`. Adopt these paths for your own needs.
 
 #### Redhat/CentOS
 
@@ -343,7 +320,7 @@ systemctl status dashing-icinga2.service
 
 ### Script
 
-You can start dashing as daemon by using this script:
+You can start smashing as daemon by using this script:
 
 ```
 ./restart-dashing
@@ -356,20 +333,19 @@ Navigate to [http://localhost:8005](http://localhost:8005)
 
 ### Foreground
 
-You can run Dashing in foreground for tests and debugging too:
+You can run Smashing in foreground for tests and debugging too:
 
 ```
 export PATH="/usr/local/bin:$PATH"
-dashing start -p 8005
+puma config.ru -p 8005
 ```
 
 Or with environment variables:
 
 ```
-ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
+ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga puma config.ru -p 8005
 ```
 
-Replace the calls above to `dashing` with `smashing` if you are using this Gem instead.
 
 ### Logrotate
 
@@ -402,6 +378,7 @@ Thanks to all contributors! :)
 * [micke2k](https://github.com/micke2k) for [proper time formatting](https://github.com/dnsmichi/dashing-icinga2/pull/2).
 * [lazyfrosch](https://github.com/lazyfrosch) for ideas on [Dashing with Icinga](https://github.com/lazyfrosch/dashing-icinga).
 * [roidelapliue](https://github.com/roidelapluie) for the [Icinga 1.x dashing script](https://github.com/roidelapluie/dashing-scripts).
+* [](https://github.com/austinjhung) for reevaluating switching to Puma + Smashing instead of Thin + Dashing.
 
 ## Troubleshooting
 
@@ -419,7 +396,7 @@ Please add these details when you are asking a question on the community channel
 
 * Open your browser's development console and check for errors.
 * Ensure that the job runner does not log any errors.
-* Stop the dashing daemon and run it in foreground.
+* Stop the smashing daemon and run it in foreground.
 
 ### Connection Errors
 
@@ -434,8 +411,6 @@ The Icinga 2 daemon might have been reloaded at that time.
 ### Misc Errors
 
 * Port 8005 is not reachable. Ensure that the firewall rules are setup accordingly.
-* Iframe is not working. Try [this solution](https://monitoring-portal.org/woltlab/index.php?thread/39888-icinga2-dashing-iframe-issue-resolved/)
-and ensure that the `X-Frame-Options` variable is **not** set to `DENY`.
 
 ## Development
 
@@ -456,7 +431,7 @@ maximum value at runtime. `list` was updated to highlight colors and change font
 You can use environment variables to quickly set the required configuration settings:
 
 ```
-ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga dashing start -p 8005
+ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga puma config.ru -p 8005
 ```
 
 ### Icinga 2 Library
