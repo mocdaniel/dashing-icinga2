@@ -15,9 +15,7 @@ WORKDIR /usr/share/dashing-icinga2
 ADD Gemfile /usr/share/dashing-icinga2
 RUN bundle update --quiet
 
-ADD . /usr/share/dashing-icinga2
-ADD config/icinga2.json config/icinga2.local.json
-RUN bundle update --quiet
+EXPOSE 8005
 
 # mimic defaults from config/icinga2.json
 ENV ICINGA2_API_HOST localhost
@@ -30,8 +28,10 @@ ENV ICINGAWEB2_URL http://localhost/icingaweb2
 ENV DASHBOARD_SHOW_ONLY_HARD_STATE_PROBLEMS 0
 ENV DASHBOARD_TIMEZONE UTC
 
-
-EXPOSE 8005
+# add code
+ADD . /usr/share/dashing-icinga2
+ADD config/icinga2.json config/icinga2.local.json
+RUN bundle update --quiet
 
 COPY docker/start.sh /usr/local/bin
 
