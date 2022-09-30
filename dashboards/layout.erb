@@ -5,23 +5,24 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="dashing_url_prefix" content="<%=getUrlPrefix()%>">
 
   <title><%= yield_content(:title) %></title>
 
   <!-- The javascript and css are managed by sprockets. The files can be found in the /assets folder-->
-   <script type="text/javascript" src="/assets/Chart.bundle.min.js"></script>
-  <script type="text/javascript" src="/assets/application.js"></script>
-  <link rel="stylesheet" href="/assets/application.css">
+  <script type="text/javascript" src="<%=getUrlPrefix()%>/assets/Chart.bundle.min.js"></script>
+  <script type="text/javascript" src="<%=getUrlPrefix()%>/assets/application.js"></script>
+  <link rel="stylesheet" href="<%=getUrlPrefix()%>/assets/application.css">
 
   <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
   <!-- Set the favicon. Note: 'images' subpath is automatically detected. -->
-  <link rel="icon" href="/assets/favicon.png">
+  <link rel="icon" href="<%=getUrlPrefix()%>/assets/favicon.png">
 
 </head>
   <body>
     <div id="container">
       <div id="banner">
-        <img src="/assets/logo_icinga-inv.png">
+        <img src="<%=getUrlPrefix()%>/assets/logo_icinga-inv.png">
       </div>
       <%= yield %>
     </div>

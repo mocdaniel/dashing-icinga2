@@ -31,6 +31,7 @@ class Icinga2
   attr_reader :uptime
   attr_reader :icingaweb2_url
   attr_reader :time_zone
+  attr_reader :url_prefix
 
   # general stats
   attr_reader :avg_latency
@@ -116,6 +117,7 @@ class Icinga2
     # dashboards
     @showOnlyHardStateProblems = ENV['DASHBOARD_SHOW_ONLY_HARD_STATE_PROBLEMS']
     @time_zone = ENV['DASHBOARD_TIMEZONE']
+    @url_prefix = ENV['DASHBOARD_URL_PREFIX']
 
     # check for the least required variables, the rest is read later on
     if [@host, @port].all? {|value| value.nil? or value == ""}
@@ -173,6 +175,10 @@ class Icinga2
           if config_dashboard.key? 'timezone'
             @time_zone = config_dashboard['timezone']
           end
+
+          if config_dashboard.key? 'url_prefix'
+            @url_prefix = config_dashboard['url_prefix']
+          end
         end
 
         if @config.key? 'icingaweb2'
@@ -189,6 +195,7 @@ class Icinga2
         @nodeName = nil
         @showOnlyHardStateProblems = false
         @time_zone = "UTC"
+        @url_prefix = ""
 
         # external attribute
         @icingaweb2_url = 'http://localhost/icingaweb2'

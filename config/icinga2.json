@@ -12,6 +12,7 @@
   },
   "dashboard": {
     "show_only_hard_state_problems": false,
-    "timezone": "UTC"
+    "timezone": "UTC",
+    "url_prefix": ""
   }
 }
