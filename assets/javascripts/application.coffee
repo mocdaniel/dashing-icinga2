@@ -5,6 +5,8 @@
 #= require_directory .
 #= require_tree ../../widgets
 
+Batman.config.viewPrefix = document.querySelector('meta[name="dashing_url_prefix"]').content + '/views'
+
 console.log("Yeah! The dashboard has started!")
 
 Chart.defaults.color = "white"

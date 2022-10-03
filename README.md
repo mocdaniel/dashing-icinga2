@@ -226,7 +226,8 @@ vim config/icinga2.local.json
   },
   "dashboard": {
     "show_only_hard_state_problems": false,
-    "timezone": "UTC"
+    "timezone": "UTC",
+    "url_prefix": ""
   }
 }
 ```
@@ -256,7 +257,8 @@ explicitly.
   },
   "dashboard": {
     "show_only_hard_state_problems": false,
-    "timezone": "UTC"
+    "timezone": "UTC",
+    "url_prefix": ""
   }
 }
 ```
@@ -281,6 +283,7 @@ ICINGA2\_API\_NODENAME   | **Optional.** If client certificates do not match the
 ICINGAWEB2\_URL          | **Optional.** Set the Icinga Web 2 Url. Defaults to `http://localhost/icingaweb2`.
 DASHBOARD_SHOW_ONLY_HARD_STATE_PROBLEMS | **Optional.** Set `show_only_hard_state_problems` configuration option, toggle with `0|1`.
 DASHBOARD_TIMEZONE       | **Optional.** Set the `timezone` option for the dashboard, overriding the default `UTC` value.
+DASHBOARD_URL_PREFIX     | **Optional.** Set the url prefix e.g. when running behind a reverse proxy
 
 > **Note**
 >
@@ -346,6 +349,19 @@ Or with environment variables:
 ICINGA2_API_HOST=localhost ICINGA2_API_PORT=5665 ICINGA2_API_USERNAME=root ICINGA2_API_PASSWORD=icinga puma config.ru -p 8005
 ```
 
+### Reverse Proxy / Subfolder
+
+To configure the application to run in a subfolder, e.g. for a reverse proxy, set the `DASHBOARD_URL_PREFIX` environment
+variable or set the corresponding value in `config/icinga2.local.json`
+
+Apache 2 reverse proxy example for `DASHBOARD_URL_PREFIX=/icinga2-dashing`
+
+```
+<Location /icinga2-dashing/>
+    ProxyPass http://127.0.0.1:8005/icinga2-dashing/
+    ProxyPassReverse http://127.0.0.1:8005/icinga2-dashing/
+</Location>
+```
 
 ### Logrotate
 
