@@ -1,0 +1,22 @@
+name: Recommend Base Image Improvements
+
+on:
+  schedule:
+    cron: '0 0 1 */1 *'
+  workflow_dispatch: {}
+
+jobs:
+  recommendations:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Docker Scout
+      id: docker-scout
+      uses: docker/scout-action@v0.18.1
+      with:
+        command: recommendations
+        image: dbodky/dashing-icinga2:latest
+
